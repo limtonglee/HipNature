@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,9 +37,9 @@ public class InstructorEntity implements Serializable {
     @Size(max = 64)
     private String instructorName;
     
-    @Column(nullable = false, unique = true, length = 64)
+    @Column(nullable = false, unique = true, length = 8)
     @NotNull
-    @Size(max = 64)
+    @Size(max = 8)
     private String phone;
     
     @Column(nullable = false, unique = true, length = 64)
@@ -49,6 +51,9 @@ public class InstructorEntity implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private PartnerEntity partnerEntity;
+    
+    @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY)
+    private List<SessionEntity> sessionEntity;
     
     public Long getInstructorId() {
         return instructorId;
@@ -137,6 +142,20 @@ public class InstructorEntity implements Serializable {
      */
     public void setPartnerEntity(PartnerEntity partnerEntity) {
         this.partnerEntity = partnerEntity;
+    }
+
+    /**
+     * @return the sessionEntity
+     */
+    public List<SessionEntity> getSessionEntity() {
+        return sessionEntity;
+    }
+
+    /**
+     * @param sessionEntity the sessionEntity to set
+     */
+    public void setSessionEntity(List<SessionEntity> sessionEntity) {
+        this.sessionEntity = sessionEntity;
     }
     
 }

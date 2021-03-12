@@ -33,7 +33,6 @@ public class ClassEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long classId;
-
     @Column(nullable = false)
     @NotNull
     private String classType;
@@ -45,7 +44,6 @@ public class ClassEntity implements Serializable {
     @Min(1)
     @NotNull
     private Integer credit;
-    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull

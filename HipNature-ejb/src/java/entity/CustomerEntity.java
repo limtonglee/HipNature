@@ -37,9 +37,9 @@ public class CustomerEntity implements Serializable {
     @Size(max = 64)
     private String customerName;
     
-    @Column(nullable = false, unique = true, length = 64)
+    @Column(nullable = false, unique = true, length = 8)
     @NotNull
-    @Size(max = 64)
+    @Size(max = 8)
     private String phone;
     
     @Column(nullable = false, unique = true, length = 64)
