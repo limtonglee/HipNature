@@ -32,7 +32,7 @@ public class InstructorEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long instructorId;
 
-        @Column(nullable = false, unique = true, length = 64)
+    @Column(nullable = false, unique = true, length = 64)
     @NotNull
     @Size(max = 64)
     private String instructorName;

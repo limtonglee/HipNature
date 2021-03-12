@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -70,6 +72,8 @@ public class SessionEntity implements Serializable {
     @JoinColumn(nullable = true)
     private InstructorEntity instructor;
 
+    @OneToMany(mappedBy = "sessionEntity", fetch = FetchType.LAZY)
+    private List<BookingEntity> participants;
     public Long getSessionId() {
         return sessionId;
     }
@@ -227,6 +231,20 @@ public class SessionEntity implements Serializable {
      */
     public void setLocationTypeEnum(LocationTypeEnum locationTypeEnum) {
         this.locationTypeEnum = locationTypeEnum;
+    }
+
+    /**
+     * @return the participants
+     */
+    public List<BookingEntity> getParticipants() {
+        return participants;
+    }
+
+    /**
+     * @param participants the participants to set
+     */
+    public void setParticipants(List<BookingEntity> participants) {
+        this.participants = participants;
     }
     
 }
