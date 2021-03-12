@@ -6,34 +6,36 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.CustomerTypeEnum;
+import java.util.List;
 
 /**
  *
  * @author User
  */
 @Entity
-public class PartnerEntity implements Serializable {
+public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long PartnerEntityId;
-    
+    private Long customerId;
     @Column(nullable = false, unique = true, length = 64)
     @NotNull
     @Size(max = 64)
-    private String partnerEntityName;
+    private String customerName;
     
     @Column(nullable = false, unique = true, length = 64)
     @NotNull
@@ -61,32 +63,41 @@ public class PartnerEntity implements Serializable {
     @Size(min = 8, max = 32)
     private String password;
     
-    @OneToMany(mappedBy = "partnerEntity", fetch = FetchType.LAZY)
-    private List<InstructorEntity> instructorEntity;
-        
-    public Long getPartnerEntityId() {
-        return PartnerEntityId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
+    private CustomerTypeEnum customerTypeEnum;
+    
+    @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY)
+    private List<CreditCardEntity> creditCardEntity;
+    
+    @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY)
+    private List<ReviewEntity> reviewEntity;
+    
+    
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setPartnerEntityId(Long PartnerEntityId) {
-        this.PartnerEntityId = PartnerEntityId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (PartnerEntityId != null ? PartnerEntityId.hashCode() : 0);
+        hash += (customerId != null ? customerId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the PartnerEntityId fields are not set
-        if (!(object instanceof PartnerEntity)) {
+        // TODO: Warning - this method won't work in the case the customerId fields are not set
+        if (!(object instanceof CustomerEntity)) {
             return false;
         }
-        PartnerEntity other = (PartnerEntity) object;
-        if ((this.PartnerEntityId == null && other.PartnerEntityId != null) || (this.PartnerEntityId != null && !this.PartnerEntityId.equals(other.PartnerEntityId))) {
+        CustomerEntity other = (CustomerEntity) object;
+        if ((this.customerId == null && other.customerId != null) || (this.customerId != null && !this.customerId.equals(other.customerId))) {
             return false;
         }
         return true;
@@ -94,21 +105,21 @@ public class PartnerEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.PartnerEntity[ id=" + PartnerEntityId + " ]";
+        return "entity.CustomerEntity[ id=" + customerId + " ]";
     }
 
     /**
-     * @return the partnerEntityName
+     * @return the customerName
      */
-    public String getPartnerEntityName() {
-        return partnerEntityName;
+    public String getCustomerName() {
+        return customerName;
     }
 
     /**
-     * @param partnerEntityName the partnerEntityName to set
+     * @param customerName the customerName to set
      */
-    public void setPartnerEntityName(String partnerEntityName) {
-        this.partnerEntityName = partnerEntityName;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     /**
@@ -182,17 +193,45 @@ public class PartnerEntity implements Serializable {
     }
 
     /**
-     * @return the instructorEntity
+     * @return the customerTypeEnum
      */
-    public List<InstructorEntity> getInstructorEntity() {
-        return instructorEntity;
+    public CustomerTypeEnum getCustomerTypeEnum() {
+        return customerTypeEnum;
     }
 
     /**
-     * @param instructorEntity the instructorEntity to set
+     * @param customerTypeEnum the customerTypeEnum to set
      */
-    public void setInstructorEntity(List<InstructorEntity> instructorEntity) {
-        this.instructorEntity = instructorEntity;
+    public void setCustomerTypeEnum(CustomerTypeEnum customerTypeEnum) {
+        this.customerTypeEnum = customerTypeEnum;
+    }
+
+    /**
+     * @return the creditCardEntity
+     */
+    public List<CreditCardEntity> getCreditCardEntity() {
+        return creditCardEntity;
+    }
+
+    /**
+     * @param creditCardEntity the creditCardEntity to set
+     */
+    public void setCreditCardEntity(List<CreditCardEntity> creditCardEntity) {
+        this.creditCardEntity = creditCardEntity;
+    }
+
+    /**
+     * @return the reviewEntity
+     */
+    public List<ReviewEntity> getReviewEntity() {
+        return reviewEntity;
+    }
+
+    /**
+     * @param reviewEntity the reviewEntity to set
+     */
+    public void setReviewEntity(List<ReviewEntity> reviewEntity) {
+        this.reviewEntity = reviewEntity;
     }
     
 }
