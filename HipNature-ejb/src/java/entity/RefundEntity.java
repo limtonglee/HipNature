@@ -38,7 +38,7 @@ public class RefundEntity implements Serializable {
     @Min(1)
     private Integer refundValue;
     
-    @OneToOne(mappedBy = "refundEntity", fetch = FetchType.LAZY, optional = true)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     private BookingEntity bookingEntity;
 
     public Long getRefundId() {

@@ -20,12 +20,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.enumeration.CustomerTypeEnum;
 import java.util.List;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  *
  * @author User
  */
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class CustomerEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -87,6 +90,22 @@ public class CustomerEntity implements Serializable {
         this.customerId = customerId;
     }
 
+    public CustomerEntity() {
+    }
+    
+    
+
+    public CustomerEntity(String customerName, String phone, String email, String address, String username, String password, CustomerTypeEnum customerTypeEnum) {
+        this.customerName = customerName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+        this.customerTypeEnum = customerTypeEnum;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;
