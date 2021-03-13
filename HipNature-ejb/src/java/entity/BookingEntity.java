@@ -32,8 +32,9 @@ public class BookingEntity implements Serializable {
     @NotNull
     private String status;
     
-    //????
-    private PurchasedPlan purchasedPlanEntity;
+    
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    private PurchasedPlan purchasedplan;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
