@@ -118,5 +118,19 @@ public class BookingEntity implements Serializable {
     public void setRefundEntity(RefundEntity refundEntity) {
         this.refundEntity = refundEntity;
     }
+
+    /**
+     * @return the purchasedplan
+     */
+    public PurchasedPlan getPurchasedplan() {
+        return purchasedplan;
+    }
+
+    /**
+     * @param purchasedplan the purchasedplan to set
+     */
+    public void setPurchasedplan(PurchasedPlan purchasedplan) {
+        this.purchasedplan = purchasedplan;
+    }
     
 }

@@ -109,5 +109,19 @@ public class PlanEntity implements Serializable {
     public String toString() {
         return "entity.PlanEntity[ id=" + planId + " ]";
     }
+
+    /**
+     * @return the planName
+     */
+    public String getPlanName() {
+        return planName;
+    }
+
+    /**
+     * @param planName the planName to set
+     */
+    public void setPlanName(String planName) {
+        this.planName = planName;
+    }
     
 }

@@ -45,7 +45,9 @@ public class PurchasedPlan implements Serializable {
 
     @OneToMany(mappedBy = "purchasedplan" )
     private List<BookingEntity> booking;
-    //Plan Type???  
+    
+    @OneToOne (fetch = FetchType.LAZY) 
+    private TransactionEntity transactionEntity;
 
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
@@ -111,6 +113,48 @@ public class PurchasedPlan implements Serializable {
      */
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the planId
+     */
+    public PlanEntity getPlanId() {
+        return planId;
+    }
+
+    /**
+     * @param planId the planId to set
+     */
+    public void setPlanId(PlanEntity planId) {
+        this.planId = planId;
+    }
+
+    /**
+     * @return the booking
+     */
+    public List<BookingEntity> getBooking() {
+        return booking;
+    }
+
+    /**
+     * @param booking the booking to set
+     */
+    public void setBooking(List<BookingEntity> booking) {
+        this.booking = booking;
+    }
+
+    /**
+     * @return the transactionEntity
+     */
+    public TransactionEntity getTransactionEntity() {
+        return transactionEntity;
+    }
+
+    /**
+     * @param transactionEntity the transactionEntity to set
+     */
+    public void setTransactionEntity(TransactionEntity transactionEntity) {
+        this.transactionEntity = transactionEntity;
     }
     
 }
