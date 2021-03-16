@@ -51,13 +51,15 @@ public class PartnerEntitySessionBean {
         return query.getResultList();
     }
 
-    public PartnerEntity retrievePartnerByPartnerId(Long staffId) {
-        PartnerEntity partnerEntity = em.find(PartnerEntity.class, staffId);
+    public PartnerEntity retrievePartnerByPartnerId(Long partnerId) throws PartnerNotFoundException {
+        PartnerEntity partnerEntity = em.find(PartnerEntity.class, partnerId);
 
-        //if(staffEntity != null)
-        //{
-        return partnerEntity;
-
+        if (partnerEntity != null) {
+            return partnerEntity;
+        } else {
+            throw new PartnerNotFoundException("Partner ID " + partnerId + " does not exist!");
+        }
+                
     }
 
     public PartnerEntity retrievePartnerByUsername(String username) throws PartnerNotFoundException {

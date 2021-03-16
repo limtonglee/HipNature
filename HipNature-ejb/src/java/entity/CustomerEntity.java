@@ -71,6 +71,8 @@ public class CustomerEntity implements Serializable {
     @NotNull
     private CustomerTypeEnum customerTypeEnum;
    
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
+    private String salt;
     
     @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY)
     private List<CreditCardEntity> creditCardEntity;
@@ -269,6 +271,20 @@ public class CustomerEntity implements Serializable {
      */
     public void setPurchasedPlans(List<PurchasedPlan> purchasedPlans) {
         this.purchasedPlans = purchasedPlans;
+    }
+
+    /**
+     * @return the salt
+     */
+    public String getSalt() {
+        return salt;
+    }
+
+    /**
+     * @param salt the salt to set
+     */
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     
