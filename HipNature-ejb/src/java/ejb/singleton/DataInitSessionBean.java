@@ -5,8 +5,12 @@
  */
 package ejb.singleton;
 
+import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PartnerEntitySessionBean;
+import ejb.stateless.PlanEntitySessionBeanLocal;
+import entity.CustomerEntity;
 import entity.PartnerEntity;
+import entity.PlanEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -14,6 +18,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.enumeration.CustomerTypeEnum;
 import util.exception.PartnerNotFoundException;
 
 /**
@@ -26,7 +31,14 @@ import util.exception.PartnerNotFoundException;
 public class DataInitSessionBean {
 
     @EJB
-    private PartnerEntitySessionBean partnerEntitySessionBean;
+    private PlanEntitySessionBeanLocal planEntitySessionBeanLocal;
+
+    @EJB
+    private CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
+
+    @EJB
+    private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
+    
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
@@ -36,22 +48,42 @@ public class DataInitSessionBean {
     public void postConstruct() {
          try
         {
-            partnerEntitySessionBean.retrievePartnerByUsername("partner");
+            partnerEntitySessionBeanLocal.retrievePartnerByUsername("partner");
         }
         catch(PartnerNotFoundException ex)
         {
-            Init();
+            initializeData();
         }
 
     }
 
-    public void Init() {
-        
-        partnerEntitySessionBean.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
-
+    private void createPartner() {
+        partnerEntitySessionBeanLocal.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
     }
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    
+    private void createCustomer() {
+        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Mark", "91234567", "mark.tan@gmail.com", "123 Kent Ridge Road", "marktan", "password123", CustomerTypeEnum.NORMAL));
+        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Rachel", "93244543", "rachel.lee@gmail.com", "456 Orchard Road", "rachellee", "password123", CustomerTypeEnum.STUDENT));
+        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Edith", "95359465", "edith.chan@gmail.com", "12 Namly Place", "edithchan", "password123", CustomerTypeEnum.ELDERLY));
+    }
+    
+    private void createPlan() {
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(19.00, Long.valueOf(10), "Lite Plan", Long.valueOf(3)));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(49.00, Long.valueOf(27), "Basic Plan", Long.valueOf(9)));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(79.00, Long.valueOf(45), "Standard Plan", Long.valueOf(15)));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(159.00, Long.valueOf(100), "Premium Plan", Long.valueOf(33)));
+    }
+
+    private void createCreditPlan() {
+        
+    }
+    
+    private void initializeData() {
+        createPartner();
+        createCustomer();
+        createPlan();
+        createCreditPlan();
+    }
 
     public void persist(Object object) {
         em.persist(object);

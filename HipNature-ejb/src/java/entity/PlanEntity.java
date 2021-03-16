@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,8 +50,19 @@ public class PlanEntity implements Serializable {
     
     @OneToMany(mappedBy = "planId",fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
-    private List<PurchasedPlan> purchasedPlans;    
+    private List<PurchasedPlanEntity> purchasedPlans;    
 
+    public PlanEntity() {
+        this.purchasedPlans = new ArrayList<PurchasedPlanEntity>();
+    }
+
+    public PlanEntity(double price, Long creditValue, String planName, Long sessionLimit) {
+        this.price = price;
+        this.creditValue = creditValue;
+        this.planName = planName;
+        this.sessionLimit = sessionLimit;
+    }
+    
     public double getPrice() {
         return price;
     }

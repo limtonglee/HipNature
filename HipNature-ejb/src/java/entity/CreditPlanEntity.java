@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * @author User
  */
 @Entity
-public class CreditPlan implements Serializable {
+public class CreditPlanEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,10 +51,10 @@ public class CreditPlan implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the creditPlanId fields are not set
-        if (!(object instanceof CreditPlan)) {
+        if (!(object instanceof CreditPlanEntity)) {
             return false;
         }
-        CreditPlan other = (CreditPlan) object;
+        CreditPlanEntity other = (CreditPlanEntity) object;
         if ((this.creditPlanId == null && other.creditPlanId != null) || (this.creditPlanId != null && !this.creditPlanId.equals(other.creditPlanId))) {
             return false;
         }

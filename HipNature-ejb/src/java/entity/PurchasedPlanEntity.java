@@ -26,7 +26,7 @@ import javax.validation.constraints.Positive;
  * @author User
  */
 @Entity
-public class PurchasedPlan implements Serializable {
+public class PurchasedPlanEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -71,10 +71,10 @@ public class PurchasedPlan implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the purchasedPlanId fields are not set
-        if (!(object instanceof PurchasedPlan)) {
+        if (!(object instanceof PurchasedPlanEntity)) {
             return false;
         }
-        PurchasedPlan other = (PurchasedPlan) object;
+        PurchasedPlanEntity other = (PurchasedPlanEntity) object;
         if ((this.purchasedPlanId == null && other.purchasedPlanId != null) || (this.purchasedPlanId != null && !this.purchasedPlanId.equals(other.purchasedPlanId))) {
             return false;
         }

@@ -32,10 +32,10 @@ public class TransactionEntity implements Serializable {
     private CreditCardEntity creditCardEntity;
     
     @OneToOne(fetch = FetchType.LAZY)
-    private CreditPlan creditPlan;
+    private CreditPlanEntity creditPlan;
     
     @OneToOne(fetch = FetchType.LAZY)
-    private PurchasedPlan purchasedPlan;
+    private PurchasedPlanEntity purchasedPlan;
 
     public Long getTransactionId() {
         return transactionId;
@@ -91,28 +91,28 @@ public class TransactionEntity implements Serializable {
     /**
      * @return the creditPlan
      */
-    public CreditPlan getCreditPlan() {
+    public CreditPlanEntity getCreditPlan() {
         return creditPlan;
     }
 
     /**
      * @param creditPlan the creditPlan to set
      */
-    public void setCreditPlan(CreditPlan creditPlan) {
+    public void setCreditPlan(CreditPlanEntity creditPlan) {
         this.creditPlan = creditPlan;
     }
 
     /**
      * @return the purchasedPlan
      */
-    public PurchasedPlan getPurchasedPlan() {
+    public PurchasedPlanEntity getPurchasedPlan() {
         return purchasedPlan;
     }
 
     /**
      * @param purchasedPlan the purchasedPlan to set
      */
-    public void setPurchasedPlan(PurchasedPlan purchasedPlan) {
+    public void setPurchasedPlan(PurchasedPlanEntity purchasedPlan) {
         this.purchasedPlan = purchasedPlan;
     }
     

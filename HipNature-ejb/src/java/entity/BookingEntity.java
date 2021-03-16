@@ -34,7 +34,7 @@ public class BookingEntity implements Serializable {
     
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    private PurchasedPlan purchasedplan;
+    private PurchasedPlanEntity purchasedplan;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
@@ -122,14 +122,14 @@ public class BookingEntity implements Serializable {
     /**
      * @return the purchasedplan
      */
-    public PurchasedPlan getPurchasedplan() {
+    public PurchasedPlanEntity getPurchasedplan() {
         return purchasedplan;
     }
 
     /**
      * @param purchasedplan the purchasedplan to set
      */
-    public void setPurchasedplan(PurchasedPlan purchasedplan) {
+    public void setPurchasedplan(PurchasedPlanEntity purchasedplan) {
         this.purchasedplan = purchasedplan;
     }
     

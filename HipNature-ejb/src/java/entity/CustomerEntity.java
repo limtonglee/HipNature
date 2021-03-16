@@ -81,7 +81,7 @@ public class CustomerEntity implements Serializable {
     private List<ReviewEntity> reviewEntity;
     
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<PurchasedPlan> purchasedPlans;
+    private List<PurchasedPlanEntity> purchasedPlans;
     
     
     public Long getCustomerId() {
@@ -262,14 +262,14 @@ public class CustomerEntity implements Serializable {
     /**
      * @return the purchasedPlans
      */
-    public List<PurchasedPlan> getPurchasedPlans() {
+    public List<PurchasedPlanEntity> getPurchasedPlans() {
         return purchasedPlans;
     }
 
     /**
      * @param purchasedPlans the purchasedPlans to set
      */
-    public void setPurchasedPlans(List<PurchasedPlan> purchasedPlans) {
+    public void setPurchasedPlans(List<PurchasedPlanEntity> purchasedPlans) {
         this.purchasedPlans = purchasedPlans;
     }
 
