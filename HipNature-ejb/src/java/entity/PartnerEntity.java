@@ -5,7 +5,9 @@
  */
 package entity;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -29,41 +32,73 @@ public class PartnerEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long PartnerEntityId;
-    
+
     @Column(nullable = false, unique = true, length = 64)
     @NotNull
     @Size(max = 64)
     private String partnerEntityName;
-    
+
     @Column(nullable = false, unique = true, length = 8)
     @NotNull
     @Size(max = 8)
     private String phone;
-    
+
     @Column(nullable = false, unique = true, length = 64)
     @NotNull
     @Size(max = 64)
     @Email
     private String email;
-    
+
     @Column(nullable = false, length = 64)
     @NotNull
     @Size(max = 128)
     private String address;
-    
-    @Column(nullable = false,unique = true, length = 64)
+
+    @Column(nullable = false, unique = true, length = 64)
     @NotNull
-    @Size(min = 8, max = 32)
+    @Size(min = 6, max = 32)
     private String username;
-    
+
     @Column(nullable = false, length = 64)
     @NotNull
     @Size(min = 8, max = 32)
     private String password;
-    
+
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
+    private String salt;
+
     @OneToMany(mappedBy = "partnerEntity", fetch = FetchType.LAZY)
     private List<InstructorEntity> instructorEntity;
-        
+
+    
+    public PartnerEntity() {
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        instructorEntity= new ArrayList<>();
+      
+    }
+
+    public PartnerEntity(String partnerEntityName, String phone, String email, String address, String username, String password) {
+                this();
+        this.partnerEntityName = partnerEntityName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.username = username;
+        setPassword(password);
+
+    }
+
+    
+    // Newly added in v4.5
+    public String getSalt() {
+        return salt;
+    }
+
+    // Newly added in v4.5
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public Long getPartnerEntityId() {
         return PartnerEntityId;
     }
@@ -178,7 +213,11 @@ public class PartnerEntity implements Serializable {
      * @param password the password to set
      */
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     /**
@@ -194,5 +233,5 @@ public class PartnerEntity implements Serializable {
     public void setInstructorEntity(List<InstructorEntity> instructorEntity) {
         this.instructorEntity = instructorEntity;
     }
-    
+
 }

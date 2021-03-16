@@ -5,13 +5,16 @@
  */
 package ejb.singleton;
 
+import ejb.stateless.PartnerEntitySessionBean;
 import entity.PartnerEntity;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.PartnerNotFoundException;
 
 /**
  *
@@ -22,18 +25,29 @@ import javax.persistence.PersistenceContext;
 @Startup
 public class DataInitSessionBean {
 
+    @EJB
+    private PartnerEntitySessionBean partnerEntitySessionBean;
+
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
 
+    
     @PostConstruct
     public void postConstruct() {
-        if (em.find(PartnerEntity.class, 1l) == null) {
+         try
+        {
+            partnerEntitySessionBean.retrievePartnerByUsername("partner");
+        }
+        catch(PartnerNotFoundException ex)
+        {
             Init();
         }
 
     }
 
     public void Init() {
+        
+        partnerEntitySessionBean.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
 
     }
     // Add business logic below. (Right-click in editor and choose
