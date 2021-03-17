@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,6 +23,7 @@ import util.enumeration.CustomerTypeEnum;
 import java.util.List;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -93,11 +95,16 @@ public class CustomerEntity implements Serializable {
     }
 
     public CustomerEntity() {
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        creditCardEntity = new ArrayList<>();
+        reviewEntity = new ArrayList<>();
+        purchasedPlans = new ArrayList<>();
     }
     
     
 
     public CustomerEntity(String customerName, String phone, String email, String address, String username, String password, CustomerTypeEnum customerTypeEnum) {
+        this();
         this.customerName = customerName;
         this.phone = phone;
         this.email = email;

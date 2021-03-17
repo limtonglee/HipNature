@@ -78,7 +78,7 @@ public class PartnerEntity implements Serializable {
     }
 
     public PartnerEntity(String partnerEntityName, String phone, String email, String address, String username, String password) {
-                this();
+        this();
         this.partnerEntityName = partnerEntityName;
         this.phone = phone;
         this.email = email;
