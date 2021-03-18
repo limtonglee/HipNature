@@ -18,13 +18,14 @@
                     </p:submenu>
 
                     <p:submenu label="Cashier Operation" rendered="#{sessionScope.isLogin == true}">
-                       <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
-                        <p:menuitem value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" rendered="#{sessionScope.isLogin == true}" />
+<!--                       <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
+                        <p:menuitem value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" rendered="#{sessionScope.isLogin == true}" />-->
                     </p:submenu>
                     
-                    <p:submenu label="System Administration" rendered="#{sessionScope.isLogin == true}">
-                      <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
-                        <p:menuitem value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" rendered="#{sessionScope.isLogin == true}" />
+                    <p:submenu label="Class Administration" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value ="Class Management" outcome="classManagement.xhml" icon="pi pi-desktop" />
+<!--                      <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
+                        <p:menuitem value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" rendered="#{sessionScope.isLogin == true}" />-->
                     </p:submenu>                        
 
                 </p:menu>

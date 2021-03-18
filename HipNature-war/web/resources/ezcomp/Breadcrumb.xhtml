@@ -16,7 +16,8 @@
             <p:breadCrumb homeDisplay="false">
 
                 <p:menuitem icon="pi pi-home" url="#{application.contextPath}/index.xhtml" style="text-decoration-line: none;" />
-
+                <p:menuitem value ="Class Administration" rendered ="#{cc.attrs.pageName == 'classManagement'}"/>
+                
 <!--                <p:menuitem value="Cashier Operation" rendered="#{cc.attrs.pageName == 'checkout' ||
                                                                         cc.attrs.pageName == 'voidRefund' ||
                                                                         cc.attrs.pageName == 'viewMySaleTransactions'}" />

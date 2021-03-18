@@ -25,9 +25,13 @@ public class TagEntitySessionBean implements TagEntitySessionBeanLocal {
 
     @Override
     public List<TagEntity> retrieveAllTags() {
-        Query query = em.createQuery("SELECT t FROM TagEntity T");
-        
-        return query.getResultList();
+        Query query = em.createQuery("SELECT t FROM TagEntity t ORDER BY t.tagName ASC");
+        List<TagEntity> list = query.getResultList();
+//            for (TagEntity tag:list){
+//                tag.getClassEntities().size();
+//            }
+
+        return list;
     }
 
     @Override

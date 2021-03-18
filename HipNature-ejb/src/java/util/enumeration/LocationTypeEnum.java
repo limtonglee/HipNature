@@ -5,10 +5,13 @@
  */
 package util.enumeration;
 
+import javax.inject.Named;
+
 /**
  *
  * @author User
  */
+@Named(value = "locationTypeEnum")
 public enum LocationTypeEnum {
     NORTH,
     WEST,

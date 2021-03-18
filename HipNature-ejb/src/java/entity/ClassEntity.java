@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -48,14 +50,53 @@ public class ClassEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private LocationTypeEnum locationTypeEnum;
-    
+
     @OneToMany(mappedBy = "classEntity", fetch = FetchType.LAZY)
-    private List<ReviewEntity> reviewEntity;
-    
+    private List<ReviewEntity> reviewEntities;
+
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<TagEntity> tagEntity;
-        
-        
+    private List<TagEntity> tagEntities;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ClassTypeEntity classTypeEntity;
+    
+    public ClassEntity() {
+        tagEntities = new ArrayList<>();
+        reviewEntities = new ArrayList<>();
+    }
+
+    public ClassEntity(String classType, String className, Integer credit, LocationTypeEnum locationTypeEnum, ClassTypeEntity classTypeEntity) {
+        this.classType = classType;
+        this.className = className;
+        this.credit = credit;
+        this.locationTypeEnum = locationTypeEnum;
+        this.classTypeEntity = classTypeEntity;
+    }
+
+
+
+    public void addTag(TagEntity tagEntity) {
+        if (tagEntity != null) {
+            if (!this.tagEntities.contains(tagEntity)) {
+                this.tagEntities.add(tagEntity);
+                if (!tagEntity.getClassEntities().contains(this)) {
+                    tagEntity.getClassEntities().add(this);
+                }
+            }
+        }
+    }
+
+    public void removeTag(TagEntity tagEntity) {
+        if (tagEntity != null) {
+            if (this.tagEntities.contains(tagEntity)) {
+                this.tagEntities.remove(tagEntity);
+                if (tagEntity.getClassEntities().contains(this)) {
+                    tagEntity.getClassEntities().remove(this);
+                }
+            }
+        }
+    }
+
     public Long getClassId() {
         return classId;
     }
@@ -146,31 +187,45 @@ public class ClassEntity implements Serializable {
     }
 
     /**
-     * @return the reviewEntity
+     * @return the reviewEntities
      */
-    public List<ReviewEntity> getReviewEntity() {
-        return reviewEntity;
+    public List<ReviewEntity> getReviewEntities() {
+        return reviewEntities;
     }
 
     /**
-     * @param reviewEntity the reviewEntity to set
+     * @param reviewEntities the reviewEntities to set
      */
-    public void setReviewEntity(List<ReviewEntity> reviewEntity) {
-        this.reviewEntity = reviewEntity;
+    public void setReviewEntities(List<ReviewEntity> reviewEntities) {
+        this.reviewEntities = reviewEntities;
     }
 
     /**
-     * @return the tagEntity
+     * @return the tagEntities
      */
-    public List<TagEntity> getTagEntity() {
-        return tagEntity;
+    public List<TagEntity> getTagEntities() {
+        return tagEntities;
     }
 
     /**
-     * @param tagEntity the tagEntity to set
+     * @param tagEntities the tagEntities to set
      */
-    public void setTagEntity(List<TagEntity> tagEntity) {
-        this.tagEntity = tagEntity;
+    public void setTagEntities(List<TagEntity> tagEntities) {
+        this.tagEntities = tagEntities;
     }
-    
+
+    /**
+     * @return the classTypeEntity
+     */
+    public ClassTypeEntity getClassTypeEntity() {
+        return classTypeEntity;
+    }
+
+    /**
+     * @param classTypeEntity the classTypeEntity to set
+     */
+    public void setClassTypeEntity(ClassTypeEntity classTypeEntity) {
+        this.classTypeEntity = classTypeEntity;
+    }
+
 }

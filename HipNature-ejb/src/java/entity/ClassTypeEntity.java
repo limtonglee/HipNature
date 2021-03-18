@@ -14,60 +14,61 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author User
  */
 @Entity
-public class TagEntity implements Serializable {
+public class ClassTypeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tagId;
-    @Column(nullable = false, unique = true)
+    private Long classTypeId;
+    @Column(nullable = false, unique = true, length =32)
     @NotNull
-    private String tagName;
+    @Size(max = 32)
+    private String classTypeName;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "classTypeEntity", fetch = FetchType.LAZY)
     private List<ClassEntity> classEntities;
 
-    public TagEntity() {
+
+    public ClassTypeEntity() {
         classEntities = new ArrayList<>();
     }
-
-    public TagEntity(String tagName) {
+    public ClassTypeEntity(String classTypeName) {
         this();
-        this.tagName = tagName;
+        this.classTypeName = classTypeName;
     }
 
-    
-    public Long getTagId() {
-        return tagId;
+    public Long getClassTypeId() {
+        return classTypeId;
     }
 
-    public void setTagId(Long tagId) {
-        this.tagId = tagId;
+    public void setClassTypeId(Long classTypeId) {
+        this.classTypeId = classTypeId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (tagId != null ? tagId.hashCode() : 0);
+        hash += (classTypeId != null ? classTypeId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the tagId fields are not set
-        if (!(object instanceof TagEntity)) {
+        // TODO: Warning - this method won't work in the case the classTypeId fields are not set
+        if (!(object instanceof ClassTypeEntity)) {
             return false;
         }
-        TagEntity other = (TagEntity) object;
-        if ((this.tagId == null && other.tagId != null) || (this.tagId != null && !this.tagId.equals(other.tagId))) {
+        ClassTypeEntity other = (ClassTypeEntity) object;
+        if ((this.classTypeId == null && other.classTypeId != null) || (this.classTypeId != null && !this.classTypeId.equals(other.classTypeId))) {
             return false;
         }
         return true;
@@ -75,21 +76,21 @@ public class TagEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.TagEntity[ id=" + tagId + " ]";
+        return "entity.ClassTypeEntity[ id=" + classTypeId + " ]";
     }
 
     /**
-     * @return the tagName
+     * @return the classTypeName
      */
-    public String getTagName() {
-        return tagName;
+    public String getClassTypeName() {
+        return classTypeName;
     }
 
     /**
-     * @param tagName the tagName to set
+     * @param classTypeName the classTypeName to set
      */
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setClassTypeName(String classTypeName) {
+        this.classTypeName = classTypeName;
     }
 
     /**

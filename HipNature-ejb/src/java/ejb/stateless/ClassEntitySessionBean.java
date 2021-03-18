@@ -24,9 +24,15 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
 
     @Override
     public List<ClassEntity> retrieveAllClasses() {
-        Query query = em.createQuery("SELECT c FROM ClassEntity C");
-        
-        return query.getResultList();
+        Query query = em.createQuery("SELECT c FROM ClassEntity c ORDER BY c.className ASC");
+        List<ClassEntity> list = query.getResultList();
+        if (list != null){
+            for (ClassEntity classE:list){
+                classE.getTagEntities().size();
+            }
+            return list;
+            }
+        return null;
     }
 
     @Override

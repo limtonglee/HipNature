@@ -5,12 +5,16 @@
  */
 package ejb.singleton;
 
+import ejb.stateless.ClassTypeEntitySessionBeanLocal;
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PartnerEntitySessionBean;
 import ejb.stateless.PlanEntitySessionBeanLocal;
+import ejb.stateless.TagEntitySessionBeanLocal;
+import entity.ClassTypeEntity;
 import entity.CustomerEntity;
 import entity.PartnerEntity;
 import entity.PlanEntity;
+import entity.TagEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -30,6 +34,13 @@ import util.exception.PartnerNotFoundException;
 @Startup
 public class DataInitSessionBean {
 
+    @EJB
+    private ClassTypeEntitySessionBeanLocal classTypeEntitySessionBeanLocal;
+
+    @EJB
+    private TagEntitySessionBeanLocal tagEntitySessionBeanLocal;
+
+    
     @EJB
     private PlanEntitySessionBeanLocal planEntitySessionBeanLocal;
 
@@ -77,12 +88,26 @@ public class DataInitSessionBean {
     private void createCreditPlan() {
         
     }
+    private void createClassTypeEntity(){
+        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
+        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
+        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
+    }
+    private void createTagEntity(){
+        tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
+        tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
+        tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
+        tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
+        tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+    }
     
     private void initializeData() {
         createPartner();
         createCustomer();
         createPlan();
         createCreditPlan();
+        createClassTypeEntity();
+        createTagEntity();
     }
 
     public void persist(Object object) {
