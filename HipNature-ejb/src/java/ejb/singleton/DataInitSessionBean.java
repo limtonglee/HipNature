@@ -15,6 +15,8 @@ import entity.CustomerEntity;
 import entity.PartnerEntity;
 import entity.PlanEntity;
 import entity.TagEntity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -23,6 +25,7 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.CustomerTypeEnum;
+import util.exception.InputDataValidationException;
 import util.exception.PartnerNotFoundException;
 
 /**
@@ -69,7 +72,11 @@ public class DataInitSessionBean {
     }
 
     private void createPartner() {
-        partnerEntitySessionBeanLocal.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
+        try {
+            partnerEntitySessionBeanLocal.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void createCustomer() {

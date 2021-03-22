@@ -69,6 +69,9 @@ public class PartnerEntity implements Serializable {
 
     @OneToMany(mappedBy = "partnerEntity", fetch = FetchType.LAZY)
     private List<InstructorEntity> instructorEntity;
+    
+    @OneToMany(mappedBy = "partnerEntity", fetch = FetchType.LAZY)
+    private List<ClassEntity> classEntity;
 
     
     public PartnerEntity() {
@@ -232,6 +235,20 @@ public class PartnerEntity implements Serializable {
      */
     public void setInstructorEntity(List<InstructorEntity> instructorEntity) {
         this.instructorEntity = instructorEntity;
+    }
+
+    /**
+     * @return the classEntity
+     */
+    public List<ClassEntity> getClassEntity() {
+        return classEntity;
+    }
+
+    /**
+     * @param classEntity the classEntity to set
+     */
+    public void setClassEntity(List<ClassEntity> classEntity) {
+        this.classEntity = classEntity;
     }
 
 }

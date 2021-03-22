@@ -10,15 +10,23 @@ import ejb.stateless.ClassTypeEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
+import entity.PartnerEntity;
 import entity.TagEntity;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.FlowEvent;
 import util.enumeration.LocationTypeEnum;
+import util.exception.CreateNewClassException;
+import util.exception.InputDataValidationException;
 
 /**
  *
@@ -37,9 +45,11 @@ public class ClassManagementManagedBean implements Serializable {
     @EJB
     private TagEntitySessionBeanLocal tagEntitySessionBeanLocal;
     
+    private PartnerEntity currentPartnerEntity;
     /**
      * @return the newClassEntity
      */
+    
     public ClassEntity getNewClassEntity() {
         return newClassEntity;
     }
@@ -65,7 +75,9 @@ public class ClassManagementManagedBean implements Serializable {
     
     
     public ClassManagementManagedBean() {
+        currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
         newClassEntity = new ClassEntity();
+        newClassEntity.setPartnerEntity(currentPartnerEntity);
     }
     @PostConstruct
     public void postConstruct(){
@@ -74,6 +86,23 @@ public class ClassManagementManagedBean implements Serializable {
         tagEntities = tagEntitySessionBeanLocal.retrieveAllTags();
     }
     
+    public void createNewClass(ActionEvent event){
+        try{
+            System.out.print("*******************************************testing*******************************************");
+            System.out.print(newClassEntity.getClassName());
+            //System.out.print(newClassEntity.getClassTypeEntity().getClassTypeName());
+            System.out.print(newClassEntity.getCredit());
+            System.out.print(newClassEntity.getLocationTypeEnum());
+            ClassEntity ce = classEntitySessionBeanLocal.createNewClass(newClassEntity, classTypeIdNew, tagIdsNew);
+            currentPartnerEntity.getClassEntity().add(ce);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Account Created", null));
+        } catch (InputDataValidationException | CreateNewClassException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new class", null));
+            System.out.print(ex.getMessage());
+        }
+        
+    }
+
     public LocationTypeEnum[] getEnumLocation(){
         return LocationTypeEnum.values();
     }
@@ -83,7 +112,9 @@ public class ClassManagementManagedBean implements Serializable {
     public List<ClassEntity> getClassEntities() {
         return classEntities;
     }
-
+    public LocationTypeEnum[] getLocationTypeEnum(){
+        return LocationTypeEnum.values();
+    }
     /**
      * @param classEntities the classEntities to set
      */
@@ -149,6 +180,7 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setLocationTypeEnumNew(LocationTypeEnum locationTypeEnumNew) {
         this.locationTypeEnumNew = locationTypeEnumNew;
+        newClassEntity.setLocationTypeEnum(locationTypeEnumNew);
     }
 
     /**
@@ -163,6 +195,20 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setClassTypeIdNew(Long classTypeIdNew) {
         this.classTypeIdNew = classTypeIdNew;
+    }
+
+    /**
+     * @return the currentPartnerEntity
+     */
+    public PartnerEntity getCurrentPartnerEntity() {
+        return currentPartnerEntity;
+    }
+
+    /**
+     * @param currentPartnerEntity the currentPartnerEntity to set
+     */
+    public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
+        this.currentPartnerEntity = currentPartnerEntity;
     }
     
 }

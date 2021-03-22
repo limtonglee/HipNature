@@ -17,6 +17,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
 import util.security.CryptographicHelper;
@@ -31,19 +35,29 @@ public class PartnerEntitySessionBean {
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
+    
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
-    public void persist(Object object) {
-        em.persist(object);
+    public PartnerEntitySessionBean() {
+        this.validatorFactory = Validation.buildDefaultValidatorFactory(); 
+        this.validator = validatorFactory.getValidator();
     }
 
-    public Long createNewPartner(PartnerEntity newPartnerEntity) {
 
-        em.persist(newPartnerEntity);
-        em.flush();
-
-        return newPartnerEntity.getPartnerEntityId();
+    public PartnerEntity createNewPartner(PartnerEntity newPartnerEntity) throws InputDataValidationException {
+        Set<ConstraintViolation<PartnerEntity>>constraintViolations = validator.validate(newPartnerEntity);
+        if (constraintViolations.isEmpty()){
+            em.persist(newPartnerEntity);
+            em.flush();
+            return newPartnerEntity;
+        }
+        else{
+            throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
+        }
 
     }
+
 
     public List<PartnerEntity> retrieveAllPartners() {
         Query query = em.createQuery("SELECT s FROM PartnerEntity s");
@@ -96,7 +110,11 @@ public class PartnerEntitySessionBean {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
         }
     }
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    private String prepareInputDataValidationException(Set<ConstraintViolation<PartnerEntity>>constraintViolations){
+        String msg = "Input data validation error: ";
+        for (ConstraintViolation constraint: constraintViolations){
+            msg +="\n\t" + constraint.getPropertyPath() + " - " + constraint.getInvalidValue() + " : " + constraint.getMessage();
+        }
+        return msg;
+    }
 }

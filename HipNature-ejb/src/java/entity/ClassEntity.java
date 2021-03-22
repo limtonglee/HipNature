@@ -37,9 +37,6 @@ public class ClassEntity implements Serializable {
     private Long classId;
     @Column(nullable = false)
     @NotNull
-    private String classType;
-    @Column(nullable = false)
-    @NotNull
     private String className;
     @Column(nullable = false)
     @Positive
@@ -60,13 +57,15 @@ public class ClassEntity implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ClassTypeEntity classTypeEntity;
     
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private PartnerEntity partnerEntity;
+    
     public ClassEntity() {
         tagEntities = new ArrayList<>();
         reviewEntities = new ArrayList<>();
     }
 
     public ClassEntity(String classType, String className, Integer credit, LocationTypeEnum locationTypeEnum, ClassTypeEntity classTypeEntity) {
-        this.classType = classType;
         this.className = className;
         this.credit = credit;
         this.locationTypeEnum = locationTypeEnum;
@@ -128,20 +127,6 @@ public class ClassEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.ClassEntity[ id=" + classId + " ]";
-    }
-
-    /**
-     * @return the classType
-     */
-    public String getClassType() {
-        return classType;
-    }
-
-    /**
-     * @param classType the classType to set
-     */
-    public void setClassType(String classType) {
-        this.classType = classType;
     }
 
     /**
@@ -226,6 +211,20 @@ public class ClassEntity implements Serializable {
      */
     public void setClassTypeEntity(ClassTypeEntity classTypeEntity) {
         this.classTypeEntity = classTypeEntity;
+    }
+
+    /**
+     * @return the partnerEntity
+     */
+    public PartnerEntity getPartnerEntity() {
+        return partnerEntity;
+    }
+
+    /**
+     * @param partnerEntity the partnerEntity to set
+     */
+    public void setPartnerEntity(PartnerEntity partnerEntity) {
+        this.partnerEntity = partnerEntity;
     }
 
 }

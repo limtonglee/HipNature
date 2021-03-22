@@ -40,4 +40,14 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
         }
         return list;
     }
+    
+    @Override
+    public ClassTypeEntity retrieveClassTypeEntityById(Long classTypeId){
+        ClassTypeEntity classTypeEntity = em.find(ClassTypeEntity.class, classTypeId);
+        if (classTypeEntity != null){
+            classTypeEntity.getClassEntities();
+            return classTypeEntity;
+        }
+        return null;
+    }
 }

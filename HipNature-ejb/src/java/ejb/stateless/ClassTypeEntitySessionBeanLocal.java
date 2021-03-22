@@ -19,5 +19,7 @@ public interface ClassTypeEntitySessionBeanLocal {
     public Long createClassType(ClassTypeEntity newClassTypeEntity);
 
     public List<ClassTypeEntity> retrieveAllClassTypeEntity();
+
+    public ClassTypeEntity retrieveClassTypeEntityById(Long classTypeId);
     
 }
