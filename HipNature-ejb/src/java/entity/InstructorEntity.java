@@ -50,27 +50,36 @@ public class InstructorEntity implements Serializable {
     private String email;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private PartnerEntity partnerEntity;
     
     @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
     private List<SessionEntity> sessionEntity;
+
+    public InstructorEntity() {
+        sessionEntity = new ArrayList<>();
+    }
+
+    public InstructorEntity(String instructorName, String phone, String email, PartnerEntity partnerEntity) {
+        this();
+        this.instructorName = instructorName;
+        this.phone = phone;
+        this.email = email;
+        this.partnerEntity = partnerEntity;
+    }
+
+    public InstructorEntity(String instructorName, String phone, String email, PartnerEntity partnerEntity, List<SessionEntity> sessionEntity) {
+        this.instructorName = instructorName;
+        this.phone = phone;
+        this.email = email;
+        this.partnerEntity = partnerEntity;
+        this.sessionEntity = sessionEntity;
+    }
     
     public Long getInstructorId() {
         return instructorId;
     }
-
-    public InstructorEntity() {
-        sessionEntity= new ArrayList<>();
-    }
-    
-
-    public InstructorEntity(String instructorName, String phone, String email) {
-        this.instructorName = instructorName;
-        this.phone = phone;
-        this.email = email;
-    }
-    
-    
 
     public void setInstructorId(Long instructorId) {
         this.instructorId = instructorId;

@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <header style="text-align: right;">
-                <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <h:form id="loginForm">
 
                 <p:outputLabel for="username" value="Username" />&nbsp;
@@ -21,7 +21,8 @@
                 &nbsp;
                 <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
                 <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
-
+                <!--    <f:attribute name="loggedInPartner" value="#{sessionScope.loggedInPartner}"/>
+                </p:commandButton> -->
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
@@ -35,7 +36,7 @@
                 <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" />
             </h:form>
         </h:panelGroup>
-        
+
     </header>
 
 </ui:composition>
