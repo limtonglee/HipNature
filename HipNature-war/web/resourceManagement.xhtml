@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+
+        <div>
+            <h2>Instructor Management</h2>
+        </div>
+
+        <h:form id="formCreateNewInstructor">                
+
+            <p:panel header="Create New Instructor" toggleable="true" collapsed="true">
+
+                <p:messages id="messagesCreateNewInstructor" redisplay="false" />
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="name" value="Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="name" value="#{resourceManagementManagedBean.newInstructor.instructorName}" maxlength="100" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="name" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phone" value="Phone: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="phone" value="#{resourceManagementManagedBean.newInstructor.phone}" maxlength="15" required="true" requiredMessage="Phone is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="phone" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{resourceManagementManagedBean.newInstructor.email}" maxlength="50" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <!-- <p:commandButton ajax="false" type="submit" value="Create" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" /> -->
+                            <p:commandButton ajax="false" id="createNewInstructor" value="Create" icon="pi pi-save" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" />    
+                                <!-- <f:attribute name="partnerTagged" value="#{resourceManagementManagedBean.newInstructor.partnerEntity}" /> -->
+                            <f:attribute name="partnerTagged" value="#{sessionScope.currentPartnerEntity}" /> 
+                        </p:column>
+
+                        <!-- <p:column colspan="3">
+                            <p:commandButton id="createNewBook" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableBooks" actionListener="#{demo01ManagedBean.saveNewBook}"/>
+                        </p:column> -->
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:panel>
+
+        </h:form>
+
+
+        <h:form id="formDataTable">
+
+            <p:messages id="messages" redisplay="false" closable="true" />
+
+            <p:dataTable id="dataTableInstructors" widgetVar="dataTableInstructors" value="#{resourceManagementManagedBean.currentPartnerEntity.instructorEntity}" var="instructor" rowKey="#{instructor.instructorId}" rowIndexVar="row"
+                         filteredValue="#{resourceManagementManagedBean.filteredInstructors}"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right;">
+                        <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('dataTableInstructors').filter()" style="width:300px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Instructor ID" sortBy="#{instructor.instructorId}" filterBy="#{instructor.instructorId}" filterMatchMode="contains" width="80">
+                    <h:outputText value="#{instructor.instructorId}" />
+                </p:column>
+
+                <p:column headerText="Name" sortBy="#{instructor.instructorName}" filterBy="#{instructor.instructorName}" filterMatchMode="contains" width="120">
+                    <h:outputText value="#{instructor.instructorName}" />
+                </p:column>
+
+                <p:column headerText="Phone" sortBy="#{instructor.phone}" filterBy="#{instructor.phone}" filterMatchMode="contains">
+                    <h:outputText value="#{instructor.phone}" />
+                </p:column>
+
+                <p:column headerText="Email" sortBy="#{instructor.email}" filterBy="#{instructor.email}" filterMatchMode="contains">
+                    <h:outputText value="#{instructor.email}" />
+                </p:column>
+
+                <p:column headerText="Partner" sortBy="#{instructor.partnerEntity}" filterBy="#{instructor.partnerEntity}" filterMatchMode="contains">
+                    <h:outputText value="#{instructor.partnerEntity.partnerEntityName}" />
+                </p:column>
+
+                <p:column headerText="Sessions">
+
+                    <h:outputText value="Assigned Sessions: "/>
+                    <p:dataList value="#{instructor.sessionEntity}" var="sess">
+                        #{sess.sessionId}
+                    </p:dataList>
+
+                </p:column>
+
+                <p:column headerText="Action" width="100" >
+                    <p:commandButton update="formViewInstructor" oncomplete="PF('dialogViewInstructor').show()" icon="pi pi-file" title="View">
+                        <f:setPropertyActionListener value="#{instructor}" target="#{resourceManagementManagedBean.selectedInstructorToView}" />
+                    </p:commandButton>
+                    <p:commandButton update="formUpdateInstructor" oncomplete="PF('dialogUpdateInstructor').show()" icon="pi pi-pencil" title="Update">
+                        <f:setPropertyActionListener value="#{instructor}" target="#{resourceManagementManagedBean.selectedInstructorToUpdate}" />
+                    </p:commandButton>
+                    <p:commandButton icon="pi pi-trash" actionListener="#{resourceManagementManagedBean.deleteInstructor}" update="formDataTable:dataTableInstructors formDataTable:messages">
+                        <f:attribute name="instructorToDelete" value="#{instructor}" />
+                        <p:confirm header="Confirmation" message="Are you sure you want to delete #{instructor.instructorName} (Instructor ID: #{instructor.instructorId})?" icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+
+                </p:column>
+
+                <f:facet name="footer">
+                    <h:outputText value="Total records is #{resourceManagementManagedBean.instructors.size()}" />
+                </f:facet>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+            </p:confirmDialog>
+
+        </h:form>
+
+        <h:form id="formViewInstructor">
+
+            <p:dialog id="dialogViewInstructor" widgetVar="dialogViewInstructor" header="View Instructor" closable="true">
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="instructorId" value="Instructor ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="instructorId" value="#{resourceManagementManagedBean.selectedInstructorToView.instructorId}" />
+                        </p:column>                 
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="name" value="Instructor Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="name" value="#{resourceManagementManagedBean.selectedInstructorToView.instructorName}" />
+                        </p:column>               
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phone" value="Phone: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="phone" value="#{resourceManagementManagedBean.selectedInstructorToView.phone}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="email" value="#{resourceManagementManagedBean.selectedInstructorToView.email}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="partner" value="Partner: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="partner" value="#{resourceManagementManagedBean.selectedInstructorToView.partnerEntity.partnerEntityName}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="sessions" value="Assigned Sessions: " />
+                        </p:column>
+                        <p:column>
+                            <p:dataList id="sessions" value="#{resourceManagementManagedBean.selectedInstructorToView.sessionEntity}" var="sess">
+                                #{sess.sessionId}
+                            </p:dataList>
+                        </p:column>
+                    </p:row>
+
+                    <!--show sessions-->
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
+        <h:form id="formUpdateInstructor">
+
+            <p:dialog id="dialogUpdateInstructor" widgetVar="dialogUpdateInstructor" header="Update Instructor" closable="true">
+
+                <p:messages id="messagesUpdateInstructor" redisplay="false" />
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="name" value="Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputMask id="name" value="#{resourceManagementManagedBean.selectedInstructorToUpdate.instructorName}" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="name" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="phone" value="Phone: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="phone" value="#{resourceManagementManagedBean.selectedInstructorToUpdate.phone}" maxlength="30" required="true" requiredMessage="Phone is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="phone" />
+                        </p:column>
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{resourceManagementManagedBean.selectedInstructorToUpdate.email}" maxlength="100" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+
+                    <!-- how to set partner and session -->
+
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="sessions" value="Sessions: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectCheckboxMenu id="sessions" value="#{resourceManagementManagedBean.partnerListOfSessions}" label="Sessions"
+                                                  multiple="true" filter="true" filterMatchMode="startsWith">
+                                <f:selectItems value="#{resourceManagementManagedBean.sessions}" var="sess" itemLabel="#{sess.sessionId}" />
+                            </p:selectCheckboxMenu>
+                        </p:column>
+                        <p:column>
+                            <p:message for="sessions" />
+                        </p:column>
+                    </p:row> 
+
+                    <p:selectCheckboxMenu id="grouped" value="#{checkboxView.selectedCountries}" label="Countries" style="width: 15rem"
+                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 15rem" scrollHeight="250">
+                        <f:selectItems value="#{checkboxView.countries}"/>
+                    </p:selectCheckboxMenu>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton id="updateInstructor" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveInstructor}" oncomplete="PF('dialogUpdateInstructor').show();" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
+    </ui:define>
+    -->
+
+</ui:composition>

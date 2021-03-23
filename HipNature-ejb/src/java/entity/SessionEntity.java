@@ -43,13 +43,10 @@ public class SessionEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String venue;
-    
-   @Temporal(TemporalType.TIMESTAMP)
+
     @Column(nullable = false)
     @NotNull
     private Date startTime;
-   
-      @Temporal(TemporalType.TIMESTAMP)
 
     @Column(nullable = false)
     @NotNull
@@ -75,8 +72,7 @@ public class SessionEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private LocationTypeEnum locationTypeEnum;
-    
-    
+
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
     private InstructorEntity instructor;
@@ -89,11 +85,9 @@ public class SessionEntity implements Serializable {
         return classEntity;
     }
 
-
-    
     @OneToMany(mappedBy = "sessionEntity", fetch = FetchType.LAZY)
     private List<BookingEntity> participants;
-    
+
     public Long getSessionId() {
         return sessionId;
     }
@@ -101,15 +95,14 @@ public class SessionEntity implements Serializable {
     public SessionEntity() {
     }
 
-    
-    public SessionEntity(String venue, Date startTime, Integer duration, String phone, Integer maxCapacity, String status, LocationTypeEnum locationTypeEnum, InstructorEntity instructor,ClassEntity classEntity) {
-         Calendar calendar = Calendar.getInstance();
+    public SessionEntity(String venue, Date startTime, Integer duration, String phone, Integer maxCapacity, String status, LocationTypeEnum locationTypeEnum, InstructorEntity instructor, ClassEntity classEntity) {
+        Calendar calendar = Calendar.getInstance();
 
         this.venue = venue;
         this.startTime = startTime;
         calendar.setTime(startTime);
         calendar.add(Calendar.HOUR_OF_DAY, duration);
-     
+
         this.endTime = calendar.getTime();
         this.Duration = duration;
         this.phone = phone;
@@ -117,12 +110,22 @@ public class SessionEntity implements Serializable {
         this.status = status;
         this.locationTypeEnum = locationTypeEnum;
         this.instructor = instructor;
-        this.classEntity=classEntity;
+        this.classEntity = classEntity;
     }
 
-  
+    public SessionEntity(String venue, Date startTime, Date endTime, Integer Duration, String phone, Integer maxCapacity, String status, LocationTypeEnum locationTypeEnum, InstructorEntity instructor) {
+        this();
+        this.venue = venue;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.Duration = Duration;
+        this.phone = phone;
+        this.maxCapacity = maxCapacity;
+        this.status = status;
+        this.locationTypeEnum = locationTypeEnum;
+        this.instructor = instructor;
+    }
 
-    
     public void setSessionId(Long sessionId) {
         this.sessionId = sessionId;
     }
@@ -291,5 +294,5 @@ public class SessionEntity implements Serializable {
     public void setParticipants(List<BookingEntity> participants) {
         this.participants = participants;
     }
-    
+
 }
