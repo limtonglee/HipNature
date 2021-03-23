@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import entity.ClassEntity;
+import entity.TagEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -40,7 +41,8 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
         
         em.persist(newClass);
         em.flush();
-
+      
+        
         return newClass.getClassId();
         
     }
