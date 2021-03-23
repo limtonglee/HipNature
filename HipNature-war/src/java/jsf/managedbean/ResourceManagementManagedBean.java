@@ -77,23 +77,23 @@ public class ResourceManagementManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         setInstructors(instructorEntitySessionBeanLocal.retrieveAllInstructors());
+        currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
         //setNewInstructorSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());
 
-        // below 4 lines are problematic
-        //System.out.println("*********** In ResourceManagementManagedBean, does retrieving logged in partner work?");
-        //PartnerEntity currPartner = loginManagedBean.getLoggedInPartner();
-        //System.out.println("*********** Retrieving logged in partner works" + currPartner.getPartnerEntityId());
+        /*System.out.println("*********** In ResourceManagementManagedBean, does retrieving logged in partner work?");
+        PartnerEntity currPartner = loginManagedBean.getLoggedInPartner();
+        System.out.println("*********** Retrieving logged in partner works" + currPartner.getPartnerEntityId());*/
 
-        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentPartnerEntity", currPartner);
+        /*FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentPartnerEntity", currPartner);*/
         
-        setCurrentPartnerEntity((PartnerEntity) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("currentPartnerEntity"));
+        /*setCurrentPartnerEntity((PartnerEntity) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("currentPartnerEntity"));
         PartnerEntity p = getCurrentPartnerEntity();
-        //System.out.println("*********** Partner entity is null?");
-        //System.out.println("*********** PartnerEntity ID: " + p.getPartnerEntityId());
+        System.out.println("*********** Partner entity is null?");
+        System.out.println("*********** PartnerEntity ID: " + p.getPartnerEntityId());
         newInstructor.setPartnerEntity(getCurrentPartnerEntity());
-        //System.out.println("*********** SUCCESSFULLY SET PARTNER TO INSTRUCTOR. newInstructor.PartnerEntity is not null" + newInstructor.getPartnerEntity().getPartnerEntityName());
+        System.out.println("*********** SUCCESSFULLY SET PARTNER TO INSTRUCTOR. newInstructor.PartnerEntity is not null" + newInstructor.getPartnerEntity().getPartnerEntityName());
 
-        setSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());
+        setSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());*/
     }
 
     /* 
@@ -120,12 +120,13 @@ public class ResourceManagementManagedBean implements Serializable {
 
         try {
             System.out.println("test");
-            PartnerEntity partnerTagged = (PartnerEntity)event.getComponent().getAttributes().get("partnerTagged");
-            System.out.println("Id:" + partnerTagged.getPartnerEntityId());
+            //PartnerEntity partnerTagged = (PartnerEntity)event.getComponent().getAttributes().get("partnerTagged");
+            //System.out.println("Id:" + partnerTagged.getPartnerEntityId());
 
-            Long newInstructorId = instructorEntitySessionBeanLocal.createNewInstructor(newInstructor, partnerTagged.getPartnerEntityId());
-
-            getNewInstructor().setInstructorId(newInstructorId);
+            // Long newInstructorId = instructorEntitySessionBeanLocal.createNewInstructor(newInstructor, partnerTagged.getPartnerEntityId());
+            System.out.println("partner: " + currentPartnerEntity);
+            Long newInstructorId = instructorEntitySessionBeanLocal.createNewInstructor(newInstructor, currentPartnerEntity.getPartnerEntityId());
+            //getNewInstructor().setInstructorId(newInstructorId);
             getInstructors().add(getNewInstructor());
 
             setNewInstructor(new InstructorEntity());
@@ -173,7 +174,7 @@ public class ResourceManagementManagedBean implements Serializable {
         }
     }
 
-    public void deleteInstructor(ActionEvent event) {
+    /*public void deleteInstructor(ActionEvent event) {
 
         try {
             InstructorEntity instructorToDelete = (InstructorEntity) event.getComponent().getAttributes().get("instructorToDelete");
@@ -192,7 +193,7 @@ public class ResourceManagementManagedBean implements Serializable {
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
-    }
+    }*/
 
     /**
      * @return the newInstructor
