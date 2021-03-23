@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        
+        <h:form id="formCreateNewRecord">
+            
+            <p:messages globalOnly="true" />
+
+            <p:panel header="Create New Record">
+
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="recordName" value="Record Name" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="recordName" value="#{recordManagementManagedBean.newRecord.recordName}" required="true" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="recordName"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            
+                            <p:commandButton process="@form" update="@form formViewAllRecords" value="Create" actionListener="#{recordManagementManagedBean.createNewRecord}"/>
+                        </p:column>
+                        
+                    </p:row>
+                </p:panelGrid>
+
+            </p:panel>
+            
+        </h:form>
+        
+        <h:form id="formViewAllRecords">
+            
+            <p:panel header="View All Records">
+                <p:dataTable id="dataTableViewAllRecords" widgetVar="dataTableXXX" value="#{recordManagementManagedBean.records}" var="record">
+
+                    <p:column headerText="Record ID" sortBy="#{record.recordId}">
+                        <h:outputText value="#{record.recordId}" />
+                    </p:column> 
+                    
+                    <p:column headerText="Record Name" sortBy="#{record.recordName}">
+                        <h:outputText value="#{record.recordName}" />
+                    </p:column> 
+
+                </p:dataTable>
+                
+            </p:panel>
+            
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+
+
