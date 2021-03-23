@@ -8,11 +8,13 @@ package jsf.managedbean;
 import ejb.stateless.InstructorEntitySessionBeanLocal;
 import ejb.stateless.PartnerEntitySessionBean;
 import ejb.stateless.SessionEntitySessionBeanLocal;
+import entity.ClassEntity;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.SessionEntity;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -25,9 +27,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import util.exception.InputDataValidationException;
+import util.exception.InstructorExistsException;
 import util.exception.InstructorNotFoundException;
 import util.exception.PartnerNotFoundException;
 import util.exception.SessionNotFoundException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -48,9 +52,9 @@ public class ResourceManagementManagedBean implements Serializable {
 
     @Inject
     private LoginManagedBean loginManagedBean;
-    
+
     @Inject
-    private GetInstructorsForPartnerManagedBean getInstructorsForPartnerManagedBean; 
+    private GetInstructorsForPartnerManagedBean getInstructorsForPartnerManagedBean;
 
     private InstructorEntity newInstructor;
     private InstructorEntity selectedInstructorToView;
@@ -64,12 +68,14 @@ public class ResourceManagementManagedBean implements Serializable {
     private List<Long> sessionIdsUpdate;
 
     private PartnerEntity currentPartnerEntity;
+    private List<SessionEntity> partnerListOfSessions;
 
     public ResourceManagementManagedBean() {
         newInstructor = new InstructorEntity();
         instructors = new ArrayList<>();
         sessionsIdsToAddToNewInstructor = new ArrayList<>();
         sessions = new ArrayList<>();
+        partnerListOfSessions = new ArrayList<>();
         /*selectItemsGenreObject = new ArrayList<>();
         selectItemsGenreName = new ArrayList<>();*/
     }
@@ -78,15 +84,23 @@ public class ResourceManagementManagedBean implements Serializable {
     public void postConstruct() {
         setInstructors(instructorEntitySessionBeanLocal.retrieveAllInstructors());
         currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
+        /*List<ClassEntity> partnerClasses = currentPartnerEntity.getClassEntity();
+        for (ClassEntity pclass : partnerClasses) {
+            List<SessionEntity> classSessions = pclass.getSessionEntities();
+            for (SessionEntity sess : classSessions) {
+                partnerListOfSessions.add(sess);
+            }
+        }
+        setPartnerListOfSessions(partnerListOfSessions);*/
+        
         //setNewInstructorSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());
 
         /*System.out.println("*********** In ResourceManagementManagedBean, does retrieving logged in partner work?");
         PartnerEntity currPartner = loginManagedBean.getLoggedInPartner();
         System.out.println("*********** Retrieving logged in partner works" + currPartner.getPartnerEntityId());*/
 
-        /*FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentPartnerEntity", currPartner);*/
-        
-        /*setCurrentPartnerEntity((PartnerEntity) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("currentPartnerEntity"));
+ /*FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentPartnerEntity", currPartner);*/
+ /*setCurrentPartnerEntity((PartnerEntity) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("currentPartnerEntity"));
         PartnerEntity p = getCurrentPartnerEntity();
         System.out.println("*********** Partner entity is null?");
         System.out.println("*********** PartnerEntity ID: " + p.getPartnerEntityId());
@@ -116,7 +130,7 @@ public class ResourceManagementManagedBean implements Serializable {
         }
     }
 
-    public void saveNewInstructor(ActionEvent event) {
+    public void saveNewInstructor(ActionEvent event) throws InstructorExistsException, UnknownPersistenceException {
 
         try {
             System.out.println("test");
@@ -128,6 +142,7 @@ public class ResourceManagementManagedBean implements Serializable {
             Long newInstructorId = instructorEntitySessionBeanLocal.createNewInstructor(newInstructor, currentPartnerEntity.getPartnerEntityId());
             //getNewInstructor().setInstructorId(newInstructorId);
             getInstructors().add(getNewInstructor());
+            currentPartnerEntity.getInstructorEntity().add(newInstructor);
 
             setNewInstructor(new InstructorEntity());
 
@@ -135,11 +150,10 @@ public class ResourceManagementManagedBean implements Serializable {
             InstructorEntity ins = instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(newInstructorId);
             instructorsList.add(ins);
             loginManagedBean.setInstructorsToDisplay(instructorsList);*/
-
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New instructor " + newInstructorId + " added successfully", null));
         } catch (PartnerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating the new instructor: Partner not found", null));
-        /*} catch (InstructorNotFoundException ex) {
+            /*} catch (InstructorNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating the new instructor: Instructor not found", null));
         /*} catch (SessionNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating the new instructor: Sesion not found", null));*/
@@ -194,7 +208,6 @@ public class ResourceManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }*/
-
     /**
      * @return the newInstructor
      */
@@ -321,7 +334,7 @@ public class ResourceManagementManagedBean implements Serializable {
     public void setSessionIdsUpdate(List<Long> sessionIdsUpdate) {
         this.sessionIdsUpdate = sessionIdsUpdate;
     }
-    
+
     /**
      * @return the sessionIdsToAddToSelectedInstructorToUpdate
      */
@@ -336,5 +349,19 @@ public class ResourceManagementManagedBean implements Serializable {
     public void setSessionIdsToAddToSelectedInstructorToUpdate(List<Long> sessionIdsToAddToSelectedInstructorToUpdate) {
         this.sessionIdsToAddToSelectedInstructorToUpdate = sessionIdsToAddToSelectedInstructorToUpdate;
     }
-    
+
+    /**
+     * @return the partnerListOfSessions
+     */
+    public List<SessionEntity> getPartnerListOfSessions() {
+        return partnerListOfSessions;
+    }
+
+    /**
+     * @param partnerListOfSessions the partnerListOfSessions to set
+     */
+    public void setPartnerListOfSessions(List<SessionEntity> partnerListOfSessions) {
+        this.partnerListOfSessions = partnerListOfSessions;
+    }
+
 }

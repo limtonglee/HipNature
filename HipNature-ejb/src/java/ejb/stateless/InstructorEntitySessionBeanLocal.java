@@ -6,12 +6,15 @@
 package ejb.stateless;
 
 import entity.InstructorEntity;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InputDataValidationException;
+import util.exception.InstructorExistsException;
 import util.exception.InstructorNotFoundException;
 import util.exception.PartnerNotFoundException;
 import util.exception.SessionNotFoundException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -36,6 +39,6 @@ public interface InstructorEntitySessionBeanLocal {
 
     public List<InstructorEntity> retrieveInstructorsByPartner(Long pid);
 
-    public Long createNewInstructor(InstructorEntity newInstructor, Long partnerEntityId) throws PartnerNotFoundException, InputDataValidationException;
+    public Long createNewInstructor(InstructorEntity newInstructor, Long partnerEntityId) throws PartnerNotFoundException, InputDataValidationException, InstructorExistsException, UnknownPersistenceException;
     
 }

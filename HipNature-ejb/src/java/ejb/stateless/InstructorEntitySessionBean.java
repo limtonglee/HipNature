@@ -8,6 +8,7 @@ package ejb.stateless;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.SessionEntity;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,9 +26,11 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.InputDataValidationException;
+import util.exception.InstructorExistsException;
 import util.exception.InstructorNotFoundException;
 import util.exception.PartnerNotFoundException;
 import util.exception.SessionNotFoundException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -70,12 +73,13 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
     }
 
     @Override
-    public Long createNewInstructor(InstructorEntity newInstructor, Long partnerEntityId/*, List<Long> sessionsId*/) throws PartnerNotFoundException, InputDataValidationException/*, SessionNotFoundException*/ {
-        /*try {*/
+    public Long createNewInstructor(InstructorEntity newInstructor, Long partnerEntityId/*, List<Long> sessionsId*/) throws PartnerNotFoundException, InputDataValidationException, InstructorExistsException, UnknownPersistenceException /*, SessionNotFoundException*/ {
+        try {
             Set<ConstraintViolation<InstructorEntity>> constraintViolations = validator.validate(newInstructor);
 
             if (constraintViolations.isEmpty()) {
                 try {
+
                     PartnerEntity partnerEntity = partnerEntitySessionBeanLocal.retrievePartnerByPartnerId(partnerEntityId);
                     em.persist(newInstructor);
 
@@ -90,7 +94,6 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
                         }
                         newInstructor.setSessionEntity(instructorSessions);
                     }*/
-
                     em.flush();
                     return newInstructor.getInstructorId();
 
@@ -100,14 +103,28 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
-        /*} catch (SessionNotFoundException ex) {
-            throw new SessionNotFoundException("No sessions were found!");
-        }*/
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    throw new InstructorExistsException("Instructor's Phone/Email exists, please try again!");
+                } else {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            } else {
+                throw new UnknownPersistenceException(ex.getMessage());
+            }
+        }
     }
 
-    @Override
-    public InstructorEntity retrieveInstructorByInstructorId(Long instructorId) throws InstructorNotFoundException {
-        InstructorEntity ins = em.find(InstructorEntity.class, instructorId);
+
+@Override
+        public InstructorEntity retrieveInstructorByInstructorId(Long instructorId) throws InstructorNotFoundException {
+        InstructorEntity ins = em.find(InstructorEntity
+
+.class  
+
+
+, instructorId);
 
         if (ins != null) {
             return ins;
@@ -115,9 +132,10 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
             throw new InstructorNotFoundException("Instructor ID " + instructorId + " does not exist!");
         }
     }
-    
+
     @Override
-    public List<InstructorEntity> retrieveInstructorsByPartner(Long pid) {
+        public List<InstructorEntity> retrieveInstructorsByPartner(Long pid
+    ) {
 
         Query query = em.createQuery("SELECT ins FROM InstructorEntity ins WHERE ins.partnerEntity.partnerEntityId = :partnerId");
         query.setParameter("partnerId", pid);
@@ -153,8 +171,13 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
     }
 
     @Override
-    public void deleteInstructor(Long instructorIdToDelete) {
-        InstructorEntity instructorToDelete = em.find(InstructorEntity.class, instructorIdToDelete);
+        public void deleteInstructor(Long instructorIdToDelete) {
+        InstructorEntity instructorToDelete = em.find(InstructorEntity
+
+.class  
+
+
+, instructorIdToDelete);
 
         if (instructorToDelete != null) {
             instructorToDelete.getPartnerEntity().getInstructorEntity().remove(instructorToDelete);
@@ -167,7 +190,7 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
     }
 
     @Override
-    public void deleteInstructors(List<Long> instructorIdsToDelete) {
+        public void deleteInstructors(List<Long> instructorIdsToDelete) {
         for (Long instructorIdToDelete : instructorIdsToDelete) {
             deleteInstructor(instructorIdToDelete);
         }
