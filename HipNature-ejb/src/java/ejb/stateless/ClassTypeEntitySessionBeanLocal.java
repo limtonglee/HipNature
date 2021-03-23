@@ -19,5 +19,6 @@ public interface ClassTypeEntitySessionBeanLocal {
     public Long createClassType(ClassTypeEntity newClassTypeEntity);
 
     public List<ClassTypeEntity> retrieveAllClassTypeEntity();
-    
+        public ClassTypeEntity retrieveClassTypeByClassId(Long classId) throws ClassNotFoundException ;
+
 }
