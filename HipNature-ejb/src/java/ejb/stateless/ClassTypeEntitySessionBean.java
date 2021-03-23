@@ -5,6 +5,7 @@
  */
 package ejb.stateless;
 
+import entity.ClassEntity;
 import entity.ClassTypeEntity;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -39,5 +40,16 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
             temp.getClassEntities().size();
         }
         return list;
+    }
+    
+     @Override
+    public ClassTypeEntity retrieveClassTypeByClassId(Long classId) throws ClassNotFoundException {
+        ClassTypeEntity classTypeEntity = em.find(ClassTypeEntity.class, classId);
+        
+        if (classTypeEntity != null) {
+            return classTypeEntity;
+        } else {
+            throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
+        }
     }
 }
