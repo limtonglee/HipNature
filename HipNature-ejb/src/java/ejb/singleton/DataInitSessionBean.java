@@ -22,6 +22,7 @@ import entity.PlanEntity;
 import entity.SessionEntity;
 import entity.TagEntity;
 import java.sql.Date;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -36,6 +37,9 @@ import util.enumeration.LocationTypeEnum;
 import util.exception.CreateNewClassException;
 import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
+
+import util.exception.InputDataValidationException;
+
 import util.exception.PartnerNotFoundException;
 
 /**

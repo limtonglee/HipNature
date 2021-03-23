@@ -52,4 +52,4 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
             throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
         }
     }
-}
+ }

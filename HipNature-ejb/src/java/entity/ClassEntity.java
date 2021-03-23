@@ -142,7 +142,7 @@ public class ClassEntity implements Serializable {
         return "entity.ClassEntity[ id=" + classId + " ]";
     }
 
-   
+
     /**
      * @return the className
      */

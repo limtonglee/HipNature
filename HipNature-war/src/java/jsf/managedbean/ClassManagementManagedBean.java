@@ -101,6 +101,7 @@ public class ClassManagementManagedBean implements Serializable {
             System.out.print(ex.getMessage());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+
         }
         
     }
