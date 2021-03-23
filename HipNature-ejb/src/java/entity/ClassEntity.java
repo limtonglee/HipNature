@@ -61,6 +61,9 @@ public class ClassEntity implements Serializable {
     @OneToMany(mappedBy = "classEntity", fetch = FetchType.LAZY)
     private List<SessionEntity> sessionEntities;
     
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private PartnerEntity partnerEntity;
+        
     public ClassEntity() {
         tagEntities = new ArrayList<>();
         reviewEntities = new ArrayList<>();
@@ -222,6 +225,20 @@ public class ClassEntity implements Serializable {
      */
     public void setClassTypeEntity(ClassTypeEntity classTypeEntity) {
         this.classTypeEntity = classTypeEntity;
+    }
+
+    /**
+     * @return the partnerEntity
+     */
+    public PartnerEntity getPartnerEntity() {
+        return partnerEntity;
+    }
+
+    /**
+     * @param partnerEntity the partnerEntity to set
+     */
+    public void setPartnerEntity(PartnerEntity partnerEntity) {
+        this.partnerEntity = partnerEntity;
     }
 
 }

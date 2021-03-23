@@ -19,9 +19,13 @@
                 </p:panelMenu>
 
             </h:form>
+            <h:form id="formAllClasses">
+                <p:messages redisplay="false"/>
+            </h:form>
 
             <h:form id="formCreateNewClass">
                 <p:dialog id="dialogCreateNewClass" widgetVar="dialogCreateNewClass" header="Create New Class" closable="true">
+                    <p:messages id="messageCreateNewClass" redisplay="false"/>
                     <p:wizard>
                         <p:tab id="ClassInformation" title="Class">
                             <p:panel header="Class Information">
@@ -36,8 +40,8 @@
                                     </p:selectOneMenu>
                                     <h:outputText value="Location: "/>
                                     <p:selectOneMenu id ="selClassLocation" value="#{classManagementManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
-                                        <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
-                                        <f:selectItems value="#{classManagementManagedBean.enumLocation}"/>
+                                        <f:selectItem itemDisabled="true" itemLabel="[Select One]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{classManagementManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
                                     </p:selectOneMenu>
                                 </h:panelGrid>
                             </p:panel>
@@ -58,7 +62,7 @@
                                     <f:selectItems value ="#{classManagementManagedBean.tagEntities}" var="tagEntity" itemValue="#{tagEntity.tagId}" itemLabel="#{tagEntity.tagName}"/>
                                 </p:selectManyCheckbox>
                             </p:panel>
-                            <p:commandButton value="Confirm" oncomplete="PF('dialogCreateNewClass').show();" style="float: right;"/>
+                            <p:commandButton value="Confirm" oncomplete="PF('dialogCreateNewClass').show();" actionListener="#{classManagementManagedBean.createNewClass}" style="float: right;" update="formAllClasses"/>
                         </p:tab>
                     </p:wizard>
                 </p:dialog>

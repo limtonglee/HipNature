@@ -9,12 +9,12 @@ package util.exception;
  *
  * @author User
  */
-public class InputDataValidationException extends Exception{
+public class CreateNewClassException extends Exception{
 
-    public InputDataValidationException() {
+    public CreateNewClassException() {
     }
 
-    public InputDataValidationException(String string) {
+    public CreateNewClassException(String string) {
         super(string);
     }
     

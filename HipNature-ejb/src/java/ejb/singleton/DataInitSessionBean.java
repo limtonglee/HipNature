@@ -33,6 +33,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.CustomerTypeEnum;
 import util.enumeration.LocationTypeEnum;
+import util.exception.CreateNewClassException;
+import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
 import util.exception.PartnerNotFoundException;
 
@@ -83,13 +85,19 @@ public class DataInitSessionBean {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex1);
             } catch (ClassNotFoundException ex1) {
                 Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex1);
+            } catch (CreateNewClassException ex1) {
+                Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
         
     }
     
     private void createPartner() {
-        partnerEntitySessionBeanLocal.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
+        try {
+            partnerEntitySessionBeanLocal.createNewPartner(new PartnerEntity("partner", "1234567", "partner@gmail.com", "Singapore", "partner", "password"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void createCustomer() {
@@ -127,8 +135,8 @@ public class DataInitSessionBean {
         instructorEntitySessionBean.createNewInstructor(new InstructorEntity("Mr Woekout", "12345678", "Mona@gmail.com"));
     }
     
-    private void createClassEntity() throws ClassNotFoundException {
-        classEntitySessionBean.createNewClass(new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL));
+    private void createClassEntity() throws ClassNotFoundException, CreateNewClassException {
+        classEntitySessionBean.NewClass(new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL));
     }
     
     private void createSessionEntity() throws InstructorNotFoundException, ClassNotFoundException {
@@ -137,7 +145,7 @@ public class DataInitSessionBean {
 
     }
     
-    private void initializeData() throws InstructorNotFoundException, ClassNotFoundException {
+    private void initializeData() throws InstructorNotFoundException, ClassNotFoundException, CreateNewClassException {
         createPartner();
         createCustomer();
         createPlan();

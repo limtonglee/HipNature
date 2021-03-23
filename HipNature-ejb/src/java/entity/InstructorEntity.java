@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +50,6 @@ public class InstructorEntity implements Serializable {
     private String email;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
     private PartnerEntity partnerEntity;
     
     @OneToMany(mappedBy = "instructor", fetch = FetchType.LAZY)
@@ -58,6 +58,19 @@ public class InstructorEntity implements Serializable {
     public Long getInstructorId() {
         return instructorId;
     }
+
+    public InstructorEntity() {
+        sessionEntity= new ArrayList<>();
+    }
+    
+
+    public InstructorEntity(String instructorName, String phone, String email) {
+        this.instructorName = instructorName;
+        this.phone = phone;
+        this.email = email;
+    }
+    
+    
 
     public void setInstructorId(Long instructorId) {
         this.instructorId = instructorId;

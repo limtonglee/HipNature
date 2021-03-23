@@ -6,7 +6,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +21,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -39,9 +43,14 @@ public class SessionEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String venue;
+    
+   @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
     private Date startTime;
+   
+      @Temporal(TemporalType.TIMESTAMP)
+
     @Column(nullable = false)
     @NotNull
     private Date endTime;
@@ -72,12 +81,48 @@ public class SessionEntity implements Serializable {
     @JoinColumn(nullable = true)
     private InstructorEntity instructor;
 
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private ClassEntity classEntity;
+
+    public ClassEntity getClassEntity() {
+        return classEntity;
+    }
+
+
+    
     @OneToMany(mappedBy = "sessionEntity", fetch = FetchType.LAZY)
     private List<BookingEntity> participants;
+    
     public Long getSessionId() {
         return sessionId;
     }
 
+    public SessionEntity() {
+    }
+
+    
+    public SessionEntity(String venue, Date startTime, Integer duration, String phone, Integer maxCapacity, String status, LocationTypeEnum locationTypeEnum, InstructorEntity instructor,ClassEntity classEntity) {
+         Calendar calendar = Calendar.getInstance();
+
+        this.venue = venue;
+        this.startTime = startTime;
+        calendar.setTime(startTime);
+        calendar.add(Calendar.HOUR_OF_DAY, duration);
+     
+        this.endTime = calendar.getTime();
+        this.Duration = duration;
+        this.phone = phone;
+        this.maxCapacity = maxCapacity;
+        this.status = status;
+        this.locationTypeEnum = locationTypeEnum;
+        this.instructor = instructor;
+        this.classEntity=classEntity;
+    }
+
+  
+
+    
     public void setSessionId(Long sessionId) {
         this.sessionId = sessionId;
     }
