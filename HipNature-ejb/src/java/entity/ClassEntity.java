@@ -35,9 +35,7 @@ public class ClassEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long classId;
-    @Column(nullable = false)
-    @NotNull
-    private String classType;
+
     @Column(nullable = false)
     @NotNull
     private String className;
@@ -60,20 +58,22 @@ public class ClassEntity implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ClassTypeEntity classTypeEntity;
     
+    @OneToMany(mappedBy = "classEntity", fetch = FetchType.LAZY)
+    private List<SessionEntity> sessionEntities;
+    
     public ClassEntity() {
         tagEntities = new ArrayList<>();
         reviewEntities = new ArrayList<>();
     }
 
-    public ClassEntity(String classType, String className, Integer credit, LocationTypeEnum locationTypeEnum, ClassTypeEntity classTypeEntity) {
-        this.classType = classType;
+    public ClassEntity(ClassTypeEntity classTypeEntity, String className, Integer credit, LocationTypeEnum locationTypeEnum) {
         this.className = className;
         this.credit = credit;
         this.locationTypeEnum = locationTypeEnum;
         this.classTypeEntity = classTypeEntity;
     }
 
-
+    
 
     public void addTag(TagEntity tagEntity) {
         if (tagEntity != null) {
@@ -86,6 +86,15 @@ public class ClassEntity implements Serializable {
         }
     }
 
+    public List<SessionEntity> getSessionEntities() {
+        return sessionEntities;
+    }
+
+    public void setSessionEntities(List<SessionEntity> sessionEntities) {
+        this.sessionEntities = sessionEntities;
+    }
+
+    
     public void removeTag(TagEntity tagEntity) {
         if (tagEntity != null) {
             if (this.tagEntities.contains(tagEntity)) {
@@ -130,20 +139,7 @@ public class ClassEntity implements Serializable {
         return "entity.ClassEntity[ id=" + classId + " ]";
     }
 
-    /**
-     * @return the classType
-     */
-    public String getClassType() {
-        return classType;
-    }
-
-    /**
-     * @param classType the classType to set
-     */
-    public void setClassType(String classType) {
-        this.classType = classType;
-    }
-
+   
     /**
      * @return the className
      */
