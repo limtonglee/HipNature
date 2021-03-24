@@ -73,6 +73,9 @@ public class ClassManagementManagedBean implements Serializable {
     private List<TagEntity> tagEntities;
     private List<ClassTypeEntity> classTypeEntities;
     
+    //Filter
+    private List<ClassEntity> classEntitiesFiltered;
+    
     
     public ClassManagementManagedBean() {
         currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
@@ -81,7 +84,7 @@ public class ClassManagementManagedBean implements Serializable {
     }
     @PostConstruct
     public void postConstruct(){
-        classEntities = classEntitySessionBeanLocal.retrieveAllClasses();
+        classEntities = classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());
         classTypeEntities = classTypeEntitySessionBeanLocal.retrieveAllClassTypeEntity();
         tagEntities = tagEntitySessionBeanLocal.retrieveAllTags();
     }
@@ -95,6 +98,9 @@ public class ClassManagementManagedBean implements Serializable {
             System.out.print(newClassEntity.getLocationTypeEnum());
             ClassEntity ce = classEntitySessionBeanLocal.createNewClass(newClassEntity, classTypeIdNew, tagIdsNew);
             currentPartnerEntity.getClassEntity().add(ce);
+            if (classEntitiesFiltered != null){
+                classEntitiesFiltered.add(ce);
+            }
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Account Created", null));
         } catch (InputDataValidationException | CreateNewClassException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new class", null));
@@ -211,6 +217,20 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
         this.currentPartnerEntity = currentPartnerEntity;
+    }
+
+    /**
+     * @return the classEntitiesFiltered
+     */
+    public List<ClassEntity> getClassEntitiesFiltered() {
+        return classEntitiesFiltered;
+    }
+
+    /**
+     * @param classEntitiesFiltered the classEntitiesFiltered to set
+     */
+    public void setClassEntitiesFiltered(List<ClassEntity> classEntitiesFiltered) {
+        this.classEntitiesFiltered = classEntitiesFiltered;
     }
     
 }

@@ -25,4 +25,6 @@ public interface ClassEntitySessionBeanLocal {
     public ClassEntity retrieveClassByClassId(Long classId) throws ClassNotFoundException;
         public ClassEntity NewClass(ClassEntity newClass) throws CreateNewClassException;
 
+    public List<ClassEntity> retrieveAllClassesByPartnerId(Long idValue);
+
 }

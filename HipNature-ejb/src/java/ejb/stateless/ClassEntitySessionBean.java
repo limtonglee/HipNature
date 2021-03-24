@@ -64,6 +64,20 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
             }
         return null;
     }
+        
+    @Override
+    public List<ClassEntity> retrieveAllClassesByPartnerId(Long idValue) {
+        Query query = em.createQuery("SELECT c FROM ClassEntity c WHERE c.partnerEntity.PartnerEntityId = :idNumber ORDER BY c.className ASC");
+        query.setParameter("idNumber", idValue);
+        List<ClassEntity> list = query.getResultList();
+        if (list != null){
+            for (ClassEntity classE:list){
+                classE.getTagEntities().size();
+            }
+            return list;
+            }
+        return null;
+    }
 
     @Override
     public ClassEntity createNewClass(ClassEntity newClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException,ClassNotFoundException {

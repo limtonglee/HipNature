@@ -21,6 +21,39 @@
             </h:form>
             <h:form id="formAllClasses">
                 <p:messages redisplay="false"/>
+                <p:dataTable id="dataTableClasses" widgetVar="dataTableClasses" value="#{classManagementManagedBean.classEntities}" 
+                             var="classEntity" rowKey="#{classEntity.classId}" rowIndexVar="row"
+                             filteredValue="#{classManagementManagedBean.classEntitiesFiltered}" rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align: right;">
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableClasses').filter()" style="width:300px" placeholder="Enter keyword" />
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Class ID" width="5%" sortBy="#{classEntity.classId}">
+                        <h:outputText value="#{classEntity.classId}" />
+                    </p:column>
+                    <p:column headerText="Class Name" width="25%" sortBy="#{classEntity.className}">
+                        <h:outputText value="#{classEntity.className}" />
+                    </p:column>
+                    <p:column headerText="Credit Cost" width="5%" sortBy="#{classEntity.credit}">
+                        <h:outputText value="#{classEntity.credit}" />
+                    </p:column>
+                    <p:column headerText="Location" width="15%" sortBy="#{classEntity.locationTypeEnum}">
+                        <h:outputText value="#{classEntity.locationTypeEnum}" />
+                    </p:column>
+                    <p:column headerText="Action" width="10%">
+                        <p:commandButton title="View" icon="ui-icon-document">
+                            
+                        </p:commandButton>
+                        <p:commandButton title="Delete" icon="ui-icon-trash">
+
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
             </h:form>
 
             <h:form id="formCreateNewClass">
