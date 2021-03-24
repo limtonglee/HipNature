@@ -92,16 +92,10 @@ public class TagEntity implements Serializable {
         this.tagName = tagName;
     }
 
-    /**
-     * @return the classEntities
-     */
     public List<ClassEntity> getClassEntities() {
         return classEntities;
     }
 
-    /**
-     * @param classEntities the classEntities to set
-     */
     public void setClassEntities(List<ClassEntity> classEntities) {
         this.classEntities = classEntities;
     }

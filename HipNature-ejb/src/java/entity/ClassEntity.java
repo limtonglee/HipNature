@@ -52,7 +52,7 @@ public class ClassEntity implements Serializable {
     @OneToMany(mappedBy = "classEntity", fetch = FetchType.LAZY)
     private List<ReviewEntity> reviewEntities;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "classEntities", fetch = FetchType.LAZY)
     private List<TagEntity> tagEntities;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -199,16 +199,10 @@ public class ClassEntity implements Serializable {
         this.reviewEntities = reviewEntities;
     }
 
-    /**
-     * @return the tagEntities
-     */
     public List<TagEntity> getTagEntities() {
         return tagEntities;
     }
 
-    /**
-     * @param tagEntities the tagEntities to set
-     */
     public void setTagEntities(List<TagEntity> tagEntities) {
         this.tagEntities = tagEntities;
     }

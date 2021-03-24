@@ -7,12 +7,9 @@ package ejb.stateless;
 
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
-import entity.PartnerEntity;
 import entity.TagEntity;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,6 +20,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CreateNewClassException;
+import util.exception.DeleteClassEntityException;
 import util.exception.InputDataValidationException;
 import util.exception.TagNotFoundException;
 
@@ -67,7 +65,7 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
         
     @Override
     public List<ClassEntity> retrieveAllClassesByPartnerId(Long idValue) {
-        Query query = em.createQuery("SELECT c FROM ClassEntity c WHERE c.partnerEntity.PartnerEntityId = :idNumber ORDER BY c.className ASC");
+        Query query = em.createQuery("SELECT c FROM ClassEntity c WHERE c.partnerEntity.PartnerEntityId = :idNumber ORDER BY c.classId ASC");
         query.setParameter("idNumber", idValue);
         List<ClassEntity> list = query.getResultList();
         if (list != null){
@@ -104,9 +102,20 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
     }
+    //This delete method remove ClassEntity from database as well
+    @Override
+    public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException{
+        ClassEntity classEntityToDelete = em.find(ClassEntity.class, classEntityToDeleteId);
+        int size = classEntityToDelete.getSessionEntities().size();
+        if (classEntityToDelete.getSessionEntities().size() == 0) {
+            em.remove(classEntityToDelete);
+        } else {
+            throw new DeleteClassEntityException("Unable to delete class Id: " + classEntityToDeleteId + " There are still " + size + " session(s) left" );
+        }
+    }
         
     
-        @Override
+    @Override
     public ClassEntity NewClass(ClassEntity newClass) throws CreateNewClassException {
                      em.persist(newClass);
                

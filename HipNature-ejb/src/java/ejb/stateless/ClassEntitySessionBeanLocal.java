@@ -9,6 +9,7 @@ import entity.ClassEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CreateNewClassException;
+import util.exception.DeleteClassEntityException;
 import util.exception.InputDataValidationException;
 
 /**
@@ -23,8 +24,11 @@ public interface ClassEntitySessionBeanLocal {
     public ClassEntity createNewClass(ClassEntity newClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException,ClassNotFoundException ;
 
     public ClassEntity retrieveClassByClassId(Long classId) throws ClassNotFoundException;
-        public ClassEntity NewClass(ClassEntity newClass) throws CreateNewClassException;
+    
+    public ClassEntity NewClass(ClassEntity newClass) throws CreateNewClassException;
 
     public List<ClassEntity> retrieveAllClassesByPartnerId(Long idValue);
+    
+    public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException;
 
 }

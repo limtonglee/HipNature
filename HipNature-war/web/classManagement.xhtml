@@ -49,11 +49,16 @@
                         <p:commandButton title="View" icon="ui-icon-document">
                             
                         </p:commandButton>
-                        <p:commandButton title="Delete" icon="ui-icon-trash">
-
+                        <p:commandButton title="Delete" icon="ui-icon-trash" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses">
+                            <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="ui-icon-alert"/>
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
+                <p:confirmDialog global="true" showEffect="clip" hideEffect="fade">
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                </p:confirmDialog>
             </h:form>
 
             <h:form id="formCreateNewClass">
@@ -95,7 +100,7 @@
                                     <f:selectItems value ="#{classManagementManagedBean.tagEntities}" var="tagEntity" itemValue="#{tagEntity.tagId}" itemLabel="#{tagEntity.tagName}"/>
                                 </p:selectManyCheckbox>
                             </p:panel>
-                            <p:commandButton value="Confirm" oncomplete="PF('dialogCreateNewClass').show();" actionListener="#{classManagementManagedBean.createNewClass}" style="float: right;" update="formAllClasses"/>
+                            <p:commandButton value="Confirm" oncomplete="PF('dialogCreateNewClass').hide()" actionListener="#{classManagementManagedBean.createNewClass}" style="float: right;" update="@form formAllClasses"/>
                         </p:tab>
                     </p:wizard>
                 </p:dialog>

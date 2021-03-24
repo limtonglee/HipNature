@@ -26,6 +26,7 @@ import javax.faces.view.ViewScoped;
 import org.primefaces.event.FlowEvent;
 import util.enumeration.LocationTypeEnum;
 import util.exception.CreateNewClassException;
+import util.exception.DeleteClassEntityException;
 import util.exception.InputDataValidationException;
 
 /**
@@ -76,6 +77,9 @@ public class ClassManagementManagedBean implements Serializable {
     //Filter
     private List<ClassEntity> classEntitiesFiltered;
     
+    //EntityToDelete
+    private ClassEntity classEntityToDelete;
+    
     
     public ClassManagementManagedBean() {
         currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
@@ -91,16 +95,12 @@ public class ClassManagementManagedBean implements Serializable {
     
     public void createNewClass(ActionEvent event){
         try{
-            System.out.print("*******************************************testing*******************************************");
-            System.out.print(newClassEntity.getClassName());
-            //System.out.print(newClassEntity.getClassTypeEntity().getClassTypeName());
-            System.out.print(newClassEntity.getCredit());
-            System.out.print(newClassEntity.getLocationTypeEnum());
             ClassEntity ce = classEntitySessionBeanLocal.createNewClass(newClassEntity, classTypeIdNew, tagIdsNew);
             currentPartnerEntity.getClassEntity().add(ce);
             if (classEntitiesFiltered != null){
                 classEntitiesFiltered.add(ce);
             }
+            classEntities.add(ce);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Account Created", null));
         } catch (InputDataValidationException | CreateNewClassException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new class", null));
@@ -109,6 +109,21 @@ public class ClassManagementManagedBean implements Serializable {
             Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    //Method not working Foreign key constraint between tag and class
+    public void doDelete(ActionEvent event){
+        try{
+            classEntityToDelete = (ClassEntity) event.getComponent().getAttributes().get("classEntityToDelete");
+            classEntitySessionBeanLocal.deleteClass(classEntityToDelete.getClassId());
+            classEntities.remove(classEntityToDelete);
+
+            if (classEntitiesFiltered != null){
+                classEntitiesFiltered.remove(classEntityToDelete);
+            }
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Class successfully deleted", null));
+        } catch (ClassNotFoundException | DeleteClassEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class", null));
+        }
     }
 
     public LocationTypeEnum[] getEnumLocation(){
@@ -231,6 +246,20 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setClassEntitiesFiltered(List<ClassEntity> classEntitiesFiltered) {
         this.classEntitiesFiltered = classEntitiesFiltered;
+    }
+
+    /**
+     * @return the classEntityToDelete
+     */
+    public ClassEntity getClassEntityToDelete() {
+        return classEntityToDelete;
+    }
+
+    /**
+     * @param classEntityToDelete the classEntityToDelete to set
+     */
+    public void setClassEntityToDelete(ClassEntity classEntityToDelete) {
+        this.classEntityToDelete = classEntityToDelete;
     }
     
 }
