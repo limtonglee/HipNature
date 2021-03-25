@@ -25,6 +25,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.LocationTypeEnum;
 import util.exception.InputDataValidationException;
 import util.exception.SessionNotFoundException;
 import util.exception.TagNotFoundException;
@@ -113,24 +114,37 @@ public class SessionEntitySessionBean implements SessionEntitySessionBeanLocal {
      
     
     @Override
-    public List<SessionEntity> filterSessionsByTags(List<Long> tagIds)
+    public List<SessionEntity> filterSessionsByTags(List<Long> tagIds, String location)
     {
         List<SessionEntity> sessionEntities = new ArrayList<>();
         
         if(tagIds == null || tagIds.isEmpty())
         {
-            return sessionEntities;
+              if (!location.equals("ALL")){
+                  String selectClause =  "SELECT pe FROM SessionEntity pe where pe.locationTypeEnum =:statusEnum";
+                   Query query = em.createQuery(selectClause);
+                   query.setParameter("statusEnum", LocationTypeEnum.valueOf(location));
+                   sessionEntities = query.getResultList(); 
+                   return sessionEntities;
+
+              } else {
+                  return retrieveAllSessions();
+              }
+
         }
+        
+       
         else
-        {
-          
+        {  
                 String selectClause = "SELECT pe FROM SessionEntity pe join ClassEntity c ";
+
                 String whereClause = "";
                 Boolean firstTag = true;
                 Integer tagCount = 1;
 
                 for(Long tagId:tagIds)
                 {
+                    
                     selectClause += ", IN (c.tagEntities) te" + tagCount;
 
                     if(firstTag)
@@ -146,6 +160,10 @@ public class SessionEntitySessionBean implements SessionEntitySessionBeanLocal {
                     tagCount++;
                 }
                 
+                if (!location.equals("ALL")){
+                   whereClause += " and pe.locationTypeEnum = " + LocationTypeEnum.valueOf(location);
+
+              }
                 String jpql = selectClause + " " + whereClause + " ORDER BY c.className ASC";
                 Query query = em.createQuery(jpql);
                 sessionEntities = query.getResultList();                                
