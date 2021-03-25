@@ -77,6 +77,7 @@ public class PartnerEntity implements Serializable {
     public PartnerEntity() {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
         instructorEntity= new ArrayList<>();
+        classEntity= new ArrayList<>();
       
     }
 

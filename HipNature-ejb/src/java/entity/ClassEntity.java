@@ -61,12 +61,13 @@ public class ClassEntity implements Serializable {
     @OneToMany(mappedBy = "classEntity", fetch = FetchType.LAZY)
     private List<SessionEntity> sessionEntities;
     
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private PartnerEntity partnerEntity;
         
     public ClassEntity() {
         tagEntities = new ArrayList<>();
         reviewEntities = new ArrayList<>();
+        sessionEntities = new ArrayList<>();
     }
 
     public ClassEntity(ClassTypeEntity classTypeEntity, String className, Integer credit, LocationTypeEnum locationTypeEnum) {

@@ -86,6 +86,7 @@ public class ClassManagementManagedBean implements Serializable {
         newClassEntity = new ClassEntity();
         newClassEntity.setPartnerEntity(currentPartnerEntity);
     }
+    
     @PostConstruct
     public void postConstruct(){
         classEntities = classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());

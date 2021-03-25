@@ -16,11 +16,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import util.enumeration.LocationTypeEnum;
 import util.exception.SessionNotFoundException;
 
 
 
-@Named(value = "updateProductManagedBean")
+@Named(value = "updateSessionManagedBean")
 @ViewScoped
 
 public class UpdateSessionManagedBean implements Serializable
@@ -52,6 +53,7 @@ public class UpdateSessionManagedBean implements Serializable
     {
         sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("sessionIdToUpdate");
         
+        System.out.println("Session" +sessionEntityToUpdate);
         try
         {
             if(sessionIdToUpdate != null)
@@ -119,11 +121,15 @@ public class UpdateSessionManagedBean implements Serializable
     
     
     public Long getSessionIdToUpdate() {
+        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("sessionIdToUpdate");
+
         return sessionIdToUpdate;
     }
 
     public void setSessionIdToUpdate(Long sessionIdToUpdate) {
-        this.sessionIdToUpdate = sessionIdToUpdate;
+       sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("sessionIdToUpdate");
+
+       this.sessionIdToUpdate = sessionIdToUpdate;
     }
 
     public SessionEntity getSessionEntityToUpdate() {
@@ -151,5 +157,9 @@ public class UpdateSessionManagedBean implements Serializable
 
     public void setTagEntities(List<TagEntity> tagEntities) {
         this.tagEntities = tagEntities;
+    }
+    
+    public LocationTypeEnum[] getEnumLocation(){
+        return LocationTypeEnum.values();
     }
 }

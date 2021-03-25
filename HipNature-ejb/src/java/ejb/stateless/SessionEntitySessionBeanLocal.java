@@ -28,7 +28,7 @@ public interface SessionEntitySessionBeanLocal {
 
     public SessionEntity retrieveSessionBySessionId(Long sessionId) throws SessionNotFoundException;
         public List<SessionEntity> searchSessionByName(String searchString);
-    public List<SessionEntity> filterSessionsByTags(List<Long> tagIds);
+    public List<SessionEntity> filterSessionsByTags(List<Long> tagIds,String location);
          public String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<SessionEntity>>constraintViolations);
     public void updateSession(SessionEntity sessionEntity, List<Long> tagIds) throws SessionNotFoundException, TagNotFoundException, UpdateSessionException, InputDataValidationException;
 
