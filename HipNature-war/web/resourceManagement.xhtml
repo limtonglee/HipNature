@@ -124,7 +124,8 @@
                     <p:commandButton update="formViewInstructor" oncomplete="PF('dialogViewInstructor').show()" icon="pi pi-file" title="View">
                         <f:setPropertyActionListener value="#{instructor}" target="#{resourceManagementManagedBean.selectedInstructorToView}" />
                     </p:commandButton>
-                    <p:commandButton update="formUpdateInstructor" oncomplete="PF('dialogUpdateInstructor').show()" icon="pi pi-pencil" title="Update">
+                    <p:commandButton update="formUpdateInstructor" oncomplete="PF('dialogUpdateInstructor').show()" icon="pi pi-pencil" title="Update" actionListener="resourceManagementManagedBean.retrievePartnerSessions">
+                        <f:attribute name="selectedPartnerEntity" value="#{sessionScope.currentPartnerEntity}" /> 
                         <f:setPropertyActionListener value="#{instructor}" target="#{resourceManagementManagedBean.selectedInstructorToUpdate}" />
                     </p:commandButton>
                     <p:commandButton icon="pi pi-trash" actionListener="#{resourceManagementManagedBean.deleteInstructor}" update="formDataTable:dataTableInstructors formDataTable:messages">
@@ -249,7 +250,7 @@
                         </p:column>
                     </p:row>
 
-
+                    <!--
                     <p:row>
                         <p:column>
                             <p:outputLabel for="email" value="Email: " />
@@ -260,10 +261,7 @@
                         <p:column>
                             <p:message for="email" />
                         </p:column>
-                    </p:row>
-
-                    <!-- how to set partner and session -->
-
+                    </p:row>*/          
 
                     <p:row>
                         <p:column>
@@ -283,8 +281,22 @@
                     <p:selectCheckboxMenu id="grouped" value="#{checkboxView.selectedCountries}" label="Countries" style="width: 15rem"
                                           multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 15rem" scrollHeight="250">
                         <f:selectItems value="#{checkboxView.countries}"/>
-                    </p:selectCheckboxMenu>
+                    </p:selectCheckboxMenu> -->
 
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="sessions" value="Sessions: " />
+                        </p:column>
+                        <p:column>
+                            <p:selectCheckboxMenu id="sessions" value="#{resourceManagementManagedBean.partnerListOfSessions}" label="Sessions" multiple="true" filter="true" filterMatchMode="startsWith" scrollHeight="250" />
+                            <f:selectItems value="#{resourceManagementManagedBean.sessions}"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="sessions" />
+                        </p:column>
+                    </p:row>
+                    
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton id="updateInstructor" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveInstructor}" oncomplete="PF('dialogUpdateInstructor').show();" />

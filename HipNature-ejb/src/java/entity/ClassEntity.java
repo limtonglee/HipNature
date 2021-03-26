@@ -67,6 +67,7 @@ public class ClassEntity implements Serializable {
     public ClassEntity() {
         tagEntities = new ArrayList<>();
         reviewEntities = new ArrayList<>();
+        sessionEntities = new ArrayList<>();
     }
 
     public ClassEntity(ClassTypeEntity classTypeEntity, String className, Integer credit, LocationTypeEnum locationTypeEnum) {
@@ -76,7 +77,14 @@ public class ClassEntity implements Serializable {
         this.classTypeEntity = classTypeEntity;
     }
 
-    
+    /*public ClassEntity(String className, Integer credit, LocationTypeEnum locationTypeEnum, List<SessionEntity> sessionEntities, PartnerEntity partnerEntity) {
+        this.className = className;
+        this.credit = credit;
+        this.locationTypeEnum = locationTypeEnum;
+        this.sessionEntities = sessionEntities;
+        this.partnerEntity = partnerEntity;
+    }*/
+
 
     public void addTag(TagEntity tagEntity) {
         if (tagEntity != null) {
