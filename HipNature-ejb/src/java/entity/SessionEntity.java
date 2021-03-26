@@ -81,13 +81,7 @@ public class SessionEntity implements Serializable {
     @JoinColumn(nullable = true)
     private ClassEntity classEntity;
 
-    public ClassEntity getClassEntity() {
-        return classEntity;
-    }
 
-    public void setClassEntity(ClassEntity classEntity) {
-        this.classEntity= classEntity;
-    }
     @OneToMany(mappedBy = "sessionEntity", fetch = FetchType.LAZY)
     private List<BookingEntity> participants;
 
@@ -296,6 +290,16 @@ public class SessionEntity implements Serializable {
     /**
      * @return the classEntity
      */
-   
+
+    public ClassEntity getClassEntity() {
+        return classEntity;
+    }
+
+    /**
+     * @param classEntity the classEntity to set
+     */
+    public void setClassEntity(ClassEntity classEntity) {
+        this.classEntity = classEntity;
+    }
 
 }
