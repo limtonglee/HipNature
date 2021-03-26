@@ -140,25 +140,25 @@ public class DataInitSessionBean {
             java.util.Date startTime5 = sdf.parse("10/12/2019 12:00");
             java.util.Date endTime5 = sdf.parse("10/12/2019 14:00");
 
-            SessionEntity session1 = new SessionEntity("Tembusu", startTime1, endTime1, 2, "61234594", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
-            sessionEntitySessionBean.createNewSession(session1);
-            instructor1.getSessionEntity().add(session1);
-
-            SessionEntity session2 = new SessionEntity("CAPT", startTime2, endTime2, 2, "62345353", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
-            sessionEntitySessionBean.createNewSession(session2);
-            instructor1.getSessionEntity().add(session2);
-
-            SessionEntity session3 = new SessionEntity("RC4", startTime3, endTime3, 2, "69568344", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
-            sessionEntitySessionBean.createNewSession(session3);
-            instructor2.getSessionEntity().add(session3);
-
-            SessionEntity session4 = new SessionEntity("RVRC", startTime4, endTime4, 2, "69324536", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
-            sessionEntitySessionBean.createNewSession(session4);
-            instructor2.getSessionEntity().add(session4);
-
-            SessionEntity session5 = new SessionEntity("USP", startTime5, endTime5, 2, "64363943", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
-            sessionEntitySessionBean.createNewSession(session5);
-            instructor2.getSessionEntity().add(session5);
+//            SessionEntity session1 = new SessionEntity("Tembusu", startTime1, endTime1, 2, "61234594", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
+//            sessionEntitySessionBean.createNewSession(session1);
+//            instructor1.getSessionEntity().add(session1);
+//
+//            SessionEntity session2 = new SessionEntity("CAPT", startTime2, endTime2, 2, "62345353", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
+//            sessionEntitySessionBean.createNewSession(session2);
+//            instructor1.getSessionEntity().add(session2);
+//
+//            SessionEntity session3 = new SessionEntity("RC4", startTime3, endTime3, 2, "69568344", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
+//            sessionEntitySessionBean.createNewSession(session3);
+//            instructor2.getSessionEntity().add(session3);
+//
+//            SessionEntity session4 = new SessionEntity("RVRC", startTime4, endTime4, 2, "69324536", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
+//            sessionEntitySessionBean.createNewSession(session4);
+//            instructor2.getSessionEntity().add(session4);
+//
+//            SessionEntity session5 = new SessionEntity("USP", startTime5, endTime5, 2, "64363943", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
+//            sessionEntitySessionBean.createNewSession(session5);
+//            instructor2.getSessionEntity().add(session5);
 
         } catch (InputDataValidationException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,8 +205,8 @@ public class DataInitSessionBean {
     }
 
     private void createSessionEntity() throws InstructorNotFoundException, ClassNotFoundException {
-        //sessionEntitySessionBean.createNewSession(new SessionEntity("Singapore 1", new java.util.Date(), new Integer(2), "12345678", 30, "ON", LocationTypeEnum.CENTRAL, instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(1l), classEntitySessionBean.retrieveClassByClassId(1l)));
-        //sessionEntitySessionBean.createNewSession(new SessionEntity("Singapore 2", new java.util.Date(), new Integer(2), "12345678", 30, "ON", LocationTypeEnum.CENTRAL, instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(1l), classEntitySessionBean.retrieveClassByClassId(1l)));
+        sessionEntitySessionBean.createNewSession(new SessionEntity("Singapore 1", new java.util.Date(), new Integer(2), "12345678", 30, "ON", LocationTypeEnum.CENTRAL, instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(1l), classEntitySessionBean.retrieveClassByClassId(1l)));
+        sessionEntitySessionBean.createNewSession(new SessionEntity("Singapore 2", new java.util.Date(), new Integer(2), "12345678", 30, "ON", LocationTypeEnum.CENTRAL, instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(1l), classEntitySessionBean.retrieveClassByClassId(1l)));
 
     }
 

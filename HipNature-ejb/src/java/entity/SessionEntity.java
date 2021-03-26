@@ -85,6 +85,9 @@ public class SessionEntity implements Serializable {
         return classEntity;
     }
 
+    public void setClassEntity(ClassEntity classEntity) {
+        this.classEntity= classEntity;
+    }
     @OneToMany(mappedBy = "sessionEntity", fetch = FetchType.LAZY)
     private List<BookingEntity> participants;
 
@@ -112,20 +115,9 @@ public class SessionEntity implements Serializable {
         this.instructor = instructor;
         this.classEntity = classEntity;
     }
+    
 
-    public SessionEntity(String venue, Date startTime, Date endTime, Integer Duration, String phone, Integer maxCapacity, String status, LocationTypeEnum locationTypeEnum, InstructorEntity instructor) {
-        this();
-        this.venue = venue;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.Duration = Duration;
-        this.phone = phone;
-        this.maxCapacity = maxCapacity;
-        this.status = status;
-        this.locationTypeEnum = locationTypeEnum;
-        this.instructor = instructor;
-    }
-
+    
     public void setSessionId(Long sessionId) {
         this.sessionId = sessionId;
     }
@@ -235,7 +227,13 @@ public class SessionEntity implements Serializable {
     /**
      * @param endTime the endTime to set
      */
-    public void setEndTime(Date endTime) {
+    public void setEndTime() {
+       Calendar calendar = Calendar.getInstance();
+
+         calendar.setTime(startTime);
+        calendar.add(Calendar.HOUR_OF_DAY, this.Duration);
+
+        this.endTime = calendar.getTime();
         this.endTime = endTime;
     }
 

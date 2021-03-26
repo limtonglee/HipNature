@@ -39,7 +39,7 @@ public class RecordInitSessionBean {
             recordEntitySessionBeanLocal.createNewRecord(new RecordEntity("Record C"));
             recordEntitySessionBeanLocal.createNewRecord(new RecordEntity("Record D"));
             recordEntitySessionBeanLocal.createNewRecord(new RecordEntity("Record E"));
-        }
+}
 
     }
 
