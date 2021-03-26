@@ -35,6 +35,7 @@
                 <h:outputText value="You are login as #{sessionScope.currentPartnerEntity.username} #{sessionScope.currentPartnerEntity.partnerEntityName}" />&nbsp;
                 <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" />
             </h:form>
+            <p:clock/>
         </h:panelGroup>
 
     </header>

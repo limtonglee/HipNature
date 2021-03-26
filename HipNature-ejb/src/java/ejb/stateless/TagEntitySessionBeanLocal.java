@@ -8,6 +8,7 @@ package ejb.stateless;
 import entity.TagEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.InputDataValidationException;
 import util.exception.TagNotFoundException;
 
 /**
@@ -17,7 +18,7 @@ import util.exception.TagNotFoundException;
 @Local
 public interface TagEntitySessionBeanLocal {
 
-    public Long createNewTag(TagEntity newTag);
+    public TagEntity createNewTag(TagEntity newTag) throws InputDataValidationException;
 
     public List<TagEntity> retrieveAllTags();
 

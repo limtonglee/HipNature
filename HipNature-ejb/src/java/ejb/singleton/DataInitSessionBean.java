@@ -189,11 +189,15 @@ public class DataInitSessionBean {
     }
 
     private void createTagEntity() {
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+        try {
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void createInstructorEntity() {
