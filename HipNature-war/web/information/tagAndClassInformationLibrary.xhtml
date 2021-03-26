@@ -16,10 +16,10 @@
                         <p:toolbarGroup>
                             <p:commandButton id= "addNewTrigger" value="Add New" icon="pi pi-plus" style="margin-right: .5rem;background: #339900;color: #ffffff"/>
                             <p:slideMenu style="width:200px;align-content: center;margin: auto" overlay="true" trigger="addNewTrigger" my="left top" at="left bottom">
-                                <p:menuitem value="Add New Tag">
+                                <p:menuitem value="Add New Tag" onclick="PF('dialogCreateNewTag').show()">
                                     <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
                                 </p:menuitem>
-                                <p:menuitem value="Add New Class Type">
+                                <p:menuitem value="Add New Class Type" onclick="PF('dialogCreateNewClassType').show()">
                                     <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
                                 </p:menuitem>
                             </p:slideMenu>
@@ -32,9 +32,12 @@
         </h:form>
         <div style=" width: 50%;float: left">
             <h:form id="formAllTagsLibrary" style="width: 99%">
-
+                <p:messages id="messageAllTagsLibrary" redisplay="false" closable="true"/>
                 <p:dataTable id="dataTableTagsLibrary" widgetVar="dataTableTagsLibrary" value="#{tagInformationLibraryManagedBean.tagEntities}" var="tagEntity"
-                             rowKey="#{tagEntity.tagId}" rowIndexVar="row" rows="10" filteredValue="#{tagInformationLibraryManagedBean.tagEntitiesFiltered}">
+                             rowKey="#{tagEntity.tagId}" rowIndexVar="row" rows="10" filteredValue="#{tagInformationLibraryManagedBean.tagEntitiesFiltered}"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
                     <f:facet name="header">
                             <span style="font-weight: bold">TAGS</span>
                                 <p:outputPanel style="text-align: right;">
@@ -57,8 +60,12 @@
         </div>
         <div style="width: 50%;float: right">
             <h:form id="formAllClassLibrary" style="width: 99%">
+                <p:messages redisplay="false" id="messageAllClassLibrary" closable="true"/>
                 <p:dataTable id="dataTableClassLibrary" widgetVar="dataTableClassLibrary" value="#{classTypeInformationLibraryManagedBean.classTypeEntities}" var="classEntity"
-                             rowKey="#{classEntity.tagId}" rowIndexVar="row" rows="10">
+                             rowKey="#{classEntity.classTypeId}" rowIndexVar="row" rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
                     <f:facet name="header">
                             <span style="font-weight: bold">TAGS</span>
                                 <p:outputPanel style="text-align: right;">
@@ -79,7 +86,43 @@
                 </p:dataTable>
             </h:form>
         </div>
+        <h:form id="formCreateNewTag">
+            <p:dialog id="dialogCreateNewTag" widgetVar="dialogCreateNewTag" header="Create New Tag">
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Tag Name:"/>
+                    </p:column>
+                    <p:column>
+                        <h:inputText value="#{tagInformationLibraryManagedBean.tagEntityNew.tagName}" required="true" requiredMessage="Tag Name cannot be empty"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandButton value="Create" actionListener="#{tagInformationLibraryManagedBean.createNewTagEntity}" update="@form formAllTagsLibrary" oncomplete="PF('dialogCreateNewTag').hide()" />
+                    </p:column>
+                </p:row>
+                
+            </p:dialog>
+        </h:form>
 
+        <h:form id="formCreateNewClassType">
+            <p:dialog id="dialogCreateNewClassType" widgetVar="dialogCreateNewClassType" header="Create New Class Type">
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Class Name:"/>
+                    </p:column>
+                    <p:column>
+                        <h:inputText value="#{classTypeInformationLibraryManagedBean.classTypeEntityNew.classTypeName}" required="true" requiredMessage="Class Type Name cannot be empty"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandButton value="Create" actionListener="#{classTypeInformationLibraryManagedBean.createNewClassTypeEntity}" update="@form formAllClassLibrary" oncomplete="PF('dialogCreateNewClassType').hide()"/>
+                    </p:column>
+                </p:row>
+                
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>

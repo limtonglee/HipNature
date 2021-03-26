@@ -5,13 +5,18 @@
  */
 package ejb.stateless;
 
-import entity.ClassEntity;
 import entity.ClassTypeEntity;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import util.exception.InputDataValidationException;
 
 /**
  *
@@ -22,16 +27,26 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
     public ClassTypeEntitySessionBean() {
+        this.validatorFactory = Validation.buildDefaultValidatorFactory(); 
+        this.validator = validatorFactory.getValidator();
     }
     
     @Override
-    public Long createClassType(ClassTypeEntity newClassTypeEntity){
+    public ClassTypeEntity createClassType(ClassTypeEntity newClassTypeEntity) throws InputDataValidationException{
+        Set<ConstraintViolation<ClassTypeEntity>>constraintViolations = validator.validate(newClassTypeEntity);
+        if (constraintViolations.isEmpty()){
         em.persist(newClassTypeEntity);
         em.flush();
         
-        return newClassTypeEntity.getClassTypeId();
+        return newClassTypeEntity;
+        } 
+        else{
+            throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
+        }
     }
 
     @Override
@@ -53,5 +68,13 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
         } else {
             throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
         }
+    }
+    
+    private String prepareInputDataValidationException(Set<ConstraintViolation<ClassTypeEntity>>constraintViolations){
+        String msg = "Input data validation error: ";
+        for (ConstraintViolation constraint: constraintViolations){
+            msg +="\n\t" + constraint.getPropertyPath() + " - " + constraint.getInvalidValue() + " : " + constraint.getMessage();
+        }
+        return msg;
     }
  }

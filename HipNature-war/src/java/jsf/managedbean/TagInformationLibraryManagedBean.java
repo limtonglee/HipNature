@@ -67,6 +67,8 @@ public class TagInformationLibraryManagedBean implements Serializable{
     public void createNewTagEntity(ActionEvent event) {
         try{
             TagEntity te = tagEntitySessionBeanLocal.createNewTag(tagEntityNew);
+            tagEntities.add(te);
+            tagEntityNew = new TagEntity();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Tag Created: " + te.getTagName(), null));
         } catch (InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new class: " + ex, null));

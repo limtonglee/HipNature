@@ -183,9 +183,13 @@ public class DataInitSessionBean {
     }
 
     private void createClassTypeEntity() {
-        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
-        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
-        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
+        try {
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void createTagEntity() {
