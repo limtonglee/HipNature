@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -84,14 +85,8 @@ public class ResourceManagementManagedBean implements Serializable {
     public void postConstruct() {
         setInstructors(instructorEntitySessionBeanLocal.retrieveAllInstructors());
         currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
-        /*List<ClassEntity> partnerClasses = currentPartnerEntity.getClassEntity();
-        for (ClassEntity pclass : partnerClasses) {
-            List<SessionEntity> classSessions = pclass.getSessionEntities();
-            for (SessionEntity sess : classSessions) {
-                partnerListOfSessions.add(sess);
-            }
-        }
-        setPartnerListOfSessions(partnerListOfSessions);*/
+        
+        //setPartnerListOfSessions(partnerEntitySessionBeanLocal.retrievePartnerClassesSessions(currentPartnerEntity.getPartnerEntityId()));
         
         //setNewInstructorSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());
 
@@ -110,13 +105,6 @@ public class ResourceManagementManagedBean implements Serializable {
         setSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());*/
     }
 
-    /* 
-    @PreDestroy
-    public void preDestroy()
-    {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Demo01ManagedBean.genres", null);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("Demo01ManagedBean.genres");
-    }*/
     public void viewInstructorsByPartner(ActionEvent event) {
 
         try {
@@ -158,8 +146,29 @@ public class ResourceManagementManagedBean implements Serializable {
         /*} catch (SessionNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating the new instructor: Sesion not found", null));*/
         } catch (InputDataValidationException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has ocurred while creating the new project: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has ocurred while creating the new instructor: " + ex.getMessage(), null));
+        } catch (InstructorExistsException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has ocurred while creating the new instructor: The instructor email/phone already exists!", null));
         }
+    }
+    
+    public List<SessionEntity> retrievePartnerSessions(ActionEvent event) {
+        
+        PartnerEntity selectedPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedPartnerEntity");
+        List<ClassEntity> partnerClasses = selectedPartnerEntity.getClassEntity();
+
+        if (!partnerClasses.isEmpty()) {
+            for (ClassEntity pclass : partnerClasses) {
+                List<SessionEntity> classSessions = pclass.getSessionEntities();
+                if (!classSessions.isEmpty()) {
+                    for (SessionEntity sess : classSessions) {
+                        partnerListOfSessions.add(sess);
+                    }
+                }
+            }
+        }
+        setPartnerListOfSessions(partnerListOfSessions);
+        return partnerListOfSessions;
     }
 
     public void doUpdateInstructor(ActionEvent event) {
@@ -188,26 +197,35 @@ public class ResourceManagementManagedBean implements Serializable {
         }
     }
 
-    /*public void deleteInstructor(ActionEvent event) {
+    public void deleteInstructor(ActionEvent event) {
 
         try {
             InstructorEntity instructorToDelete = (InstructorEntity) event.getComponent().getAttributes().get("instructorToDelete");
 
-            List<InstructorEntity> ins = getInstructorsForPartnerManagedBean.getInstructorsForCompany();
+            /*List<InstructorEntity> ins = getInstructorsForPartnerManagedBean.getInstructorsForCompany();
             ins.remove(instructorToDelete);
             getInstructorsForPartnerManagedBean.setInstructorsForCompany(ins);
 
             List<InstructorEntity> insList = loginManagedBean.getInstructorsToDisplay();
             insList.remove(instructorToDelete);
-            loginManagedBean.setInstructorsToDisplay(insList);
+            loginManagedBean.setInstructorsToDisplay(insList);*/
+ /*resourceManagementManagedBean.currentPartnerEntity.instructorEntity*/
+            
+            /*PartnerEntity partner = instructorToDelete.getPartnerEntity();
+            List<InstructorEntity> partnerInstructors = partner.getInstructorEntity();
+            partnerInstructors.remove(instructorToDelete);*/
+            
+            currentPartnerEntity.getInstructorEntity().remove(instructorToDelete);
 
             instructorEntitySessionBeanLocal.deleteInstructor(instructorToDelete.getInstructorId());
             getInstructors().remove(instructorToDelete);
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Instructor deleted successfully", null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
-    }*/
+    }
+
     /**
      * @return the newInstructor
      */

@@ -293,4 +293,9 @@ public class SessionEntity implements Serializable {
         this.participants = participants;
     }
 
+    /**
+     * @return the classEntity
+     */
+   
+
 }

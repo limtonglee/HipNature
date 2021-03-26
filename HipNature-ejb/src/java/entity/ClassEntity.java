@@ -77,7 +77,14 @@ public class ClassEntity implements Serializable {
         this.classTypeEntity = classTypeEntity;
     }
 
-    
+    /*public ClassEntity(String className, Integer credit, LocationTypeEnum locationTypeEnum, List<SessionEntity> sessionEntities, PartnerEntity partnerEntity) {
+        this.className = className;
+        this.credit = credit;
+        this.locationTypeEnum = locationTypeEnum;
+        this.sessionEntities = sessionEntities;
+        this.partnerEntity = partnerEntity;
+    }*/
+
 
     public void addTag(TagEntity tagEntity) {
         if (tagEntity != null) {

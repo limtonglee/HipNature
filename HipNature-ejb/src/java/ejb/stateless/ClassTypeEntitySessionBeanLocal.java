@@ -8,6 +8,7 @@ package ejb.stateless;
 import entity.ClassTypeEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.InputDataValidationException;
 
 /**
  *
@@ -16,9 +17,10 @@ import javax.ejb.Local;
 @Local
 public interface ClassTypeEntitySessionBeanLocal {
 
-    public Long createClassType(ClassTypeEntity newClassTypeEntity);
+    public ClassTypeEntity createClassType(ClassTypeEntity newClassTypeEntity) throws InputDataValidationException;
 
     public List<ClassTypeEntity> retrieveAllClassTypeEntity();
-        public ClassTypeEntity retrieveClassTypeByClassId(Long classId) throws ClassNotFoundException ;
+    
+    public ClassTypeEntity retrieveClassTypeByClassId(Long classId) throws ClassNotFoundException ;
 
 }
