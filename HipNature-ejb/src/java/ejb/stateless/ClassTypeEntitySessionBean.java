@@ -22,7 +22,9 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
-    
+
+    public ClassTypeEntitySessionBean() {
+    }
     
     @Override
     public Long createClassType(ClassTypeEntity newClassTypeEntity){
@@ -34,7 +36,7 @@ public class ClassTypeEntitySessionBean implements ClassTypeEntitySessionBeanLoc
 
     @Override
     public List<ClassTypeEntity> retrieveAllClassTypeEntity(){
-        Query query = em.createQuery("Select s from ClassTypeEntity s ORDER BY s.classTypeName ASC");
+        Query query = em.createQuery("Select s from ClassTypeEntity s ORDER BY s.classTypeId ASC");
         List<ClassTypeEntity> list = query.getResultList();
         for(ClassTypeEntity temp:list){
             temp.getClassEntities().size();

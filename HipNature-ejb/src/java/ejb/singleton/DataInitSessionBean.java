@@ -24,8 +24,6 @@ import entity.TagEntity;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +54,7 @@ import util.exception.PartnerNotFoundException;
 public class DataInitSessionBean {
 
     @EJB
-    private ClassEntitySessionBeanLocal classEntitySessionBeanLocal;
+    private ClassEntitySessionBeanLocal classEntitySessionBean;
 
     @EJB
     private InstructorEntitySessionBeanLocal instructorEntitySessionBeanLocal;
@@ -102,7 +100,7 @@ public class DataInitSessionBean {
 
     }
 
-    private void createPartner() throws ParseException, ClassNotFoundException, CreateNewClassException {
+    private void createPartner() throws ParseException {
         try {
             PartnerEntity partner1 = new PartnerEntity("Partner 1", "1234567", "partner1@gmail.com", "Singapore", "partner1", "password");
             partnerEntitySessionBeanLocal.createNewPartner(partner1);
@@ -161,28 +159,6 @@ public class DataInitSessionBean {
             SessionEntity session5 = new SessionEntity("USP", startTime5, endTime5, 2, "64363943", 40, "Available", LocationTypeEnum.CENTRAL, instructor2);
             sessionEntitySessionBean.createNewSession(session5);
             instructor2.getSessionEntity().add(session5);
-            
-            // to create a class entity and link it with sessions 
-            // giving me nullpointerexception at ejb.stateless.SessionEntitySessionBean.createNewSession(SessionEntitySessionBean.java:78)
-            /*List<SessionEntity> partnerOneSessions = new ArrayList<>();
-            partnerOneSessions.add(session1);
-            partnerOneSessions.add(session2);
-            partnerOneSessions.add(session3);
-            
-            TagEntity tag1 = new TagEntity("Pottery 1");
-            Long tag1id = tag1.getTagId();
-            
-            List<Long> tags1Id = new ArrayList<>();
-            tags1Id.add(tag1id);
-            ClassTypeEntity classType1 = new ClassTypeEntity("Pottery");
-            
-            ClassEntity class1 = new ClassEntity("Pottery 101", 30, LocationTypeEnum.WEST, partnerOneSessions, partner1);
-            classEntitySessionBeanLocal.createNewClass(class1, classType1.getClassTypeId(), tags1Id);
-            
-            class1.setSessionEntities(partnerOneSessions);
-            session1.setClassEntity(class1);
-            session2.setClassEntity(class1);
-            session3.setClassEntity(class1);*/
 
         } catch (InputDataValidationException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -213,11 +189,15 @@ public class DataInitSessionBean {
     }
 
     private void createTagEntity() {
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+        try {
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void createInstructorEntity() {
@@ -225,7 +205,7 @@ public class DataInitSessionBean {
     }
 
     private void createClassEntity() throws ClassNotFoundException, CreateNewClassException {
-        classEntitySessionBeanLocal.NewClass(new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL));
+        classEntitySessionBean.NewClass(new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL));
     }
 
     private void createSessionEntity() throws InstructorNotFoundException, ClassNotFoundException {
