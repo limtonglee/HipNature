@@ -31,4 +31,6 @@ public interface ClassEntitySessionBeanLocal {
     
     public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException;
 
+    public void updateClass(ClassEntity updateClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException, ClassNotFoundException;
+
 }

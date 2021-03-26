@@ -102,6 +102,34 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
     }
+    @Override
+    public void updateClass(ClassEntity updateClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException,ClassNotFoundException {
+        Set<ConstraintViolation<ClassEntity>>constraintViolations = validator.validate(updateClass);
+        if (constraintViolations.isEmpty()){
+            try{
+                ClassTypeEntity classTypeEntity = classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(newClassTypeId);
+                ClassEntity classToUpdate = retrieveClassByClassId(updateClass.getClassId());
+                if (newTagEntityId != null && !(newTagEntityId.isEmpty())){
+                    for (TagEntity removeId:classToUpdate.getTagEntities()){
+                        removeId.getClassEntities().remove(classToUpdate);
+                    }
+                    classToUpdate.getTagEntities().clear();
+                    for (Long tag:newTagEntityId){
+                        TagEntity tagEntity = tagEntitySessionBeanLocal.retrieveTagByTagId(tag);
+                        classToUpdate.addTag(tagEntity);
+                    }
+                }
+                classToUpdate.setCredit(updateClass.getCredit());
+                classToUpdate.setClassTypeEntity(classTypeEntity);
+                classToUpdate.setLocationTypeEnum(updateClass.getLocationTypeEnum());
+            } catch (TagNotFoundException ex) {
+                throw new CreateNewClassException("An Error has occurred: " + ex.getMessage());
+            } 
+        }
+        else {
+            throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
+        }
+    }
     //This delete method remove ClassEntity from database as well
     @Override
     public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException{
@@ -117,8 +145,7 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
     
     @Override
     public ClassEntity NewClass(ClassEntity newClass) throws CreateNewClassException {
-                     em.persist(newClass);
-               
+                em.persist(newClass);
                 em.flush();
                 return newClass;
         

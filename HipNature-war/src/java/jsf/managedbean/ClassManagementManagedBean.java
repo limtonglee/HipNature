@@ -13,6 +13,7 @@ import entity.ClassTypeEntity;
 import entity.PartnerEntity;
 import entity.TagEntity;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,6 +81,9 @@ public class ClassManagementManagedBean implements Serializable {
     //EntityToDelete
     private ClassEntity classEntityToDelete;
     
+    //Update
+    private ClassEntity classEntityToUpdate;
+    
     
     public ClassManagementManagedBean() {
         currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
@@ -101,7 +105,7 @@ public class ClassManagementManagedBean implements Serializable {
                 classEntitiesFiltered.add(ce);
             }
             classEntities.add(ce);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Account Created", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Class Created", null));
         } catch (InputDataValidationException | CreateNewClassException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new class", null));
             System.out.print(ex.getMessage());
@@ -110,7 +114,7 @@ public class ClassManagementManagedBean implements Serializable {
         }
         
     }
-    //Method not working Foreign key constraint between tag and class
+    
     public void doDelete(ActionEvent event){
         try{
             classEntityToDelete = (ClassEntity) event.getComponent().getAttributes().get("classEntityToDelete");
@@ -125,7 +129,25 @@ public class ClassManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class", null));
         }
     }
-
+    
+    public void doUpdate(ActionEvent event){
+            classEntityToUpdate = (ClassEntity) event.getComponent().getAttributes().get("classEntityToUpdate");
+            locationTypeEnumNew = null;
+            tagIdsNew = new ArrayList<>();
+            for (TagEntity tag:classEntityToUpdate.getTagEntities()){
+                tagIdsNew.add(tag.getTagId());
+            }
+    }
+    
+    public void updateClass(ActionEvent event){
+        try {
+            classEntityToUpdate.setLocationTypeEnum(locationTypeEnumNew);
+            classEntitySessionBeanLocal.updateClass(classEntityToUpdate, classTypeIdNew, tagIdsNew);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Class Updated", null));
+        } catch (InputDataValidationException | CreateNewClassException | ClassNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update class", null));
+        }
+    }
     public LocationTypeEnum[] getEnumLocation(){
         return LocationTypeEnum.values();
     }
@@ -203,7 +225,6 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setLocationTypeEnumNew(LocationTypeEnum locationTypeEnumNew) {
         this.locationTypeEnumNew = locationTypeEnumNew;
-        newClassEntity.setLocationTypeEnum(locationTypeEnumNew);
     }
 
     /**
@@ -260,6 +281,20 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setClassEntityToDelete(ClassEntity classEntityToDelete) {
         this.classEntityToDelete = classEntityToDelete;
+    }
+
+    /**
+     * @return the classEntityToUpdate
+     */
+    public ClassEntity getClassEntityToUpdate() {
+        return classEntityToUpdate;
+    }
+
+    /**
+     * @param classEntityToUpdate the classEntityToUpdate to set
+     */
+    public void setClassEntityToUpdate(ClassEntity classEntityToUpdate) {
+        this.classEntityToUpdate = classEntityToUpdate;
     }
     
 }
