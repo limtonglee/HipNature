@@ -119,12 +119,7 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
 
 @Override
         public InstructorEntity retrieveInstructorByInstructorId(Long instructorId) throws InstructorNotFoundException {
-        InstructorEntity ins = em.find(InstructorEntity
-
-.class  
-
-
-, instructorId);
+        InstructorEntity ins = em.find(InstructorEntity.class, instructorId);
 
         if (ins != null) {
             return ins;
@@ -134,8 +129,7 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
     }
 
     @Override
-        public List<InstructorEntity> retrieveInstructorsByPartner(Long pid
-    ) {
+        public List<InstructorEntity> retrieveInstructorsByPartner(Long pid) {
 
         Query query = em.createQuery("SELECT ins FROM InstructorEntity ins WHERE ins.partnerEntity.PartnerEntityId = :partnerId");
         query.setParameter("partnerId", pid);

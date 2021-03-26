@@ -24,8 +24,7 @@ import util.exception.SessionNotFoundException;
 
 
 @Named(value = "updateSessionManagedBean")
-@SessionScoped
-
+@ViewScoped
 public class UpdateSessionManagedBean implements Serializable
 {
 
@@ -35,9 +34,6 @@ public class UpdateSessionManagedBean implements Serializable
     @EJB
     private TagEntitySessionBeanLocal tagEntitySessionBean;
 
-    private Long sessionIdToUpdate;
-
-
     private SessionEntity sessionEntityToUpdate;
     private List<Long> tagIds;
     private List<TagEntity> tagEntities;
@@ -46,6 +42,7 @@ public class UpdateSessionManagedBean implements Serializable
     
     public UpdateSessionManagedBean() 
     {        
+          sessionEntityToUpdate = new SessionEntity();
     }
     
     
@@ -53,43 +50,30 @@ public class UpdateSessionManagedBean implements Serializable
     @PostConstruct
     public void postConstruct()
     {
-        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
+
+
+//        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
         
-        System.out.println("Session" +sessionEntityToUpdate);
-        try
-        {
-            if(sessionIdToUpdate != null)
-            {
-                sessionEntityToUpdate = sessionEntitySessionBean.retrieveSessionBySessionId(sessionIdToUpdate);
-                tagIds = new ArrayList<>();
+//        System.out.println("Session" +sessionEntityToUpdate.getSessionId());
+//        try
+//        {
+//           
+//                tagIds = new ArrayList<>();
+//
+//                for(TagEntity tagEntity:sessionEntityToUpdate.getClassEntity().getTagEntities())
+//                {
+//                    tagIds.add(tagEntity.getTagId());
+//                }
+//
+//                tagEntities = tagEntitySessionBean.retrieveAllTags();
+//            
+//        }
+//
+//        catch(Exception ex)
+//        {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+//        }
 
-                for(TagEntity tagEntity:sessionEntityToUpdate.getClassEntity().getTagEntities())
-                {
-                    tagIds.add(tagEntity.getTagId());
-                }
-
-                tagEntities = tagEntitySessionBean.retrieveAllTags();
-            }
-            else
-            {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No product has been selected", null));
-            }
-        }
-        catch(SessionNotFoundException ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the product details: " + ex.getMessage(), null));
-        }
-        catch(Exception ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
-        }
-    }
-    
-    
-    
-    public void back(ActionEvent event) throws IOException
-    {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("sessionIdToView", sessionIdToUpdate);
 //        FacesContext.getCurrentInstance().getExternalContext().redirect("viewClasses.xhtml");
     }
     
@@ -105,34 +89,23 @@ public class UpdateSessionManagedBean implements Serializable
     {
                   
         
-        try
-        {
-            sessionEntitySessionBean.updateSession(sessionEntityToUpdate, tagIds);
-
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product updated successfully", null));
-        }
-        catch(SessionNotFoundException ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
-        }
-        catch(Exception ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
-        }
+//        try
+//        {
+//            sessionEntitySessionBean.updateSession(sessionEntityToUpdate, tagIds);
+//
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product updated successfully", null));
+//        }
+//        catch(SessionNotFoundException ex)
+//        {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+//        }
+//        catch(Exception ex)
+//        {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+//        }
     }
     
-    
-    public Long getSessionIdToUpdate() {
-        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
 
-        return sessionIdToUpdate;
-    }
-
-    public void setSessionIdToUpdate(Long sessionIdToUpdate) {
-       sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
-
-       this.sessionIdToUpdate = sessionIdToUpdate;
-    }
 
     public SessionEntity getSessionEntityToUpdate() {
         return sessionEntityToUpdate;
@@ -140,6 +113,7 @@ public class UpdateSessionManagedBean implements Serializable
 
     public void setSessionEntityToUpdate(SessionEntity sessionEntityToUpdate) {
         this.sessionEntityToUpdate = sessionEntityToUpdate;
+        System.out.println(sessionEntityToUpdate.getSessionId());
     }
    
 

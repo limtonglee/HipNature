@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="content">
+        <p>
+            This Library displays all available Tags and Class Type that you can use when creating your Class. Unable to find any? Create your own using the "Add New" Function
+        </p>
+        <h:form>
+            <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton id= "addNewTrigger" value="Add New" icon="pi pi-plus" style="margin-right: .5rem;background: #339900;color: #ffffff"/>
+                            <p:slideMenu style="width:200px;align-content: center;margin: auto" overlay="true" trigger="addNewTrigger" my="left top" at="left bottom">
+                                <p:menuitem value="Add New Tag" onclick="PF('dialogCreateNewTag').show()">
+                                    <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
+                                </p:menuitem>
+                                <p:menuitem value="Add New Class Type" onclick="PF('dialogCreateNewClassType').show()">
+                                    <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
+                                </p:menuitem>
+                            </p:slideMenu>
+                        </p:toolbarGroup>
+            </p:toolbar>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="500" message="Any Creation of New Tag or Class Type cannot be deleted. Please Search the Library carefully before proceeding">
+                <p:commandButton value="Bring me back to the library" type="button" styleClass="ui-confirmdialog-no ui-button-flat" style="background: #ff6666;color: #000000"/>
+                <p:commandButton value="I am aware and I would like to create a new Tag/Class Type" type="button" styleClass="ui-confirmdialog-yes" style="background: #66ff66;color: #000000"/>
+            </p:confirmDialog>
+        </h:form>
+        <div style=" width: 50%;float: left">
+            <h:form id="formAllTagsLibrary" style="width: 99%">
+                <p:messages id="messageAllTagsLibrary" redisplay="false" closable="true"/>
+                <p:dataTable id="dataTableTagsLibrary" widgetVar="dataTableTagsLibrary" value="#{tagInformationLibraryManagedBean.tagEntities}" var="tagEntity"
+                             rowKey="#{tagEntity.tagId}" rowIndexVar="row" rows="10" filteredValue="#{tagInformationLibraryManagedBean.tagEntitiesFiltered}"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
+                    <f:facet name="header">
+                            <span style="font-weight: bold">TAGS</span>
+                                <p:outputPanel style="text-align: right;">
+                                    <h:outputText value="Search all tags:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('dataTableTagsLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
+                                </p:outputPanel>
+                    </f:facet>
+                    <row>          
+                        <p:column filterBy="#{tagEntity.tagId}" headerText="Tag Id" filterStyle="display:none">
+                            <h:outputText value="#{tagEntity.tagId}"/>
+                        </p:column>
+                    </row>
+                    <row>          
+                        <p:column filterBy="#{tagEntity.tagName}" headerText="Tag Name" filterStyle="display:none">
+                            <h:outputText value="#{tagEntity.tagName}"/>
+                        </p:column>
+                    </row>
+                </p:dataTable>
+            </h:form>
+        </div>
+        <div style="width: 50%;float: right">
+            <h:form id="formAllClassLibrary" style="width: 99%">
+                <p:messages redisplay="false" id="messageAllClassLibrary" closable="true"/>
+                <p:dataTable id="dataTableClassLibrary" widgetVar="dataTableClassLibrary" value="#{classTypeInformationLibraryManagedBean.classTypeEntities}" var="classEntity"
+                             rowKey="#{classEntity.classTypeId}" rowIndexVar="row" rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
+                    <f:facet name="header">
+                            <span style="font-weight: bold">TAGS</span>
+                                <p:outputPanel style="text-align: right;">
+                                    <h:outputText value="Search all Class Type:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('dataTableClassLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
+                                </p:outputPanel>
+                    </f:facet>
+                    <row>          
+                        <p:column filterBy="#{classEntity.classTypeId}" headerText="Tag Id" filterStyle="display:none">
+                            <h:outputText value="#{classEntity.classTypeId}"/>
+                        </p:column>
+                    </row>
+                    <row>          
+                        <p:column filterBy="#{classEntity.classTypeName}" headerText="Tag Name" filterStyle="display:none">
+                            <h:outputText value="#{classEntity.classTypeName}"/>
+                        </p:column>
+                    </row>
+                </p:dataTable>
+            </h:form>
+        </div>
+        <h:form id="formCreateNewTag">
+            <p:dialog id="dialogCreateNewTag" widgetVar="dialogCreateNewTag" header="Create New Tag">
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Tag Name:"/>
+                    </p:column>
+                    <p:column>
+                        <h:inputText value="#{tagInformationLibraryManagedBean.tagEntityNew.tagName}" required="true" requiredMessage="Tag Name cannot be empty"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandButton value="Create" actionListener="#{tagInformationLibraryManagedBean.createNewTagEntity}" update="@form formAllTagsLibrary" oncomplete="PF('dialogCreateNewTag').hide()" />
+                    </p:column>
+                </p:row>
+                
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formCreateNewClassType">
+            <p:dialog id="dialogCreateNewClassType" widgetVar="dialogCreateNewClassType" header="Create New Class Type">
+                <p:row>
+                    <p:column>
+                        <h:outputText value="Class Name:"/>
+                    </p:column>
+                    <p:column>
+                        <h:inputText value="#{classTypeInformationLibraryManagedBean.classTypeEntityNew.classTypeName}" required="true" requiredMessage="Class Type Name cannot be empty"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandButton value="Create" actionListener="#{classTypeInformationLibraryManagedBean.createNewClassTypeEntity}" update="@form formAllClassLibrary" oncomplete="PF('dialogCreateNewClassType').hide()"/>
+                    </p:column>
+                </p:row>
+                
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

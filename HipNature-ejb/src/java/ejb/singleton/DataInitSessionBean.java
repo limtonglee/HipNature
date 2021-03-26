@@ -102,7 +102,7 @@ public class DataInitSessionBean {
 
     private void createPartner() throws ParseException {
         try {
-            PartnerEntity partner1 = new PartnerEntity("Partner 1", "1234567", "partner1@gmail.com", "Singapore", "partner1", "password");
+            PartnerEntity partner1 = new PartnerEntity("Partner 1", "87654321", "partner1@gmail.com", "Singapore", "partner1", "password");
             partnerEntitySessionBeanLocal.createNewPartner(partner1);
             PartnerEntity partner2 = new PartnerEntity("Partner 2", "61234567", "partner2@gmail.com", "Singapore", "partner2", "password");
             partnerEntitySessionBeanLocal.createNewPartner(partner2);
@@ -183,17 +183,25 @@ public class DataInitSessionBean {
     }
 
     private void createClassTypeEntity() {
-        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
-        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
-        classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
+        try {
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void createTagEntity() {
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
-        tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+        try {
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("paint"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("art"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("dance"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("relax"));
+            tagEntitySessionBeanLocal.createNewTag(new TagEntity("Intensive"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void createInstructorEntity() {

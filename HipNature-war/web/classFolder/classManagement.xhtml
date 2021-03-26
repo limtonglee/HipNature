@@ -4,17 +4,24 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="./template/defaultTemplate.xhtml"
+                template="./../template/defaultTemplate.xhtml"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-
+    <style>
+        hide{
+            display:none;
+            visibility:hidden;
+        }
+    </style>
     <ui:define name="content">
         <ez:Breadcrumb pageName ="classManagement"/>
         <div>
             <h2>Class Management</h2>
             <h:form>
                 <p:panelMenu style="width: 20%;font-size: 15px">
-                    <p:submenu label="File" icon="ui-icon-document"     >
-                        <p:menuitem value ="Create new Class" onclick="PF('dialogCreateNewClass').show()" icon="pi pi-plus"/>
+                    <p:submenu label="File" icon="ui-icon-document">
+                        <p:menuitem value ="Create new Class" onclick="PF('dialogCreateNewClass').show()" icon="pi pi-plus">
+                            <p:resetInput target="@form formCreateNewClass"/>
+                        </p:menuitem>
                     </p:submenu>
                 </p:panelMenu>
 
@@ -27,27 +34,29 @@
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
+                    
                     <f:facet name="header">
                         <p:outputPanel style="text-align: right;">
                             <h:outputText value="Search all fields:" />
                             <p:inputText id="globalFilter" onkeyup="PF('dataTableClasses').filter()" style="width:300px" placeholder="Enter keyword" />
                         </p:outputPanel>
                     </f:facet>
-                    <p:column headerText="Class ID" width="5%" sortBy="#{classEntity.classId}">
+                    
+                    <p:column id="col" headerText="Class ID" width="5%" sortBy="#{classEntity.classId}" filterBy="#{classEntity.classId}" filterStyle="display:none">
                         <h:outputText value="#{classEntity.classId}" />
                     </p:column>
-                    <p:column headerText="Class Name" width="25%" sortBy="#{classEntity.className}">
+                    <p:column headerText="Class Name" width="25%" sortBy="#{classEntity.className}" filterBy="#{classEntity.className}" filterStyle="display:none">
                         <h:outputText value="#{classEntity.className}" />
                     </p:column>
-                    <p:column headerText="Credit Cost" width="5%" sortBy="#{classEntity.credit}">
+                    <p:column headerText="Credit Cost" width="5%" sortBy="#{classEntity.credit}" filterBy="#{classEntity.credit}" filterStyle="display:none">
                         <h:outputText value="#{classEntity.credit}" />
                     </p:column>
-                    <p:column headerText="Location" width="15%" sortBy="#{classEntity.locationTypeEnum}">
+                    <p:column headerText="Location" width="15%" sortBy="#{classEntity.locationTypeEnum}" filterBy="#{classEntity.locationTypeEnum}" filterStyle="display:none">
                         <h:outputText value="#{classEntity.locationTypeEnum}" />
                     </p:column>
                     <p:column headerText="Action" width="10%">
-                        <p:commandButton title="View" icon="ui-icon-document">
-                            
+                        <p:commandButton title="Update" icon="ui-icon-document" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()">
+                            <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
                         </p:commandButton>
                         <p:commandButton title="Delete" icon="ui-icon-trash" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses">
                             <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
@@ -77,7 +86,7 @@
                                         <f:selectItems value="#{classManagementManagedBean.classTypeEntities}" var="classTypeEntity" itemValue="#{classTypeEntity.classTypeId}" itemLabel="#{classTypeEntity.classTypeName}"/>
                                     </p:selectOneMenu>
                                     <h:outputText value="Location: "/>
-                                    <p:selectOneMenu id ="selClassLocation" value="#{classManagementManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
+                                    <p:selectOneMenu id ="selClassLocation" value="#{classManagementManagedBean.newClassEntity.locationTypeEnum}" required="true" requiredMessage="Location cannot be empty">
                                         <f:selectItem itemDisabled="true" itemLabel="[Select One]" noSelectionOption="true"/>
                                         <f:selectItems value="#{classManagementManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
                                     </p:selectOneMenu>
@@ -89,7 +98,7 @@
                                 <p:message for="credit"/>
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <h:outputText value="Credit: "/>
-                                    <p:spinner id="credit" value="#{classManagementManagedBean.newClassEntity.credit}" required="" placeholder="10" min="0" max="1000" requiredMessage="Credit cannot be empty"/>
+                                    <p:spinner id="credit" value="#{classManagementManagedBean.newClassEntity.credit}" required="true" placeholder="10" min="0" max="1000" requiredMessage="Credit cannot be empty"/>
                                 </h:panelGrid>
                             </p:panel>
                         </p:tab>
@@ -105,7 +114,69 @@
                     </p:wizard>
                 </p:dialog>
             </h:form>
-          
+
+            <h:form id="formUpdateClass">
+                <p:dialog id="dialogUpdateClass" closable="true" header="Update Class Details" widgetVar="dialogUpdateClass">
+                    <p:messages id="messageCreateNewClass" redisplay="false"/>
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Class Name"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{classManagementManagedBean.classEntityToUpdate.className}"/>
+                            </p:column>
+                        </p:row>   
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Class Type: "/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id ="selClassType" value="#{classManagementManagedBean.classTypeIdNew}" required="true" requiredMessage="Class Type cannot be empty">
+                                    <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
+                                    <f:selectItems value="#{classManagementManagedBean.classTypeEntities}" var="classTypeEntity" itemValue="#{classTypeEntity.classTypeId}" itemLabel="#{classTypeEntity.classTypeName}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Location: "/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id ="selClassLocation" value="#{classManagementManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
+                                    <f:selectItem itemDisabled="true" itemLabel="[Select One]" noSelectionOption="true"/>
+                                    <f:selectItems value="#{classManagementManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Credit"/>
+                            </p:column>
+                            <p:column>
+                                <p:spinner id="updateClassName" value="#{classManagementManagedBean.classEntityToUpdate.credit}" placeholder="#{classManagementManagedBean.classEntityToUpdate.credit}" required="true" min="0" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Tag(s) "/>
+                            </p:column>
+                            <p:column>
+                                <p:selectManyCheckbox id="selTags" value="#{classManagementManagedBean.tagIdsNew}">
+                                    <f:selectItems value ="#{classManagementManagedBean.tagEntities}" var="tagEntity" itemValue="#{tagEntity.tagId}" itemLabel="#{tagEntity.tagName}"/>
+                                </p:selectManyCheckbox>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton value="Update Class" update="@form formAllClasses" oncomplete="PF('dialogUpdateClass').hide()" actionListener="#{classManagementManagedBean.updateClass}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    
+                </p:dialog>
+                
+            </h:form>
         </div>
     </ui:define>
 </ui:composition>

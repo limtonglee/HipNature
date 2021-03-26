@@ -76,16 +76,17 @@
 
                             <f:facet name = "header">Action</f:facet>
 
-                            <p:commandLink 
-                                value="Update" actionListener="#{searchSessionsByNameManagedBean.updateSession}"
+                            <p:commandButton 
+                                value="Update" 
                                 oncomplete="PF('dialogUpdateSession').show()">
-                                <f:attribute name="sessionIdToUpdate" value="#{sessionEntity.sessionId}" />
-                            </p:commandLink>
+                                <f:setPropertyActionListener value="#{sessionEntity}" target="#{searchSessionsByNameManagedBean.updateSessionManagedBean.sessionEntityToUpdate}" />
+                            </p:commandButton>
 
-                            <p:commandLink 
-                                value="Delete" actionListener="#{searchSessionsByNameManagedBean.updateSession}">
-                                <f:attribute name="sessionIdToUpdate" value="#{sessionEntity.sessionId}" />
-                            </p:commandLink>
+                              <p:commandButton 
+                                value="Delete" 
+                                oncomplete="PF('dialogUpdateSession').show()">
+                                  <f:setPropertyActionListener value="#{sessionEntity}" target="#{searchSessionsByNameManagedBean.updateSessionManagedBean.sessionEntityToUpdate}" />
+                            </p:commandButton>
 
                             <h:form id="rootform">
                                 <p:growl id="growl" showDetail="true"/>
@@ -95,7 +96,7 @@
                                     <p:dialog id="dialogUpdateSession" widgetVar="dialogUpdateSession" header="Update Session" closable="true">
                                         <p:wizard>
                                             <p:tab id="SessionInformation" title="Session">
-                                                <p:panel header="Session Information" rendered="#{updateSessionManagedBean.sessionIdToUpdate !=null}">
+                                                <p:panel header="Session Information">
                                                     <p:messages/>
                                                     <h:panelGrid columns="2" columnClasses="label, value">
                                                         <h:outputText value="Session Name: "/>
@@ -128,11 +129,11 @@
                         <p:progressBar value="#{sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
 
                         <div class="product-grid-item-bottom">
-                            <p:commandLink type="button"
+                            <p:commandButton type="button"
                                            value="Update"
                                            onclick="PF('dialogUpdateSession').show()"
                                            >
-                            </p:commandLink>
+                            </p:commandButton>
                             <br></br>
                             <p:commandLink 
                                 value="Delete" actionListener="#{searchSessionsByNameManagedBean.updateSession}">
