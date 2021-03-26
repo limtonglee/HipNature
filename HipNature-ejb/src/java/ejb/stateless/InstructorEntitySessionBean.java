@@ -137,7 +137,7 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
         public List<InstructorEntity> retrieveInstructorsByPartner(Long pid
     ) {
 
-        Query query = em.createQuery("SELECT ins FROM InstructorEntity ins WHERE ins.partnerEntity.partnerEntityId = :partnerId");
+        Query query = em.createQuery("SELECT ins FROM InstructorEntity ins WHERE ins.partnerEntity.PartnerEntityId = :partnerId");
         query.setParameter("partnerId", pid);
 
         return (List<InstructorEntity>) query.getResultList();

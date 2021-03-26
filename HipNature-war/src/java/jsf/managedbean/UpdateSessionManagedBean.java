@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -22,7 +24,7 @@ import util.exception.SessionNotFoundException;
 
 
 @Named(value = "updateSessionManagedBean")
-@ViewScoped
+@SessionScoped
 
 public class UpdateSessionManagedBean implements Serializable
 {
@@ -51,7 +53,7 @@ public class UpdateSessionManagedBean implements Serializable
     @PostConstruct
     public void postConstruct()
     {
-        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("sessionIdToUpdate");
+        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
         
         System.out.println("Session" +sessionEntityToUpdate);
         try
@@ -87,8 +89,8 @@ public class UpdateSessionManagedBean implements Serializable
     
     public void back(ActionEvent event) throws IOException
     {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("sessionIdToView", sessionIdToUpdate);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("viewClasses.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("sessionIdToView", sessionIdToUpdate);
+//        FacesContext.getCurrentInstance().getExternalContext().redirect("viewClasses.xhtml");
     }
     
     
@@ -121,13 +123,13 @@ public class UpdateSessionManagedBean implements Serializable
     
     
     public Long getSessionIdToUpdate() {
-        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("sessionIdToUpdate");
+        sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
 
         return sessionIdToUpdate;
     }
 
     public void setSessionIdToUpdate(Long sessionIdToUpdate) {
-       sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("sessionIdToUpdate");
+       sessionIdToUpdate = (Long)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionIdToUpdate");
 
        this.sessionIdToUpdate = sessionIdToUpdate;
     }

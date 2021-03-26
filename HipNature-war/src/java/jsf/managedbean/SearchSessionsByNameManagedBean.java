@@ -1,17 +1,27 @@
 package jsf.managedbean;
 
+import ejb.stateless.ClassEntitySessionBeanLocal;
+import ejb.stateless.InstructorEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
+import entity.ClassEntity;
+import entity.ClassTypeEntity;
+import entity.InstructorEntity;
+import entity.PartnerEntity;
 import entity.SessionEntity;
 import entity.TagEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -19,6 +29,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.primefaces.model.TreeNode;
+import util.enumeration.LocationTypeEnum;
+import util.exception.CreateNewClassException;
+import util.exception.InputDataValidationException;
+import util.exception.InstructorNotFoundException;
 
 
 
@@ -27,13 +41,32 @@ import org.primefaces.model.TreeNode;
 public class SearchSessionsByNameManagedBean implements Serializable
 {
 
- 
+    /**
+     * @return the instructorEntities
+     */
+    public List<InstructorEntity> getInstructorEntities() {
+        return instructorEntities;
+    }
 
+    /**
+     * @param instructorEntities the instructorEntities to set
+     */
+    public void setInstructorEntities(List<InstructorEntity> instructorEntities) {
+        this.instructorEntities = instructorEntities;
+    }
+
+    @EJB
+    private InstructorEntitySessionBeanLocal instructorEntitySessionBean;
+
+ 
+   @EJB
+    private ClassEntitySessionBeanLocal classEntitySessionBeanLocal;
     @EJB
     private SessionEntitySessionBeanLocal sessionEntitySessionBean;
     @EJB
     private TagEntitySessionBeanLocal tagEntitySessionBeanLocal;
   
+    
     private String searchString;
     private List<SessionEntity> sessionEntities;
     private List<Long> selectedTagIds;
@@ -41,17 +74,30 @@ public class SearchSessionsByNameManagedBean implements Serializable
     private String location;
 
     
+    private SessionEntity newSessionEntity;
+    private Long newInstructorId;
+    private Long newClassId;
+    private List<ClassEntity> classEntities;
+    private List<InstructorEntity> instructorEntities;
+
+    private LocationTypeEnum locationTypeEnumNew;
+    private PartnerEntity currentPartnerEntity;
+
     public SearchSessionsByNameManagedBean() 
     {
         location = "ALL";
-        
+        currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
+       System.out.println("Here");
+        newSessionEntity = new SessionEntity();
     }
-    
-    
-    
+
     @PostConstruct
     public void postConstruct()            
     {
+        classEntities = classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());
+        System.out.println("PartnerEntiy" +currentPartnerEntity.getPartnerEntityId());
+        instructorEntities = instructorEntitySessionBean.retrieveInstructorsByPartner(currentPartnerEntity.getPartnerEntityId());
+          
         if(location == null) {
             location="ALL";
         }
@@ -178,9 +224,88 @@ public class SearchSessionsByNameManagedBean implements Serializable
         this.selectItems = selectItems;
     }    
     
-    public void updateProduct(ActionEvent event) throws IOException
+    public void updateSession(ActionEvent event) throws IOException
     {
             Long sessionId = (Long)event.getComponent().getAttributes().get("sessionIdToUpdate");
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("sessionIdToUpdate", sessionId);    
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("sessionIdToUpdate", sessionId);    
+    }
+
+    public InstructorEntitySessionBeanLocal getInstructorEntitySessionBean() {
+        return instructorEntitySessionBean;
+    }
+
+    public void setInstructorEntitySessionBean(InstructorEntitySessionBeanLocal instructorEntitySessionBean) {
+        this.instructorEntitySessionBean = instructorEntitySessionBean;
+    }
+
+    public SessionEntity getNewSessionEntity() {
+        return newSessionEntity;
+    }
+
+    public void setNewSessionEntity(SessionEntity newSessionEntity) {
+        this.newSessionEntity = newSessionEntity;
+    }
+
+    public Long getNewInstructorId() {
+        return newInstructorId;
+    }
+
+    public void setNewInstructorId(Long newInstructorId) {
+        this.newInstructorId = newInstructorId;
+    }
+
+    public Long getNewClassId() {
+        return newClassId;
+    }
+
+    public void setNewClassId(Long newClassId) {
+        this.newClassId = newClassId;
+    }
+
+    public List<ClassEntity> getClassEntities() {
+        return classEntities;
+    }
+
+    public void setClassEntities(List<ClassEntity> classEntities) {
+        this.classEntities = classEntities;
+    }
+
+
+
+     public LocationTypeEnum[] getLocationTypeEnum(){
+        return LocationTypeEnum.values();
+    }
+     
+     
+    public LocationTypeEnum getLocationTypeEnumNew() {
+        return locationTypeEnumNew;
+    }
+
+    public void setLocationTypeEnumNew(LocationTypeEnum locationTypeEnumNew) {
+        this.locationTypeEnumNew = locationTypeEnumNew;
+    }
+
+    public PartnerEntity getCurrentPartnerEntity() {
+        return currentPartnerEntity;
+    }
+
+    public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
+        this.currentPartnerEntity = currentPartnerEntity;
+    }
+    
+    
+    public void createNewSession(ActionEvent event) throws InstructorNotFoundException{
+        try{
+            newSessionEntity.setInstructor(instructorEntitySessionBean.retrieveInstructorByInstructorId(newInstructorId));
+            newSessionEntity.setLocationTypeEnum(locationTypeEnumNew);
+            newSessionEntity.setClassEntity(classEntitySessionBeanLocal.retrieveClassByClassId(newClassId));
+            newSessionEntity.setEndTime();
+            newSessionEntity.setStatus("ACTIVE");
+            Long ce = sessionEntitySessionBean.createNewSession(newSessionEntity);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Session Created", null));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
