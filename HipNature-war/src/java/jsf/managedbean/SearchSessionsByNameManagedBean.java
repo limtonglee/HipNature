@@ -42,6 +42,22 @@ public class SearchSessionsByNameManagedBean implements Serializable
 {
 
     /**
+     * @return the updateSessionManagedBean
+     */
+    public UpdateSessionManagedBean getUpdateSessionManagedBean() {
+        return updateSessionManagedBean;
+    }
+
+    /**
+     * @param updateSessionManagedBean the updateSessionManagedBean to set
+     */
+    public void setUpdateSessionManagedBean(UpdateSessionManagedBean updateSessionManagedBean) {
+        this.updateSessionManagedBean = updateSessionManagedBean;
+    }
+
+    @Inject
+    private UpdateSessionManagedBean updateSessionManagedBean;
+    /**
      * @return the instructorEntities
      */
     public List<InstructorEntity> getInstructorEntities() {
