@@ -31,8 +31,13 @@ import javax.inject.Inject;
 import org.primefaces.model.TreeNode;
 import util.enumeration.LocationTypeEnum;
 import util.exception.CreateNewClassException;
+import util.exception.DeleteClassEntityException;
+import util.exception.DeleteSessionEntityException;
 import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
+import util.exception.SessionNotFoundException;
+import util.exception.TagNotFoundException;
+import util.exception.UpdateSessionException;
 
 
 
@@ -42,28 +47,24 @@ public class SearchSessionsByNameManagedBean implements Serializable
 {
 
     /**
-     * @return the updateSessionManagedBean
+     * @return the sessionEntityToDelete
      */
-    public UpdateSessionManagedBean getUpdateSessionManagedBean() {
-        return updateSessionManagedBean;
+    public SessionEntity getSessionEntityToDelete() {
+        return sessionEntityToDelete;
     }
 
     /**
-     * @param updateSessionManagedBean the updateSessionManagedBean to set
+     * @param sessionEntityToDelete the sessionEntityToDelete to set
      */
-    public void setUpdateSessionManagedBean(UpdateSessionManagedBean updateSessionManagedBean) {
-        this.updateSessionManagedBean = updateSessionManagedBean;
+    public void setSessionEntityToDelete(SessionEntity sessionEntityToDelete) {
+        this.sessionEntityToDelete = sessionEntityToDelete;
     }
 
-    @Inject
-    private UpdateSessionManagedBean updateSessionManagedBean;
-    /**
-     * @return the instructorEntities
-     */
     public List<InstructorEntity> getInstructorEntities() {
         return instructorEntities;
     }
 
+    
     /**
      * @param instructorEntities the instructorEntities to set
      */
@@ -98,6 +99,8 @@ public class SearchSessionsByNameManagedBean implements Serializable
 
     private LocationTypeEnum locationTypeEnumNew;
     private PartnerEntity currentPartnerEntity;
+    private SessionEntity sessionEntityToUpdate;
+    private SessionEntity sessionEntityToDelete;
 
     public SearchSessionsByNameManagedBean() 
     {
@@ -105,6 +108,8 @@ public class SearchSessionsByNameManagedBean implements Serializable
         currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
        System.out.println("Here");
         newSessionEntity = new SessionEntity();
+       sessionEntityToUpdate = new SessionEntity();
+
     }
 
     @PostConstruct
@@ -240,11 +245,58 @@ public class SearchSessionsByNameManagedBean implements Serializable
         this.selectItems = selectItems;
     }    
     
+    
+   public void doUpdate(ActionEvent event){
+        try {
+            sessionEntityToUpdate = (SessionEntity) event.getComponent().getAttributes().get("sessionEntityToUpdate");
+            sessionEntityToUpdate = sessionEntitySessionBean.retrieveSessionBySessionId(sessionEntityToUpdate.getSessionId());
+            locationTypeEnumNew = null;
+            newInstructorId = null;
+        } catch (SessionNotFoundException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+   
     public void updateSession(ActionEvent event) throws IOException
     {
-            Long sessionId = (Long)event.getComponent().getAttributes().get("sessionIdToUpdate");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("sessionIdToUpdate", sessionId);    
+        try {
+            sessionEntityToUpdate.setLocationTypeEnum(locationTypeEnumNew);
+            sessionEntityToUpdate.setInstructor(instructorEntitySessionBean.retrieveInstructorByInstructorId(newInstructorId));
+            System.out.println(sessionEntityToUpdate.getLocationTypeEnum());
+                    System.out.println(sessionEntityToUpdate);
+
+            sessionEntitySessionBean.updateSession(sessionEntityToUpdate, selectedTagIds);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session Updated", null));
+
+            
+    }   catch (SessionNotFoundException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TagNotFoundException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UpdateSessionException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstructorNotFoundException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
+    
+    
+     public void doDelete(ActionEvent event){
+        try {
+            sessionEntityToDelete = (SessionEntity) event.getComponent().getAttributes().get("sessionEntityToDelete");
+            sessionEntitySessionBean.deleteSession(sessionEntityToDelete.getSessionId());
+            sessionEntities.remove(sessionEntityToDelete);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session successfully deleted", null));
+        } catch (DeleteSessionEntityException ex) {
+            Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 
     public InstructorEntitySessionBeanLocal getInstructorEntitySessionBean() {
         return instructorEntitySessionBean;
@@ -307,6 +359,19 @@ public class SearchSessionsByNameManagedBean implements Serializable
 
     public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
         this.currentPartnerEntity = currentPartnerEntity;
+    }
+    
+     public SessionEntity getSessionEntityToUpdate() {
+       System.out.println("Get Session" + sessionEntityToUpdate.getSessionId());
+        return sessionEntityToUpdate;
+    }
+
+    public void setSessionEntityToUpdate(SessionEntity sessionEntityToUpdate) {
+        this.sessionEntityToUpdate = sessionEntityToUpdate;
+
+        System.out.println("Set Session" + this.sessionEntityToUpdate.getSessionId());
+                System.out.println("Set Session" + this.sessionEntityToUpdate.getMaxCapacity());
+
     }
     
     
