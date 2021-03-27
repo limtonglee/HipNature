@@ -81,7 +81,7 @@
                             </p:commandButton>
 
                             <p:commandButton 
-                                value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" update="formMain" >
+                                value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" process="@form" update="formMain:dataViewMain"  >
                                 <f:attribute value="#{sessionEntity}" name="sessionEntityToDelete" />
                             </p:commandButton>
 
@@ -107,7 +107,7 @@
                             </p:commandButton>
 
                             <p:commandButton 
-                                value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" update="formMain" >
+                                value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" process="@form" update="formMain:dataViewMain"  >
                                 <f:attribute value="#{sessionEntity}" name="sessionEntityToDelete" />
                             </p:commandButton>
 
@@ -194,7 +194,7 @@
                                 <p:outputLabel for="input4" value="Phone"/>
                                 <p:inputNumber id="input4" value="#{searchSessionsByNameManagedBean.newSessionEntity.phone}" /> 
                                 <h:outputText value="Class : "/>
-                                <p:selectOneMenu id ="selClass" value="#{searchSessionsByNameManagedBean.newClassId}" required="true" requiredMessage="Instructor cannot be empty">
+                                <p:selectOneMenu id ="selClass" value="#{searchSessionsByNameManagedBean.newClassId}" required="true" requiredMessage="Class cannot be empty">
                                     <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
                                     <f:selectItems value="#{searchSessionsByNameManagedBean.classEntities}" var="classEntity" itemValue="#{classEntity.classId}" itemLabel="#{classEntity.className}"/>
                                 </p:selectOneMenu>
