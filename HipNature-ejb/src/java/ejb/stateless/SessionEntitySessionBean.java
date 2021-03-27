@@ -209,4 +209,10 @@ public class SessionEntitySessionBean implements SessionEntitySessionBeanLocal {
             throw new DeleteSessionEntityException("Unable to delete class Id: " + sessionEntityToDelete + " There are still " + size + " session(s) left" );
         }
     }
+    @Override
+    public List<SessionEntity> retrieveSessionsByPartnerId(Long partnerId){
+        Query query = em.createQuery("SELECT S FROM SessionEntity s WHERE s.classEntity.partnerEntity.PartnerEntityId =:partnerId");
+        query.setParameter("partnerId", partnerId);
+        return query.getResultList();
+    }
 }

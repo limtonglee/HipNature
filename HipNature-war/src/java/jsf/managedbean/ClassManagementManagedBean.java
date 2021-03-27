@@ -119,13 +119,17 @@ public class ClassManagementManagedBean implements Serializable {
     public void doDelete(ActionEvent event){
         try{
             classEntityToDelete = (ClassEntity) event.getComponent().getAttributes().get("classEntityToDelete");
-            classEntitySessionBeanLocal.deleteClass(classEntityToDelete.getClassId());
-            classEntities.remove(classEntityToDelete);
-
-            if (classEntitiesFiltered != null){
-                classEntitiesFiltered.remove(classEntityToDelete);
+            if (classEntityToDelete.getSessionEntities().isEmpty()){
+                classEntitySessionBeanLocal.deleteClass(classEntityToDelete.getClassId());
+                classEntities.remove(classEntityToDelete);
+                if (classEntitiesFiltered != null){
+                    classEntitiesFiltered.remove(classEntityToDelete);
+                }
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Class successfully deleted", null));
             }
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Class successfully deleted", null));
+            else {
+                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class: There are sessions still running", null));
+            }
         } catch (ClassNotFoundException | DeleteClassEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class", null));
         }

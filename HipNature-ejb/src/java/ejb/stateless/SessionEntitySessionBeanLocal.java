@@ -33,5 +33,7 @@ public interface SessionEntitySessionBeanLocal {
    public String prepareInputDataValidationException(Set<ConstraintViolation<SessionEntity>>constraintViolations);
     public void updateSession(SessionEntity sessionEntity, List<Long> tagIds) throws SessionNotFoundException, TagNotFoundException, UpdateSessionException, InputDataValidationException;
 
+    public List<SessionEntity> retrieveSessionsByPartnerId(Long partnerId);
+
 
 }
