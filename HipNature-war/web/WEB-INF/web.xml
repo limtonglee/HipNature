@@ -17,10 +17,10 @@
         <param-name>facelets.SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
-    <context-param>
+<!--    <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>admin</param-value>
-    </context-param>
+    </context-param>-->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
