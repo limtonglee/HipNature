@@ -39,7 +39,7 @@ public class RecordReportManagedBean {
     public void generateReport(ActionEvent event) {
         try {
             HashMap parameters = new HashMap();
-            parameters.put("Description", "Vendor Report");
+            parameters.put("Description", "Partner's Revenue Report");
 
             InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/hipreport.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
