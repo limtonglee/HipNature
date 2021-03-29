@@ -268,7 +268,7 @@ public class SearchSessionsByNameManagedBean implements Serializable
 
             sessionEntitySessionBean.updateSession(sessionEntityToUpdate, selectedTagIds);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session Updated", null));
-
+            searchSession();
             
     }   catch (SessionNotFoundException ex) {
             Logger.getLogger(SearchSessionsByNameManagedBean.class.getName()).log(Level.SEVERE, null, ex);
