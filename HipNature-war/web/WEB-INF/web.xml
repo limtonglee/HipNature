@@ -18,6 +18,10 @@
         <param-value>true</param-value>
     </context-param>
 <!--    <context-param>
+        <param-name>alternatedocroot_1</param-name>
+        <param-value>C:/HipNatureFileUpload/uploadedFiles</param-value>
+    </context-param>-->
+<!--    <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>admin</param-value>
     </context-param>-->

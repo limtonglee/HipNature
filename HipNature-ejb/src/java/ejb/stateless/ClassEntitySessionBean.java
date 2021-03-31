@@ -19,6 +19,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.LocationTypeEnum;
 import util.exception.CreateNewClassException;
 import util.exception.DeleteClassEntityException;
 import util.exception.InputDataValidationException;
@@ -83,8 +84,9 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
         if (constraintViolations.isEmpty()){
             try{
                 ClassTypeEntity classTypeEntity = classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(newClassTypeId);
-                em.persist(newClass);
                 newClass.setClassTypeEntity(classTypeEntity);
+                em.persist(newClass);
+                classTypeEntity.getClassEntities().add(newClass);
                 if (newTagEntityId != null && !(newTagEntityId.isEmpty())){
                     for (Long tag:newTagEntityId){
                         TagEntity tagEntity = tagEntitySessionBeanLocal.retrieveTagByTagId(tag);
@@ -175,4 +177,11 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
         }
         return msg;
     }
+     
+    @Override
+     public List<ClassEntity> retrieveAllClassEntityByLocation(LocationTypeEnum location){
+         Query query = em.createQuery("SELECT s from ClassEntity s WHERE s.locationTypeEnum = :location");
+         query.setParameter("location", location);
+         return query.getResultList();
+     }
 }

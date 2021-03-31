@@ -32,6 +32,8 @@ public interface PartnerEntitySessionBeanLocal {
     
     public PartnerEntity retrievePartnerByInstructor(Long instructorId) throws InstructorNotFoundException;
     
+    public List<PartnerEntity> retrieveAllPartnerLessCurrent(Long partnerId);
+    
     
     
 }

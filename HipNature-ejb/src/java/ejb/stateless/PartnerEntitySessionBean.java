@@ -170,4 +170,11 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
         }
         return msg;
     }
+    @Override
+    public List<PartnerEntity> retrieveAllPartnerLessCurrent(Long partnerId){
+        Query query = em.createQuery("SELECT s FROM PartnerEntity s WHERE s.PartnerEntityId != :partnerId");
+        query.setParameter("partnerId", partnerId);
+        
+        return query.getResultList();
+    }
 }

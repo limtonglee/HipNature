@@ -8,6 +8,7 @@ package ejb.stateless;
 import entity.ClassEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.enumeration.LocationTypeEnum;
 import util.exception.CreateNewClassException;
 import util.exception.DeleteClassEntityException;
 import util.exception.InputDataValidationException;
@@ -32,5 +33,8 @@ public interface ClassEntitySessionBeanLocal {
     public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException;
 
     public void updateClass(ClassEntity updateClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException, ClassNotFoundException;
+
+
+    public List<ClassEntity> retrieveAllClassEntityByLocation(LocationTypeEnum location);
 
 }
