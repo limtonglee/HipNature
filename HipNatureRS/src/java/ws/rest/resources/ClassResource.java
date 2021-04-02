@@ -67,7 +67,6 @@ public class ClassResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
-
     
 
     private ClassEntitySessionBeanLocal lookupClassEntitySessionBeanLocal() {

@@ -32,7 +32,6 @@ public class BookingEntity implements Serializable {
     @NotNull
     private String status;
     
-    
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private PurchasedPlanEntity purchasedplan;
     
@@ -42,6 +41,17 @@ public class BookingEntity implements Serializable {
     
     @OneToOne(mappedBy = "bookingEntity", fetch = FetchType.LAZY, optional = true)
     private RefundEntity refundEntity;
+
+    public BookingEntity() {
+    }
+
+    public BookingEntity(PurchasedPlanEntity purchasedplan, SessionEntity sessionEntity) {
+        this.status = "Booked";
+        this.purchasedplan = purchasedplan;
+        this.sessionEntity = sessionEntity;
+    }
+    
+    
     
     
     public Long getBookingId() {
