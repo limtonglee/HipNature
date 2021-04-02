@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.rest;
+package ws.rest.resources;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;

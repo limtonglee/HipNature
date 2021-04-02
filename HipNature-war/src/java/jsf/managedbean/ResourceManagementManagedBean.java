@@ -157,7 +157,7 @@ public class ResourceManagementManagedBean implements Serializable {
     public List<SessionEntity> retrievePartnerSessions(ActionEvent event) {
         
         PartnerEntity selectedPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedPartnerEntity");
-        List<ClassEntity> partnerClasses = selectedPartnerEntity.getClassEntity();
+        /*List<ClassEntity> partnerClasses = selectedPartnerEntity.getClassEntity();
 
         if (!partnerClasses.isEmpty()) {
             for (ClassEntity pclass : partnerClasses) {
@@ -169,7 +169,14 @@ public class ResourceManagementManagedBean implements Serializable {
                 }
             }
         }
-        setPartnerListOfSessions(partnerListOfSessions);
+        setPartnerListOfSessions(partnerListOfSessions);*/
+        
+        Long pid = selectedPartnerEntity.getPartnerEntityId();
+        
+        List<SessionEntity> sess = sessionEntitySessionBeanLocal.retrieveSessionsByPartnerId(pid);
+        
+        setPartnerListOfSessions(sess);
+        
         return partnerListOfSessions;
     }
 

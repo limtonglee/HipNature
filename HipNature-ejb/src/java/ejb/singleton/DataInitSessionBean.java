@@ -139,6 +139,8 @@ public class DataInitSessionBean {
             java.util.Date endTime4 = sdf.parse("09/12/2019 14:00");
             java.util.Date startTime5 = sdf.parse("10/12/2019 12:00");
             java.util.Date endTime5 = sdf.parse("10/12/2019 14:00");
+            
+            // to test update sessions, need to create new classes and link to partner. then create sessions that link to the classes
 
 //            SessionEntity session1 = new SessionEntity("Tembusu", startTime1, endTime1, 2, "61234594", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
 //            sessionEntitySessionBean.createNewSession(session1);

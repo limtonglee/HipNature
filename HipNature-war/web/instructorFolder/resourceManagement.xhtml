@@ -61,7 +61,7 @@
                             <!-- <p:commandButton ajax="false" type="submit" value="Create" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" /> -->
                             <p:commandButton ajax="false" id="createNewInstructor" value="Create" icon="pi pi-save" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" />    
                                 <!-- <f:attribute name="partnerTagged" value="#{resourceManagementManagedBean.newInstructor.partnerEntity}" /> -->
-                            <f:attribute name="partnerTagged" value="#{sessionScope.currentPartnerEntity}" /> 
+                            <f:attribute name="currentPartnerEntity" value="#{sessionScope.currentPartnerEntity}" /> 
                         </p:column>
 
                         <!-- <p:column colspan="3">

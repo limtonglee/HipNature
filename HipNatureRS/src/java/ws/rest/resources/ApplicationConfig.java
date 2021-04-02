@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ws.rest;
+package ws.rest.resources;
 
 import java.util.Set;
 
@@ -28,8 +28,9 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(ws.rest.CorsFilter.class);
-        resources.add(ws.rest.SessionsResource.class);
+        resources.add(ws.rest.resources.ClassResource.class);
+        resources.add(ws.rest.resources.CorsFilter.class);
+        resources.add(ws.rest.resources.SessionsResource.class);
     }
     
 }
