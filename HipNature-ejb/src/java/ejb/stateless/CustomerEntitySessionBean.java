@@ -57,7 +57,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
     
     @Override
     public CustomerEntity retrieveCustomerByUsername(String username) throws CustomerNotFoundException {
-        Query query = em.createQuery("SELECT c FROM CustomerEntity WHERE c.username =:inUsername");
+        Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.username =:inUsername");
         query.setParameter("inUsername", username);
         
         try {

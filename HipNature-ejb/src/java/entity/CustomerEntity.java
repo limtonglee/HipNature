@@ -110,7 +110,7 @@ public class CustomerEntity implements Serializable {
         this.email = email;
         this.address = address;
         this.username = username;
-        this.password = password;
+        setPassword(password);
         this.customerTypeEnum = customerTypeEnum;
     }
 
@@ -221,8 +221,11 @@ public class CustomerEntity implements Serializable {
      * @param password the password to set
      */
     public void setPassword(String password) {
-        this.password = password;
-    }
+         if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }    }
 
     /**
      * @return the customerTypeEnum
