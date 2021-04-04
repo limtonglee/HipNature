@@ -41,7 +41,7 @@ public class RecordReportManagedBean {
             HashMap parameters = new HashMap();
             parameters.put("Description", "Partner's Revenue Report");
 
-            InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/hipreport.jasper");
+            InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/customer.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
 
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, hipNatureDataSource.getConnection());
