@@ -20,7 +20,7 @@ public interface CustomerEntitySessionBeanLocal {
 
     public List<CustomerEntity> retrieveAllCustomers();
 
-    public Long createNewCustomer(CustomerEntity newCustomer);
+    public CustomerEntity createNewCustomer(CustomerEntity newCustomer);
 
     public CustomerEntity retrieveCustomerByCustomerId(Long customerId) throws CustomerNotFoundException;
 

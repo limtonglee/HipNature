@@ -35,12 +35,12 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
     }
 
     @Override
-    public Long createNewCustomer(CustomerEntity newCustomer) {
+    public CustomerEntity createNewCustomer(CustomerEntity newCustomer) {
         
         em.persist(newCustomer);
         em.flush();
 
-        return newCustomer.getCustomerId();
+        return newCustomer;
         
     }
     

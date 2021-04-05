@@ -7,8 +7,6 @@ package ws.rest.resources;
 
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import entity.CustomerEntity;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -17,8 +15,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,7 +34,7 @@ public class CustomerResource {
     private UriInfo context;
 
     private final SessionBeanLookup sessionBeanLookup;
-        CustomerEntitySessionBeanLocal customerEntitySessionBean;
+    private final CustomerEntitySessionBeanLocal customerEntitySessionBean;
 
     /**
      * Creates a new instance of CustomerResource
@@ -81,6 +77,23 @@ public class CustomerResource {
         catch(Exception ex)
         {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createCustomer(CustomerEntity createNewCustomerReq){
+        if (createNewCustomerReq != null){
+        try{
+            System.out.println("TESTING***********************");
+        CustomerEntity customerEntity = customerEntitySessionBean.createNewCustomer(createNewCustomerReq);
+        return Response.status(Response.Status.OK).entity(customerEntity.getCustomerId()).build();
+        } catch (Exception ex){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+        } else{
+             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid request").build();
         }
     }
    
