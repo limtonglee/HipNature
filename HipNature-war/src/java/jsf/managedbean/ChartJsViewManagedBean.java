@@ -5,11 +5,14 @@
  */
 package jsf.managedbean;
 
+import ejb.stateless.CustomerEntitySessionBeanLocal;
+import entity.CustomerEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -43,52 +46,42 @@ import org.primefaces.model.charts.scatter.ScatterChartModel;
 @RequestScoped
 public class ChartJsViewManagedBean implements Serializable {
 
+    @EJB
+    private CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
+
     private PieChartModel pieModel;
-
-    //private PolarAreaChartModel polarAreaModel;
-
-    //private LineChartModel lineModel;
-
-    //private LineChartModel cartesianLinerModel;
 
     private BarChartModel barModel;
 
-   // private BarChartModel barModel2;
+    private List<CustomerEntity> records;
 
-    //private HorizontalBarChartModel hbarModel;
+    //normal 
+    private int n = 0;
 
-   // private BarChartModel stackedBarModel;
+    //students
+    private int s = 0;
 
-    //private BarChartModel stackedGroupBarModel;
+    //elderly
+    private int e = 0;
 
-    //private RadarChartModel radarModel;
-
-    //private RadarChartModel radarModel2;
-
-    //private BubbleChartModel bubbleModel;
-
-    //private BarChartModel mixedModel;
-
-    //private DonutChartModel donutModel;
-
-    //private ScatterChartModel scatterModel;
     /**
      * Creates a new instance of ChartJsViewManagedBean
      */
     public ChartJsViewManagedBean() {
     }
-    
 
     @PostConstruct
     public void init() {
-     
+
+        setRecords(customerEntitySessionBeanLocal.retrieveAllCustomers());
+
         createBarModel();
-        
+
         createPieModel();
-        //createBarModel2();
-    
+
     }
-    
+
+    //dummy chart to add in revenue later 
     public void createBarModel() {
         barModel = new BarChartModel();
         ChartData data = new ChartData();
@@ -99,8 +92,8 @@ public class ChartJsViewManagedBean implements Serializable {
         List<Number> values = new ArrayList<>();
         //loop to get the monthly revenue statement later
         // for (Number num : values) {
-          //  System.out.println(num);
-          //  values.add(num);
+        //  System.out.println(num);
+        //  values.add(num);
         //}
         values.add(65);
         values.add(59);
@@ -195,47 +188,39 @@ public class ChartJsViewManagedBean implements Serializable {
         //Animation animation = new Animation();
         //animation.setDuration(0);
         //options.setAnimation(animation);
-
         barModel.setOptions(options);
     }
-    
-    public void createPieModel() 
-    {
+
+    public void createPieModel() {
         pieModel = new PieChartModel();
-        
-        //List<Number> customers = new ArrayList<>();
-        
-        //loop to read in the report later
-        // for (Number cust : customers) {
-          //  System.out.println(cust);
-          //  pieModel.set("Elderly", cust);
-          //pieModel.set("Regulars", cust);
-          // pieModel.set("Students", cust);
-          // pieModel.set("Others", cust);
-        //}
-        
-        pieModel.set("Elderly", 557);
-        pieModel.set("Regulars", 325);
-        pieModel.set("Students", 702);
-        pieModel.set("Others", 421);
+
+        for (CustomerEntity customer : getRecords()) {
+            if (customer.getCustomerTypeEnum().toString().equals("NORMAL")) {
+                n++;
+            } else if (customer.getCustomerTypeEnum().toString().equals("STUDENT")) {
+                s++;
+            } else {
+                e++;
+            }
+        }
+
+        pieModel.set("Elderly", n);
+        pieModel.set("Regulars", s);
+        pieModel.set("Students", e);
         //pieModel.setTitle("Customer Breakdown");
         pieModel.setLegendPosition("e");
         pieModel.setFill(true);
         pieModel.setShowDataLabels(true);
         pieModel.setShowDatatip(true);
         //pieModel.setDiameter(150);
-        
+
         pieModel.setSeriesColors("aaf,afa,faa,ffa");
-        
 
         //pieModel.setSeriesColors("aaf,afa,faa,ffa,aff,faf,ddd");
-        
         //show label text  as 'value' (numeric) , others are 'label', 'percent' (default). Only one can be used.
         //pieModel.setDataFormat("label");
-        
     }
-    
-    
+
     /*private void createPieModel() {
         pieModel = new PieChartModel();
         ChartData data = new ChartData();
@@ -262,8 +247,6 @@ public class ChartJsViewManagedBean implements Serializable {
 
         pieModel.setData(data);
     }*/
-    
-    
     public BarChartModel getBarModel() {
         return barModel;
     }
@@ -271,12 +254,17 @@ public class ChartJsViewManagedBean implements Serializable {
     public void setBarModel(BarChartModel barModel) {
         this.barModel = barModel;
     }
-    
+
     public PieChartModel getPieModel() {
         return pieModel;
     }
-    
-  
+
+    public List<CustomerEntity> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<CustomerEntity> records) {
+        this.records = records;
+    }
+
 }
-
-
