@@ -5,6 +5,7 @@
  */
 package ws.rest.resources;
 
+import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PlanEntitySessionBeanLocal;
 import entity.PlanEntity;
 import java.util.List;
@@ -36,15 +37,27 @@ import util.exception.InvalidLoginCredentialException;
 public class PlanResource {
 
 
-    PlanEntitySessionBeanLocal planEntitySessionBeanLocal = lookupPlanEntitySessionBeanLocal();
+    PlanEntitySessionBeanLocal planEntitySessionBeanLocal;
 
     @Context
     private UriInfo context;
+ 
+    private final SessionBeanLookup sessionBeanLookup;
+
+
+    /**
+     * Creates a new instance of CustomerResource
+     */
+     
+     
 
     /**
      * Creates a new instance of PlanResource
      */
     public PlanResource() {
+                        sessionBeanLookup = new SessionBeanLookup();
+                planEntitySessionBeanLocal= sessionBeanLookup.lookupPlanEntitySessionBeanLocal();
+
     }
 
     @Path("retrieveAllPlans")
@@ -77,13 +90,4 @@ public class PlanResource {
     public void putXml(String content) {
     }*/
 
-    private PlanEntitySessionBeanLocal lookupPlanEntitySessionBeanLocal() {
-        try {
-            javax.naming.Context c = new InitialContext();
-            return (PlanEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/PlanEntitySessionBean!ejb.stateless.PlanEntitySessionBeanLocal");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
 }
