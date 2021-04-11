@@ -135,5 +135,13 @@ public class PlanEntity implements Serializable {
     public void setPlanName(String planName) {
         this.planName = planName;
     }
+
+    public List<PurchasedPlanEntity> getPurchasedPlans() {
+        return purchasedPlans;
+    }
+
+    public void setPurchasedPlans(List<PurchasedPlanEntity> purchasedPlans) {
+        this.purchasedPlans = purchasedPlans;
+    }
     
 }

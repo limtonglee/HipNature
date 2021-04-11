@@ -72,7 +72,13 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
             throw new PurchasedPlanNotFoundException("Purchased Plan not found.");
         }
     }
-
+    @Override
+    public List<BookingEntity> retrieveMyBookings(Long cusId){
+        Query query = em.createQuery("SELECT s FROM BookingEntity s WHERE s.purchasedplan.customer.customerId =:cusId");
+        query.setParameter("cusId", cusId);
+        return query.getResultList();
+    }
+    
     @Override
     public BookingEntity retrieveClassByClassId(Long bookingId) throws BookingNotFoundException {
         BookingEntity bookingEntity = em.find(BookingEntity.class, bookingId);

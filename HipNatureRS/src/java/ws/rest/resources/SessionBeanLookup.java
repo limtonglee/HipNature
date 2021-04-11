@@ -33,7 +33,7 @@ public class SessionBeanLookup
         }
     }
     
-    CustomerEntitySessionBeanLocal lookupCustomerEntitySessionBeanLocal() {
+   public CustomerEntitySessionBeanLocal lookupCustomerEntitySessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
             return (CustomerEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/CustomerEntitySessionBean!ejb.stateless.CustomerEntitySessionBeanLocal");
