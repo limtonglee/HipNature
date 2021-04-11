@@ -2,6 +2,7 @@ package ws.rest.resources;
 
 
 import ejb.stateless.BookingEntitySessionBeanLocal;
+import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PlanEntitySessionBeanLocal;
 import java.util.logging.Level;
@@ -14,6 +15,8 @@ import javax.naming.NamingException;
 
 public class SessionBeanLookup 
 {
+
+    ClassEntitySessionBeanLocal classEntitySessionBean = lookupClassEntitySessionBeanLocal();
 
     PlanEntitySessionBeanLocal planEntitySessionBean = lookupPlanEntitySessionBeanLocal();
     private final String ejbModuleJndiPath;
@@ -56,6 +59,19 @@ public class SessionBeanLookup
             throw new RuntimeException(ne);
         }
     }
+
+    public ClassEntitySessionBeanLocal lookupClassEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (ClassEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/ClassEntitySessionBean!ejb.stateless.ClassEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+     
+    
     
   
 }

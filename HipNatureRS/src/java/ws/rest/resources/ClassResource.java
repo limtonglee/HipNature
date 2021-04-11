@@ -10,6 +10,7 @@ import ws.rest.model.ErrorRsp;
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import entity.ClassEntity;
 import static entity.ClassTypeEntity_.classEntities;
+import entity.PlanEntity;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,18 +36,25 @@ import javax.ws.rs.core.Response.Status;
 @Path("Class")
 public class ClassResource {
 
-    ClassEntitySessionBeanLocal classEntitySessionBeanLocal = lookupClassEntitySessionBeanLocal();
+    ClassEntitySessionBeanLocal classEntitySessionBeanLocal;
 
     @Context
     private UriInfo context;
 
+    private final SessionBeanLookup sessionBeanLookup;
+
     public ClassResource() {
+        sessionBeanLookup = new SessionBeanLookup();
+        classEntitySessionBeanLocal = sessionBeanLookup.lookupClassEntitySessionBeanLocal();
+        System.out.println("HERE");
+
     }
 
     @Path("retrieveAllClasses")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllClasses() {
+        System.out.println("HERE");
         try {
 
             List<ClassEntity> classEntities = classEntitySessionBeanLocal.retrieveAllClasses();
@@ -59,23 +67,14 @@ public class ClassResource {
                 c.getSessionEntities().clear();
                 c.setPartnerEntity(null);
             }
-
-            RetrieveAllClassesRsp retrieveAllClassesRsp = new RetrieveAllClassesRsp(classEntities);
-            return Response.status(Status.OK).entity(retrieveAllClassesRsp).build();
+            System.out.println(classEntities);
+            GenericEntity<List<ClassEntity>> genericEntity = new GenericEntity<List<ClassEntity>>(classEntities) {
+            };
+            return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
-    
 
-    private ClassEntitySessionBeanLocal lookupClassEntitySessionBeanLocal() {
-        try {
-            javax.naming.Context c = new InitialContext();
-            return (ClassEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/ClassEntitySessionBean!ejb.stateless.ClassEntitySessionBeanLocal");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
 }
