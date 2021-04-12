@@ -81,8 +81,8 @@ public class ClassResource {
             classEntity.getTagEntities().clear();
             classEntity.setClassTypeEntity(null);
             classEntity.setPartnerEntity(null);
-            RetrieveClassRsp retrieveClassRsp = new RetrieveClassRsp(classEntity);
-            return Response.status(Status.OK).entity(retrieveClassRsp).build();
+            GenericEntity<ClassEntity> genericEntity = new GenericEntity<ClassEntity>(classEntity) {            };
+            return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();

@@ -6,6 +6,7 @@
 package ws.rest.resources;
 
 import ejb.stateless.ReviewEntitySessionBeanLocal;
+import entity.ClassEntity;
 import entity.ReviewEntity;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import ws.rest.model.ErrorRsp;
@@ -54,8 +56,9 @@ public class ReviewResource {
                 review.setClassEntity(null);
                 review.setCustomerEntity(null);
             }
-                RetrieveClassReviewsRsp retrieveClassReviewsRsp = new RetrieveClassReviewsRsp(reviews);
-                return Response.status(Response.Status.OK).entity(retrieveClassReviewsRsp).build();
+                GenericEntity<List<ReviewEntity>> genericEntity = new GenericEntity<List<ReviewEntity>>(reviews) {
+            };
+            return Response.status(Response.Status.OK).entity(genericEntity).build();
             }catch (Exception ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();

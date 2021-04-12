@@ -53,7 +53,6 @@ public class BookingsResource {
         if (createNewBookingReq != null) {
             try {
                 Long newBookingId = bookingEntitySessionBeanLocal.createNewBooking(createNewBookingReq.getNewBooking(), createNewBookingReq.getSessionEntityId(), createNewBookingReq.getPurchasedPlanId());
-
                 CreateNewBookingRsp createNewBookingRsp = new CreateNewBookingRsp(newBookingId);
                 return Response.status(Response.Status.OK).entity(createNewBookingRsp).build();
             } catch (Exception ex) {
