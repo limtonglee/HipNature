@@ -22,5 +22,7 @@ public interface ReviewEntitySessionBeanLocal {
     public Long createNewReview(ReviewEntity newReview);
 
     public List<ReviewEntity> retrieveAllReviews();
+
+    public List<ReviewEntity> retrieveReviewsByClassId(Long classId);
     
 }

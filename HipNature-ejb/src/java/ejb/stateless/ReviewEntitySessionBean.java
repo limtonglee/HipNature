@@ -50,6 +50,14 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
             throw new ReviewNotFoundException("Review ID " + reviewId + " does not exist!");
         }
     }
+    
+    @Override
+    public List<ReviewEntity> retrieveReviewsByClassId(Long classId) {
+        Query query = em.createQuery("SELECT r FROM ReviewEntity r WHERE r.classEntity.classId =:cid");
+        query.setParameter("cid", classId);
+        
+        return query.getResultList(); 
+    }
 
     // public List<ReviewEntity> retrieveAllReviewsForPartner(Long partnerId) 
     // public List<ReviewEntity retrieveAllReviewsForClass(Long classId)

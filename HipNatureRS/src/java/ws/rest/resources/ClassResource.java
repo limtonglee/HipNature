@@ -5,28 +5,21 @@
  */
 package ws.rest.resources;
 
-import ws.rest.model.RetrieveAllClassesRsp;
 import ws.rest.model.ErrorRsp;
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import entity.ClassEntity;
-import static entity.ClassTypeEntity_.classEntities;
-import entity.PlanEntity;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import ws.rest.model.RetrieveClassRsp;
 
 /**
  * REST Web Service
@@ -77,4 +70,22 @@ public class ClassResource {
         }
     }
 
+    @GET
+    @Path("retrieveClass/{classId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveClassByClassId(@PathParam("classId") Long classId) {
+        try {
+            ClassEntity classEntity = classEntitySessionBeanLocal.retrieveClassByClassId(classId);
+            classEntity.getReviewEntities().clear();
+            classEntity.getSessionEntities().clear();
+            classEntity.getTagEntities().clear();
+            classEntity.setClassTypeEntity(null);
+            classEntity.setPartnerEntity(null);
+            RetrieveClassRsp retrieveClassRsp = new RetrieveClassRsp(classEntity);
+            return Response.status(Status.OK).entity(retrieveClassRsp).build();
+        } catch (Exception ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+        }
+    }
 }
