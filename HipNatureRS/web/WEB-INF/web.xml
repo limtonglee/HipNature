@@ -47,4 +47,10 @@
         <local>ejb.stateless.CustomerEntitySessionBeanLocal</local>
         <ejb-link>HipNature-ejb.jar#CustomerEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>SessionEntitySessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.SessionEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#SessionEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

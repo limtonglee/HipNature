@@ -215,4 +215,10 @@ public class SessionEntitySessionBean implements SessionEntitySessionBeanLocal {
         query.setParameter("partnerId", partnerId);
         return query.getResultList();
     }
+    @Override
+    public List<SessionEntity> retrieveSessionsByClassId(Long classId){
+        Query query = em.createQuery("SELECT S FROM SessionEntity s WHERE s.classEntity.classId =:classId");
+        query.setParameter("classId", classId);
+        return query.getResultList();
+    }
 }

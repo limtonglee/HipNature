@@ -35,5 +35,7 @@ public interface SessionEntitySessionBeanLocal {
 
     public List<SessionEntity> retrieveSessionsByPartnerId(Long partnerId);
 
+    public List<SessionEntity> retrieveSessionsByClassId(Long classId);
+
 
 }
