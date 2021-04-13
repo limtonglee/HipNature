@@ -80,7 +80,6 @@ public class SessionsResource {
                 se.getParticipants().clear();
                 se.setClassEntity(null);
                 toReturn.add(toReturnSingleEntity);
-                
             }
 //             GenericEntity<List<SessionEntity>> genericEntity = new GenericEntity<List<SessionEntity>>(sessionEntities) {
 //            };

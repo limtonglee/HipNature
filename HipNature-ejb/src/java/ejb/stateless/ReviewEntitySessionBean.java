@@ -34,8 +34,11 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
     public Long createNewReview(ReviewEntity newReview) {
         
         em.persist(newReview);
+        
+        newReview.getCustomerEntity().getReviewEntity().add(newReview);
+        newReview.getClassEntity().getReviewEntities().add(newReview);
         em.flush();
-
+        
         return newReview.getReviewId();
         
     }

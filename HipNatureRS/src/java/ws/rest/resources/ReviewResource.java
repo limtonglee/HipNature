@@ -5,6 +5,7 @@
  */
 package ws.rest.resources;
 
+import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.ReviewEntitySessionBeanLocal;
 import entity.ClassEntity;
@@ -29,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import util.exception.InvalidLoginCredentialException;
-import ws.datamodel.CreateReviewReq;
+import ws.rest.model.CreateReviewReq;
 import ws.rest.model.ErrorRsp;
 import ws.rest.model.RetrieveClassReviewsRsp;
 
@@ -41,6 +42,8 @@ import ws.rest.model.RetrieveClassReviewsRsp;
 @Path("Review")
 @RequestScoped
 public class ReviewResource {
+
+    ClassEntitySessionBeanLocal classEntitySessionBean = lookupClassEntitySessionBeanLocal();
 
     CustomerEntitySessionBeanLocal customerEntitySessionBean = lookupCustomerEntitySessionBeanLocal();
 
@@ -81,13 +84,24 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createReview(CreateReviewReq createReviewReq)
     {
+        System.out.println("Review");
         if(createReviewReq != null)
         {
             try
             {
                 CustomerEntity customer = customerEntitySessionBean.customerLogin(createReviewReq.getUsername(), createReviewReq.getPassword());
+                                    System.out.println("********** ProductResource.createProduct(): Staff " + customer.getUsername() + " login remotely via web service");
 
-                Long reviewId  = reviewEntitySessionBean.createNewReview(createReviewReq.getReview());
+                                    System.out.println(createReviewReq.getPassword());
+                                             System.out.println(createReviewReq.getUsername());
+                                             System.out.println(createReviewReq.getDescription());
+                                             System.out.println(createReviewReq.getReviewRating());
+
+                System.out.println("********** ProductResource.createProduct(): Staff " + customer.getUsername() + " login remotely via web service");
+                ClassEntity c = classEntitySessionBean.retrieveClassByClassId(createReviewReq.getClassId());
+                ReviewEntity newR = new ReviewEntity(createReviewReq.getReviewRating(), createReviewReq.getDescription(), customer,c );
+                 System.out.println(newR);
+                Long reviewId  = reviewEntitySessionBean.createNewReview(newR);
                 
                 return Response.status(Response.Status.OK).entity(reviewId).build();
             }
@@ -120,6 +134,16 @@ public class ReviewResource {
         try {
             javax.naming.Context c = new InitialContext();
             return (CustomerEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/CustomerEntitySessionBean!ejb.stateless.CustomerEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ClassEntitySessionBeanLocal lookupClassEntitySessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (ClassEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/ClassEntitySessionBean!ejb.stateless.ClassEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

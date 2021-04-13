@@ -26,6 +26,7 @@ public class RetrieveClassReviewsRsp {
     /**
      * @return the reviews
      */
+    
     public List<ReviewEntity> getReviews() {
         return reviews;
     }

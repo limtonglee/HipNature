@@ -48,6 +48,20 @@ public class ReviewEntity implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
     private ClassEntity classEntity;
+
+    public ReviewEntity() {
+        
+    }
+
+    public ReviewEntity(Integer reviewRating, String description, CustomerEntity customerEntity, ClassEntity classEntity) {
+        this.reviewRating = reviewRating;
+        this.description = description;
+        this.customerEntity = customerEntity;
+        this.classEntity = classEntity;
+    }
+    
+    
+    
     
     public Long getReviewId() {
         return reviewId;
