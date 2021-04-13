@@ -40,7 +40,7 @@ public class CreditCardEntity implements Serializable {
     @NotNull
     @Size(max = 5)
     private String expiryDate;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotNull
     private String Status;
     

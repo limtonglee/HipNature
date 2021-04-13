@@ -5,6 +5,7 @@
  */
 package ejb.stateless;
 
+import entity.CreditCardEntity;
 import entity.CustomerEntity;
 import java.util.List;
 import javax.ejb.Local;
@@ -27,5 +28,7 @@ public interface CustomerEntitySessionBeanLocal {
     public CustomerEntity retrieveCustomerByUsername(String username) throws CustomerNotFoundException;
 
     public CustomerEntity customerLogin(String username, String password) throws InvalidLoginCredentialException;
+
+    public CreditCardEntity addCreditCardToCustomer(CreditCardEntity newCreditCard, CustomerEntity customerToBind) throws InvalidLoginCredentialException;
     
 }

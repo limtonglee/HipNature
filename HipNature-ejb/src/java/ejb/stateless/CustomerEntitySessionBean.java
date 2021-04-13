@@ -5,9 +5,11 @@
  */
 package ejb.stateless;
 
+import entity.CreditCardEntity;
 import entity.CustomerEntity;
-import static entity.ReviewEntity_.customerEntity;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -81,6 +83,27 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
             }
         } catch (CustomerNotFoundException ex) {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
+        }
+    }
+    @Override
+    public CreditCardEntity addCreditCardToCustomer(CreditCardEntity newCreditCard,CustomerEntity customerToBind) throws InvalidLoginCredentialException{
+        try {
+            System.out.println("test2");
+            CustomerEntity ce = retrieveCustomerByCustomerId(customerToBind.getCustomerId());
+            newCreditCard.setCustomerEntity(ce);
+            newCreditCard.setStatus("ACTIVE");
+            System.out.println(newCreditCard.getCardNumber());
+            System.out.println(newCreditCard.getCvv());
+            System.out.println(newCreditCard.getExpiryDate());
+            System.out.println(newCreditCard.getCustomerEntity());
+            System.out.println(newCreditCard.getStatus());
+            em.persist(newCreditCard);
+            em.flush();
+            ce.getCreditCardEntity().add(newCreditCard);
+            System.out.println("test");
+            return newCreditCard;
+        } catch (CustomerNotFoundException ex) {
+             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
         }
     }
 }
