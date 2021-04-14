@@ -19,6 +19,8 @@ import javax.naming.NamingException;
 public class SessionBeanLookup 
 {
 
+    BookingEntitySessionBeanLocal bookingEntitySessionBean = lookupBookingEntitySessionBeanLocal1();
+
     TransactionEntitySessionBeanLocal transactionEntitySessionBean = lookupTransactionEntitySessionBeanLocal();
 
     PurchasedPlanEntitySessionBeanLocal purchasedPlanEntitySessionBean = lookupPurchasedPlanEntitySessionBeanLocal();
@@ -106,6 +108,16 @@ public class SessionBeanLookup
         try {
             Context c = new InitialContext();
             return (TransactionEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/TransactionEntitySessionBean!ejb.stateless.TransactionEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    public BookingEntitySessionBeanLocal lookupBookingEntitySessionBeanLocal1() {
+        try {
+            Context c = new InitialContext();
+            return (BookingEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/BookingEntitySessionBean!ejb.stateless.BookingEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

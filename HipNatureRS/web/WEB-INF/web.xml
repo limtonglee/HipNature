@@ -71,4 +71,10 @@
         <local>ejb.stateless.TransactionEntitySessionBeanLocal</local>
         <ejb-link>HipNature-ejb.jar#TransactionEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>BookingEntitySessionBeanLocal1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.BookingEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#BookingEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

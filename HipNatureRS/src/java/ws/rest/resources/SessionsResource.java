@@ -5,7 +5,9 @@
  */
 package ws.rest.resources;
 
+import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
+import entity.CustomerEntity;
 import entity.SessionEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import ws.rest.model.CheckoutSessionReq;
 import ws.rest.model.ErrorRsp;
 import ws.rest.model.retrieveSessionByClassId;
 
@@ -33,6 +36,7 @@ import ws.rest.model.retrieveSessionByClassId;
 public class SessionsResource {
 
     SessionEntitySessionBeanLocal sessionEntitySessionBeanLocal;
+    CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
     @Context
     private UriInfo context;
     private final SessionBeanLookup sessionBeanLookup;
@@ -43,6 +47,7 @@ public class SessionsResource {
     public SessionsResource() {
         sessionBeanLookup = new SessionBeanLookup();
         sessionEntitySessionBeanLocal = sessionBeanLookup.lookupSessionEntitySessionBeanLocal();
+        customerEntitySessionBeanLocal = sessionBeanLookup.lookupCustomerEntitySessionBeanLocal();
     }
 
     /**
@@ -65,7 +70,7 @@ public class SessionsResource {
     public void putXml(String content) {
     }
     
-        @Path("retrieveSessionsByClassId/{classId}")
+    @Path("retrieveSessionsByClassId/{classId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveSessionsByClassId(@PathParam("classId") Long classId) {
@@ -91,5 +96,6 @@ public class SessionsResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
+    
     
 }
