@@ -6,17 +6,23 @@
                 template="/template/defaultTemplate.xhtml"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 xmlns:p="http://primefaces.org/ui">
-    
+
     <ui:define name="content">
-                <div style="width: 50%; float: left" id="indexLeft">
+        <div class="card" style="width: 50%; float: left">
+            <h:graphicImage library="img" name="HipNature_Logo.png" style="width: 100%; height: 100%;"/>
+        </div>
+          
+
+        <div style="width: 50%; float: left" id="indexLeft">
             <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-                
+
             </h:panelGroup>
+
         </div>
         <div style="width: 50%; float: right;" id="indexRight">
-            
+
             <h:form id="formCreateNewPartner">
-                
+
                 <h:panelGroup rendered="#{sessionScope.isLogin == false}" style="display: inline-block;float: right;margin-right: 25%;text-align: center" >
                     <h3>New User? Register An Account Today!</h3>
                     <p:panelGrid>
@@ -72,15 +78,15 @@
                         </p:row>
                         <p:row style="text-align: center">
                             <p:column colspan="2">
-                            <p:commandButton value="reset" type="reset"/>
-                            <p:commandButton value="submit" actionListener="#{partnerManagedBean.createNewPartner}" update="@form formCreateNewPartner"/> 
+                                <p:commandButton value="reset" type="reset"/>
+                                <p:commandButton value="submit" actionListener="#{partnerManagedBean.createNewPartner}" update="@form formCreateNewPartner"/> 
                             </p:column>
                         </p:row>
                     </p:panelGrid>
                 </h:panelGroup>
             </h:form>
         </div>
-        
+
         <div>
             <h:panelGroup rendered="#{sessionScope.isLogin == true}" style="display: inline-block;word-wrap: break-word">
                 <h:form>
