@@ -15,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import util.exception.PurchasedPlanNotFoundException;
 
@@ -76,11 +77,16 @@ public class PurchasedPlanEntitySessionBean implements PurchasedPlanEntitySessio
     }
     @Override
     public PurchasedPlanEntity retrieveCurrentPlanByCusId(Long cusId) throws PurchasedPlanNotFoundException {
-        Query query = em.createQuery("SELECT s FROM PurchasedPlanEntity s WHERE s.customer.customerId =:cusId ORDER BY s.planId");
-        query.setParameter("cusId", cusId);
-        System.out.println("retrieveCurrentPlanByCusId");
-        System.out.println(query.getResultList());
-        return (PurchasedPlanEntity) query.getResultList().get(0);
+        try{
+            Query query = em.createQuery("SELECT s FROM PurchasedPlanEntity s WHERE s.customer.customerId =:cusId ORDER BY s.planId");
+            query.setParameter("cusId", cusId);
+            System.out.println("retrieveCurrentPlanByCusId");
+            System.out.println(query.getResultList());
+            return (PurchasedPlanEntity) query.getSingleResult();
+        } catch(NoResultException ex){
+            return null;
+        }
+
     }
 
 }

@@ -118,21 +118,21 @@ public class PurchasePlanResource {
             PurchasedPlanEntity toReturn = purchasedPlanEntitySessionBeanLocal.retrieveCurrentPlanByCusId(customerEntity.getCustomerId());
             System.out.println(toReturn);
             System.out.println("Before Send off");
-            toReturn.setCustomer(null);
-            toReturn.setPlanId(null);
-            toReturn.setTransactionEntity(null);
-            toReturn.getBooking().clear();
-            GenericEntity<PurchasedPlanEntity> genericEntity = new GenericEntity<PurchasedPlanEntity>(toReturn) { 
-            };
-            System.out.println("Generic");
-            System.out.println(genericEntity);
-            return Response.status(Status.OK).entity(genericEntity).build();
-
+            if (toReturn != null) {
+                toReturn.setCustomer(null);
+                toReturn.setPlanId(null);
+                toReturn.setTransactionEntity(null);
+                toReturn.getBooking().clear();
+                GenericEntity<PurchasedPlanEntity> genericEntity = new GenericEntity<PurchasedPlanEntity>(toReturn) {
+                };
+                return Response.status(Status.OK).entity(genericEntity).build();
+            } else {
+                return Response.status(Status.OK).build();
+            }
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
 
     }
-
 
 }
