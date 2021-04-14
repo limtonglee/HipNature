@@ -19,8 +19,10 @@ public interface PurchasedPlanEntitySessionBeanLocal {
 
     public PurchasedPlanEntity retrievePurchasedPlanByPurchasedPlanId(Long purchasedPlanId) throws PurchasedPlanNotFoundException;
 
-    public Long createNewPurchasedPlan(PurchasedPlanEntity newPurchasedPlan);
-
     public List<PurchasedPlanEntity> retrieveAllPurchasedPlans();
+
+    public Long createNewPurchasedPlan(PurchasedPlanEntity newPurchasedPlan, Long ccId);
+
+    public PurchasedPlanEntity retrieveCurrentPlanByCusId(Long cusId) throws PurchasedPlanNotFoundException;
     
 }

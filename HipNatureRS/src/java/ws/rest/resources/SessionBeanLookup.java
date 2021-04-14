@@ -5,7 +5,9 @@ import ejb.stateless.BookingEntitySessionBeanLocal;
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PlanEntitySessionBeanLocal;
+import ejb.stateless.PurchasedPlanEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
+import ejb.stateless.TransactionEntitySessionBeanLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -17,11 +19,18 @@ import javax.naming.NamingException;
 public class SessionBeanLookup 
 {
 
+    TransactionEntitySessionBeanLocal transactionEntitySessionBean = lookupTransactionEntitySessionBeanLocal();
+
+    PurchasedPlanEntitySessionBeanLocal purchasedPlanEntitySessionBean = lookupPurchasedPlanEntitySessionBeanLocal();
+
     SessionEntitySessionBeanLocal sessionEntitySessionBean = lookupSessionEntitySessionBeanLocal();
 
     ClassEntitySessionBeanLocal classEntitySessionBean = lookupClassEntitySessionBeanLocal();
 
     PlanEntitySessionBeanLocal planEntitySessionBean = lookupPlanEntitySessionBeanLocal();
+    
+    
+    
     private final String ejbModuleJndiPath;
     
     
@@ -77,6 +86,26 @@ public class SessionBeanLookup
         try {
             Context c = new InitialContext();
             return (SessionEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/SessionEntitySessionBean!ejb.stateless.SessionEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    public PurchasedPlanEntitySessionBeanLocal lookupPurchasedPlanEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (PurchasedPlanEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/PurchasedPlanEntitySessionBean!ejb.stateless.PurchasedPlanEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    public TransactionEntitySessionBeanLocal lookupTransactionEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (TransactionEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/TransactionEntitySessionBean!ejb.stateless.TransactionEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

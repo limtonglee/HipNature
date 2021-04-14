@@ -30,5 +30,11 @@ public interface CustomerEntitySessionBeanLocal {
     public CustomerEntity customerLogin(String username, String password) throws InvalidLoginCredentialException;
 
     public CreditCardEntity addCreditCardToCustomer(CreditCardEntity newCreditCard, CustomerEntity customerToBind) throws InvalidLoginCredentialException;
+
+    public List<CreditCardEntity> getAllCreditCardsFromCustomer(CustomerEntity customerToget) throws InvalidLoginCredentialException;
+
+    public void deleteCreditCard(Long creditCardId);
+
+    public CreditCardEntity retrieveCreditCardById(Long creditCardId);
     
 }

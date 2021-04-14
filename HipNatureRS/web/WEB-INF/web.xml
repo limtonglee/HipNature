@@ -59,4 +59,16 @@
         <local>ejb.stateless.ClassEntitySessionBeanLocal</local>
         <ejb-link>HipNature-ejb.jar#ClassEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>PurchasedPlanEntitySessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.PurchasedPlanEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#PurchasedPlanEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>TransactionEntitySessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.TransactionEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#TransactionEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

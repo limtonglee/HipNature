@@ -88,22 +88,40 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
     @Override
     public CreditCardEntity addCreditCardToCustomer(CreditCardEntity newCreditCard,CustomerEntity customerToBind) throws InvalidLoginCredentialException{
         try {
-            System.out.println("test2");
             CustomerEntity ce = retrieveCustomerByCustomerId(customerToBind.getCustomerId());
             newCreditCard.setCustomerEntity(ce);
             newCreditCard.setStatus("ACTIVE");
-            System.out.println(newCreditCard.getCardNumber());
-            System.out.println(newCreditCard.getCvv());
-            System.out.println(newCreditCard.getExpiryDate());
-            System.out.println(newCreditCard.getCustomerEntity());
-            System.out.println(newCreditCard.getStatus());
             em.persist(newCreditCard);
             em.flush();
             ce.getCreditCardEntity().add(newCreditCard);
-            System.out.println("test");
             return newCreditCard;
         } catch (CustomerNotFoundException ex) {
              throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
         }
+    }
+    @Override
+    public  List<CreditCardEntity> getAllCreditCardsFromCustomer(CustomerEntity customerToget) throws InvalidLoginCredentialException{
+        try {
+            CustomerEntity ce = retrieveCustomerByCustomerId(customerToget.getCustomerId());
+            Query query = em.createQuery("SELECT s from CreditCardEntity s WHERE s.customerEntity.customerId = :cusId");
+            query.setParameter("cusId", ce.getCustomerId());
+            List<CreditCardEntity> results = query.getResultList();
+            return results;
+        } catch (CustomerNotFoundException ex) {
+             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
+        }
+    }
+    @Override
+    public void deleteCreditCard(Long creditCardId){
+        CreditCardEntity cce = em.find(CreditCardEntity.class, creditCardId);
+        em.remove(cce);
+    }
+    @Override
+    public CreditCardEntity retrieveCreditCardById(Long creditCardId){
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        CreditCardEntity cce = em.find(CreditCardEntity.class, creditCardId);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(cce);
+        return cce;
     }
 }

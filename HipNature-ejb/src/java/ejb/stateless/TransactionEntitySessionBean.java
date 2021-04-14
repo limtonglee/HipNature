@@ -31,12 +31,11 @@ public class TransactionEntitySessionBean implements TransactionEntitySessionBea
     }
 
     @Override
-    public Long createNewTransaction(TransactionEntity newTransaction) {
-        
+    public void createNewTransaction(TransactionEntity newTransaction) {
+        System.out.println("test");
         em.persist(newTransaction);
         em.flush();
 
-        return newTransaction.getTransactionId();
         
     }
         
