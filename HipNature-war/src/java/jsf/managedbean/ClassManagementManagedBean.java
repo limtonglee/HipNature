@@ -107,6 +107,7 @@ public class ClassManagementManagedBean implements Serializable {
             }
             classEntities.add(ce);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Class Created", null));
+            newClassEntity = new ClassEntity();
         } catch (InputDataValidationException | CreateNewClassException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating new class", null));
             System.out.print(ex.getMessage());
