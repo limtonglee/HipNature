@@ -31,16 +31,14 @@ public class TransactionEntitySessionBean implements TransactionEntitySessionBea
     }
 
     @Override
-    public void createNewTransaction(TransactionEntity newTransaction) {
-        System.out.println("test");
+    public TransactionEntity createNewTransaction(TransactionEntity newTransaction) {
         em.persist(newTransaction);
         em.flush();
-
-        
+        return newTransaction;
     }
         
     @Override
-    public TransactionEntity retrieveSessionBySessionId(Long transactionId) throws TransactionNotFoundException {
+    public TransactionEntity retrieveTransactionByTransactionId(Long transactionId) throws TransactionNotFoundException {
         TransactionEntity transactionEntity = em.find(TransactionEntity.class, transactionId);
         
         if (transactionEntity != null) {

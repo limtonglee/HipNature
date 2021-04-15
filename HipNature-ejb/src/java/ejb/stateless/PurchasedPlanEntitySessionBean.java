@@ -54,8 +54,8 @@ public class PurchasedPlanEntitySessionBean implements PurchasedPlanEntitySessio
             CreditCardEntity ce = customerEntitySessionBean.retrieveCreditCardById(ccId);
             te.setPurchasedPlan(newPurchasedPlan);
             te.setCreditCardEntity(ce);
-            transactionEntitySessionBeanLocal.createNewTransaction(te);
-            
+            TransactionEntity te2Add = transactionEntitySessionBeanLocal.createNewTransaction(te);
+            addedPlan.setTransactionEntity(te2Add);
 
             return newPurchasedPlan.getPurchasedPlanId();
         } catch (PurchasedPlanNotFoundException ex) {

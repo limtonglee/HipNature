@@ -17,9 +17,9 @@ import util.exception.TransactionNotFoundException;
 @Local
 public interface TransactionEntitySessionBeanLocal {
 
-    public void createNewTransaction(TransactionEntity newTransaction);
+    public TransactionEntity createNewTransaction(TransactionEntity newTransaction);
 
-    public TransactionEntity retrieveSessionBySessionId(Long transactionId) throws TransactionNotFoundException;
+    public TransactionEntity retrieveTransactionByTransactionId(Long transactionId) throws TransactionNotFoundException;
 
     public List<TransactionEntity> retrieveAllTransactions();
     
