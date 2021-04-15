@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,6 +33,9 @@ public class BookingEntity implements Serializable {
     @NotNull
     private String status;
     
+    @Column(nullable = false)
+    private LocalDate bookingDate;
+    
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private PurchasedPlanEntity purchasedplan;
     
@@ -42,11 +46,14 @@ public class BookingEntity implements Serializable {
     @OneToOne(mappedBy = "bookingEntity", fetch = FetchType.LAZY, optional = true)
     private RefundEntity refundEntity;
 
+
     public BookingEntity() {
+        this.status = "Booked";
+        this.bookingDate = java.time.LocalDate.now();
     }
 
     public BookingEntity(PurchasedPlanEntity purchasedplan, SessionEntity sessionEntity) {
-        this.status = "Booked";
+        
         this.purchasedplan = purchasedplan;
         this.sessionEntity = sessionEntity;
     }

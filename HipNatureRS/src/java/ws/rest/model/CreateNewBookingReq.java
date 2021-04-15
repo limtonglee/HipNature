@@ -5,7 +5,8 @@
  */
 package ws.rest.model;
 
-import entity.BookingEntity;
+import static entity.CustomerEntity_.customerId;
+import entity.SessionEntity;
 
 /**
  *
@@ -13,61 +14,64 @@ import entity.BookingEntity;
  */
 public class CreateNewBookingReq {
  
-    private BookingEntity newBooking;
-    private Long purchasedPlanId;
-    private Long sessionEntityId;
-    private Long customerId;
+    private String username;
+    private String password;
+    private retrieveSessionByClassId[] sessionArray;
+ 
     
     public CreateNewBookingReq() {
     }
 
-    public CreateNewBookingReq(BookingEntity newBooking, Long purchasedPlanId, Long sessionEntityId, Long customerId) {
-        this.newBooking = newBooking;
-        this.purchasedPlanId = purchasedPlanId;
-        this.sessionEntityId = sessionEntityId;
-        this.customerId = customerId;
-    }
-
-    
-    
-    public BookingEntity getNewBooking() {
-        return newBooking;
-    }
-
-    public void setNewBooking(BookingEntity newBooking) {
-        this.newBooking = newBooking;
-    }
-
-    public Long getPurchasedPlanId() {
-        return purchasedPlanId;
-    }
-
-    public void setPurchasedPlanId(Long purchasedPlanId) {
-        this.purchasedPlanId = purchasedPlanId;
-    }
-
-    public Long getSessionEntityId() {
-        return sessionEntityId;
-    }
-
-
-    public void setSessionEntityId(Long sessionEntityId) {
-        this.sessionEntityId = sessionEntityId;
+    public CreateNewBookingReq(String username, String password, retrieveSessionByClassId[] sessionArray) {
+        this.username = username;
+        this.password = password;
+        this.sessionArray = sessionArray;
     }
 
     /**
-     * @return the customerId
-     */
-    public Long getCustomerId() {
-        return customerId;
+     * @return the username 
+    */
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * @param customerId the customerId to set
+     * @param username the username to set
      */
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setUsername(String username) {
+        this.username = username;
     }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the sessionArray
+     */
+    public retrieveSessionByClassId[] getSessionArray() {
+        return sessionArray;
+    }
+
+    /**
+     * @param sessionArray the sessionArray to set
+     */
+    public void setSessionArray(retrieveSessionByClassId[] sessionArray) {
+        this.sessionArray = sessionArray;
+    }
+
+
+
 
     
 }

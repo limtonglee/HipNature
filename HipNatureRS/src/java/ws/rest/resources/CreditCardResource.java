@@ -80,7 +80,7 @@ public class CreditCardResource {
         if (creditCardReq != null){
             try{
                 CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(creditCardReq.getUsername(), creditCardReq.getPassword());
-                System.out.println("test3");
+
                 CreditCardEntity addedCreditCard = customerEntitySessionBeanLocal.addCreditCardToCustomer(creditCardReq.getCreditCard(), customerEntity);
                 return Response.status(Status.OK).entity(addedCreditCard.getCreditCardId()).build();
             }catch (Exception ex)
@@ -103,7 +103,7 @@ public class CreditCardResource {
             List<CreditCardEntity> toReturn = customerEntitySessionBeanLocal.getAllCreditCardsFromCustomer(customerEntity);
             for(CreditCardEntity cce : toReturn){
             cce.setCustomerEntity(null);
-            System.out.println(cce.getCreditCardId());
+
             }
             GenericEntity<List<CreditCardEntity>> genericEntity = new GenericEntity<List<CreditCardEntity>>(toReturn) {};
             return Response.status(Status.OK).entity(genericEntity).build();

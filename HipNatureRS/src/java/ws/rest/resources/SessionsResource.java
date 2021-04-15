@@ -74,7 +74,6 @@ public class SessionsResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveSessionsByClassId(@PathParam("classId") Long classId) {
-        System.out.println("test");
         try {
             List<retrieveSessionByClassId> toReturn = new ArrayList<>();
             List<SessionEntity> sessionEntities = sessionEntitySessionBeanLocal.retrieveSessionsByClassId(classId);

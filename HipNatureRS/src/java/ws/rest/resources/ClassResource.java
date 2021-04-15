@@ -47,7 +47,7 @@ public class ClassResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllClasses() {
-        System.out.println("HERE");
+
         try {
 
             List<ClassEntity> classEntities = classEntitySessionBeanLocal.retrieveAllClasses();
@@ -60,7 +60,7 @@ public class ClassResource {
                 c.getSessionEntities().clear();
                 c.setPartnerEntity(null);
             }
-            System.out.println(classEntities);
+
             GenericEntity<List<ClassEntity>> genericEntity = new GenericEntity<List<ClassEntity>>(classEntities) {
             };
             return Response.status(Status.OK).entity(genericEntity).build();

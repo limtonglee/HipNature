@@ -82,21 +82,21 @@ public class PurchasePlanResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response makeNewPurchasePlan(PurchasePlanReq purchaseplanreq) {
-        System.out.println("makePurchasePlan");
+
         if (purchaseplanreq != null) {
             try {
 
                 System.out.println(purchaseplanreq.getPlanId());
                 CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(purchaseplanreq.getUsername(), purchaseplanreq.getPassword());
                 PlanEntity planToUse = planEntitySessionBeanLocal.retrievePlanByPlanId(purchaseplanreq.getPlanId());
-                System.out.println("makePurchasePlan2");
+
                 PurchasedPlanEntity planToAdd = new PurchasedPlanEntity();
                 planToAdd.setCustomer(ce);
                 planToAdd.setPlanId(planToUse);
                 planToAdd.setSessionLeft(Math.toIntExact(planToUse.getSessionLimit()));
-                System.out.println("makePurchasePlan4");
+
                 Long toReturn = purchasedPlanEntitySessionBeanLocal.createNewPurchasedPlan(planToAdd, purchaseplanreq.getCcId());
-                System.out.println("makePurchasePlan3");
+
                 return Response.status(Response.Status.OK).build();
             } catch (Exception ex) {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
@@ -130,7 +130,7 @@ public class PurchasePlanResource {
                 return Response.status(Status.OK).build();
             }
         } catch (Exception ex) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            return Response.status(Status.OK).build();
         }
 
     }

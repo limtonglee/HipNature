@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +40,13 @@ public class PurchasedPlanEntity implements Serializable {
     @Min(1)
     private Integer sessionLeft;
     
+    @Column(nullable = false)
+    private LocalDate purchaseDate;
+    
+        
+    @Column(nullable = false)
+    private LocalDate expiryDate;
+    
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
     private PlanEntity planId;
@@ -52,6 +60,13 @@ public class PurchasedPlanEntity implements Serializable {
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
     private CustomerEntity customer;
+
+    public PurchasedPlanEntity() {
+        this.purchaseDate = java.time.LocalDate.now();
+        this.expiryDate = LocalDate.now().plusMonths(1);
+    }
+    
+    
     
     public Long getPurchasedPlanId() {
         return purchasedPlanId;
@@ -155,6 +170,34 @@ public class PurchasedPlanEntity implements Serializable {
      */
     public void setTransactionEntity(TransactionEntity transactionEntity) {
         this.transactionEntity = transactionEntity;
+    }
+
+    /**
+     * @return the purchaseDate
+     */
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    /**
+     * @param purchaseDate the purchaseDate to set
+     */
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    /**
+     * @return the expiryDate
+     */
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+
+    /**
+     * @param expiryDate the expiryDate to set
+     */
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
     }
     
 }

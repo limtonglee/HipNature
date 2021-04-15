@@ -6,7 +6,13 @@
 package ws.rest.resources;
 
 import ejb.stateless.BookingEntitySessionBeanLocal;
+import ejb.stateless.CustomerEntitySessionBeanLocal;
+import ejb.stateless.PurchasedPlanEntitySessionBeanLocal;
+import ejb.stateless.SessionEntitySessionBeanLocal;
 import entity.BookingEntity;
+import entity.CustomerEntity;
+import entity.PurchasedPlanEntity;
+import entity.SessionEntity;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +31,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import ws.rest.model.CreateNewBookingReq;
-import ws.rest.model.CreateNewBookingRsp;
 import ws.rest.model.ErrorRsp;
+import ws.rest.model.retrieveSessionByClassId;
 
 /**
  * REST Web Service
@@ -38,23 +44,35 @@ import ws.rest.model.ErrorRsp;
 public class BookingsResource {
 
     BookingEntitySessionBeanLocal bookingEntitySessionBeanLocal = lookupBookingEntitySessionBeanLocal();
-
+    private final SessionBeanLookup sessionBeanLookup;
+    SessionEntitySessionBeanLocal sessionEntitySessionBeanLocal;
+    CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
+    private final PurchasedPlanEntitySessionBeanLocal purchasedPlanEntitySessionBeanLocal;
     @Context
     private UriInfo context;
 
     public BookingsResource() {
+        sessionBeanLookup = new SessionBeanLookup();
+        sessionEntitySessionBeanLocal = sessionBeanLookup.lookupSessionEntitySessionBeanLocal();
+        customerEntitySessionBeanLocal = sessionBeanLookup.lookupCustomerEntitySessionBeanLocal();
+        purchasedPlanEntitySessionBeanLocal = sessionBeanLookup.lookupPurchasedPlanEntitySessionBeanLocal();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createBooking(CreateNewBookingReq createNewBookingReq) {
-        System.out.println("Creating new booking for customer: " + createNewBookingReq.getCustomerId() + " session: " + createNewBookingReq.getSessionEntityId());
         if (createNewBookingReq != null) {
             try {
-                Long newBookingId = bookingEntitySessionBeanLocal.createNewBooking(createNewBookingReq.getNewBooking(), createNewBookingReq.getSessionEntityId(), createNewBookingReq.getPurchasedPlanId());
-                CreateNewBookingRsp createNewBookingRsp = new CreateNewBookingRsp(newBookingId);
-                return Response.status(Response.Status.OK).entity(createNewBookingRsp).build();
+                System.out.println("Testing");
+                CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(createNewBookingReq.getUsername(),createNewBookingReq.getPassword());
+                PurchasedPlanEntity ppeToUse = purchasedPlanEntitySessionBeanLocal.retrieveCurrentPlanByCusId(ce.getCustomerId());
+                for (retrieveSessionByClassId rsbci : createNewBookingReq.getSessionArray()) {
+                    System.out.println("Session Id Selected: " + rsbci.getSessionId());
+                    BookingEntity newBookingEntity = new BookingEntity();
+                    bookingEntitySessionBeanLocal.createNewBooking(newBookingEntity, rsbci.getSessionId(), ppeToUse.getPurchasedPlanId());
+                }
+                return Response.status(Response.Status.OK).build();
             } catch (Exception ex) {
                 ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
                 System.out.println(ex.getMessage());
