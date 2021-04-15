@@ -65,12 +65,15 @@
 
                 <p:dataViewGridItem>
                     <div class="product-grid-item card border-1">
-
+                         <p class="product-name">#{sessionEntity.classEntity.className}</p>
+                         <p class="product-name">#{sessionEntity.startTime} - #{sessionEntity.endTime}</p>
+                         <p class="product-name">#{sessionEntity.instructor.instructorName}</p>
                         <p class="product-name">#{sessionEntity.maxCapacity}</p>
                         <p class="product-description">#{sessionEntity.locationTypeEnum}</p>
                         <br></br>
-                        <p:progressBar value="#{sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
-                    
+                        <p:progressBar value="#{sessionEntity.participants.size()/sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
+<h:outputText value="&lt;br/&gt;" escape="false" />
+
                         <div class="product-grid-item-bottom">
 
                             <f:facet name = "header">Action</f:facet>
@@ -92,10 +95,13 @@
 
                 <p:dataViewListItem>
                      <div class="product-grid-item card border-1">
-
+                         <p class="product-name">#{sessionEntity.classEntity.className}</p>
+                         <p class="product-name">#{sessionEntity.startTime} - #{sessionEntity.endTime}</p>
+                         <p class="product-name">#{sessionEntity.instructor.instructorName}</p>
                         <p class="product-name">#{sessionEntity.maxCapacity}</p>
                         <p class="product-description">#{sessionEntity.locationTypeEnum}</p>
-                        <p:progressBar value="#{sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
+                        <p:progressBar value="#{sessionEntity.participants.size()/sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
+                        <h:outputText value="&lt;br/&gt;" escape="false" />
 
                         <div class="product-grid-item-bottom">
 
@@ -176,6 +182,7 @@
                 </p:dialog>
             </div>
         </h:form>
+        
         <h:form id="formCreateNewSession">
             <p:dialog id="dialogCreateNewClass" widgetVar="dialogCreateNewSession" header="Create New Session" closable="true">
                 <p:messages id="messageCreateNewSession" redisplay="false"/>
@@ -187,13 +194,13 @@
                                 <h:outputText value="Session Venue: "/>
                                 <p:inputText id="venue" value="#{searchSessionsByNameManagedBean.newSessionEntity.venue}" required="true" placeholder="" requiredMessage="Class Name cannot be empty"/>
                                 <p:outputLabel for="time" value="Time"/> 
-                                <p:datePicker id="time" value="#{searchSessionsByNameManagedBean.newSessionEntity.startTime}" showTime="true"/>
+                                <p:datePicker id="time" value="#{searchSessionsByNameManagedBean.newSessionEntity.startTime}" showTime="true" required="true" />
                                 <p:outputLabel for="input1" value="Duration"/>
-                                <p:inputNumber id="input1" value="#{searchSessionsByNameManagedBean.newSessionEntity.duration}" /> 
+                                <p:inputNumber id="input1" value="#{searchSessionsByNameManagedBean.newSessionEntity.duration}" required="true" /> 
                                 <p:outputLabel for="input3" value="Max Capacity"/>
-                                <p:inputNumber id="input3" value="#{searchSessionsByNameManagedBean.newSessionEntity.maxCapacity}" /> 
+                                <p:inputNumber id="input3" value="#{searchSessionsByNameManagedBean.newSessionEntity.maxCapacity}"  required="true"/> 
                                 <p:outputLabel for="input4" value="Phone"/>
-                                <p:inputNumber id="input4" value="#{searchSessionsByNameManagedBean.newSessionEntity.phone}" /> 
+                                <p:inputNumber id="input4" value="#{searchSessionsByNameManagedBean.newSessionEntity.phone}" required="true"/> 
                                 <h:outputText value="Class : "/>
                                 <p:selectOneMenu id ="selClass" value="#{searchSessionsByNameManagedBean.newClassId}" required="true" requiredMessage="Class cannot be empty">
                                     <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>

@@ -21,10 +21,10 @@
         <param-name>alternatedocroot_1</param-name>
         <param-value>C:/HipNatureFileUpload/uploadedFiles</param-value>
     </context-param>-->
-    <context-param>
+<!--    <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>nova-dark</param-value>
-    </context-param>
+    </context-param>-->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>

@@ -265,8 +265,10 @@ public class SearchSessionsByNameManagedBean implements Serializable
             sessionEntityToUpdate.setInstructor(instructorEntitySessionBean.retrieveInstructorByInstructorId(newInstructorId));
             System.out.println(sessionEntityToUpdate.getLocationTypeEnum());
                     System.out.println(sessionEntityToUpdate);
-
+            sessionEntities.remove(sessionEntityToUpdate);
             sessionEntitySessionBean.updateSession(sessionEntityToUpdate, selectedTagIds);
+            sessionEntities.add(sessionEntityToUpdate);
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session Updated", null));
             searchSession();
             
@@ -383,6 +385,8 @@ public class SearchSessionsByNameManagedBean implements Serializable
             newSessionEntity.setEndTime();
             newSessionEntity.setStatus("ACTIVE");
             Long ce = sessionEntitySessionBean.createNewSession(newSessionEntity);
+            System.out.println("Created" + ce);
+            sessionEntities.add(newSessionEntity);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Session Created", null));
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
