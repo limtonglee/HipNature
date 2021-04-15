@@ -76,7 +76,7 @@ public class BookingsResource {
             } catch (Exception ex) {
                 ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
                 System.out.println(ex.getMessage());
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
         } else {
             ErrorRsp errorRsp = new ErrorRsp("Invalid Request");
@@ -92,6 +92,11 @@ public class BookingsResource {
 
         try {
             List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(cusId);
+            for (BookingEntity be : BookingList){
+                be.setPurchasedplan(null);
+                be.setSessionEntity(null);
+                be.setRefundEntity(null);
+            }
             GenericEntity<List<BookingEntity>> genericBookingList = new GenericEntity<List<BookingEntity>>(BookingList) {
             };
             return Response.status(Status.OK).entity(genericBookingList).build();
