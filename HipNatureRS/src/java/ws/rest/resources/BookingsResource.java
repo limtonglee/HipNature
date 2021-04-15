@@ -12,7 +12,8 @@ import ejb.stateless.SessionEntitySessionBeanLocal;
 import entity.BookingEntity;
 import entity.CustomerEntity;
 import entity.PurchasedPlanEntity;
-import entity.SessionEntity;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,12 +27,14 @@ import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.ws.rs.GET;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import ws.rest.model.CreateNewBookingReq;
 import ws.rest.model.ErrorRsp;
+import ws.rest.model.RetrieveBookingsByCusReq;
 import ws.rest.model.retrieveSessionByClassId;
 
 /**
@@ -87,17 +90,24 @@ public class BookingsResource {
     /*Retrieve All booking associated to the Customer*/
     @Path("retrieveMyBookings")
     @GET
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveMyBookings(Long cusId) {
+    public Response retrieveMyBookings(@QueryParam("username") String username, @QueryParam("password") String password){
 
         try {
-            List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(cusId);
+            CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(username, password);
+            List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());
+            List<RetrieveBookingsByCusReq> rbbcr = new ArrayList<>();
             for (BookingEntity be : BookingList){
-                be.setPurchasedplan(null);
-                be.setSessionEntity(null);
-                be.setRefundEntity(null);
+                RetrieveBookingsByCusReq temp = new RetrieveBookingsByCusReq();
+                temp.setBookingId(be.getBookingId());
+                temp.setSessionName(be.getSessionEntity().getClassEntity().getClassName());
+                
+                temp.setStartTime(be.getSessionEntity().getStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                temp.setEndTime(be.getSessionEntity().getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                rbbcr.add(temp);
             }
-            GenericEntity<List<BookingEntity>> genericBookingList = new GenericEntity<List<BookingEntity>>(BookingList) {
+            GenericEntity<List<RetrieveBookingsByCusReq>> genericBookingList = new GenericEntity<List<RetrieveBookingsByCusReq>>(rbbcr) {
             };
             return Response.status(Status.OK).entity(genericBookingList).build();
         } catch (Exception ex) {

@@ -52,6 +52,7 @@ public class SessionsResource {
 
     /**
      * Retrieves representation of an instance of ws.rest.SessionsResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
@@ -63,13 +64,15 @@ public class SessionsResource {
 
     /**
      * PUT method for updating or creating an instance of SessionsResource
+     *
      * @param content representation for the resource
      */
     @PUT
     @Consumes(javax.ws.rs.core.MediaType.APPLICATION_XML)
     public void putXml(String content) {
     }
-    
+
+    /* Remember to filter Sessions that had happened*/
     @Path("retrieveSessionsByClassId/{classId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -77,13 +80,15 @@ public class SessionsResource {
         try {
             List<retrieveSessionByClassId> toReturn = new ArrayList<>();
             List<SessionEntity> sessionEntities = sessionEntitySessionBeanLocal.retrieveSessionsByClassId(classId);
-            for (SessionEntity se: sessionEntities){
-                se.getInstructor();
-                retrieveSessionByClassId toReturnSingleEntity = new retrieveSessionByClassId(se.getSessionId(),se.getVenue(),se.getStartTime(),se.getEndTime(),se.getDuration(),se.getPhone(),se.getMaxCapacity(), se.getStatus(),se.getLocationTypeEnum(),se.getInstructor().getInstructorName());
-                se.setInstructor(null);
-                se.getParticipants().clear();
-                se.setClassEntity(null);
-                toReturn.add(toReturnSingleEntity);
+            for (SessionEntity se : sessionEntities) {
+                if (se.getStartTime().compareTo(new java.util.Date()) != -1) {
+                    se.getInstructor();
+                    retrieveSessionByClassId toReturnSingleEntity = new retrieveSessionByClassId(se.getSessionId(), se.getVenue(), se.getStartTime(), se.getEndTime(), se.getDuration(), se.getPhone(), se.getMaxCapacity(), se.getStatus(), se.getLocationTypeEnum(), se.getInstructor().getInstructorName());
+                    se.setInstructor(null);
+                    se.getParticipants().clear();
+                    se.setClassEntity(null);
+                    toReturn.add(toReturnSingleEntity);
+                }
             }
 //             GenericEntity<List<SessionEntity>> genericEntity = new GenericEntity<List<SessionEntity>>(sessionEntities) {
 //            };
@@ -95,6 +100,5 @@ public class SessionsResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
-    
-    
+
 }
