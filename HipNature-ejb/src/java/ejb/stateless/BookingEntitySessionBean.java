@@ -59,9 +59,13 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
 
             newBooking.setPurchasedplan(purchasedPlan);
             newBooking.setSessionEntity(session);
-
+            
             em.persist(newBooking);
             em.flush();
+            
+            purchasedPlan.setSessionLeft(purchasedPlan.getSessionLeft() - 1);
+            session.getParticipants().add(newBooking);
+            
             return newBooking.getBookingId();
 
         } catch (PersistenceException ex) {
