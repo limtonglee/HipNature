@@ -7,11 +7,12 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 xmlns:p="http://primefaces.org/ui">
 
+
     <ui:define name="content">
         <div class="card" style="width: 50%; float: left">
-            <h:graphicImage library="img" name="HipNature_Logo.png" style="width: 100%; height: 100%;"/>
+            <!--<h:graphicImage library="img" name="test.png" style="width: 100%; height: 100%;"/>-->
+            <p:graphicImage name="img/HipNature_Logo.png" style="width: 400px"/>
         </div>
-          
 
         <div style="width: 50%; float: left" id="indexLeft">
             <h:panelGroup rendered="#{sessionScope.isLogin == false}">
