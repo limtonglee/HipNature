@@ -48,21 +48,8 @@ public class ClassManagementManagedBean implements Serializable {
     private TagEntitySessionBeanLocal tagEntitySessionBeanLocal;
     
     private PartnerEntity currentPartnerEntity;
-    /**
-     * @return the newClassEntity
-     */
     
-    public ClassEntity getNewClassEntity() {
-        return newClassEntity;
-    }
-
-    /**
-     * @param newClassEntity the newClassEntity to set
-     */
-    public void setNewClassEntity(ClassEntity newClassEntity) {
-        this.newClassEntity = newClassEntity;
-    }
-
+    private Integer classRating; 
     
     //Use for creating new class Entity
     private ClassEntity newClassEntity;
@@ -83,6 +70,21 @@ public class ClassManagementManagedBean implements Serializable {
     
     //Update
     private ClassEntity classEntityToUpdate;
+    
+    /**
+     * @return the newClassEntity
+     */
+    
+    public ClassEntity getNewClassEntity() {
+        return newClassEntity;
+    }
+
+    /**
+     * @param newClassEntity the newClassEntity to set
+     */
+    public void setNewClassEntity(ClassEntity newClassEntity) {
+        this.newClassEntity = newClassEntity;
+    }
     
     
     public ClassManagementManagedBean() {
@@ -154,6 +156,12 @@ public class ClassManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update class", null));
         }
     }
+   
+    /*public Integer retrieveClassRating() {
+        
+        
+    }*/
+    
     public LocationTypeEnum[] getEnumLocation(){
         return LocationTypeEnum.values();
     }
@@ -301,6 +309,20 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setClassEntityToUpdate(ClassEntity classEntityToUpdate) {
         this.classEntityToUpdate = classEntityToUpdate;
+    }
+
+    /**
+     * @param classRating the classRating to set
+     */
+    public void setClassRating(Integer classRating) {
+        this.classRating = classRating;
+    }
+
+    /**
+     * @return the classRating
+     */
+    public Integer getClassRating() {
+        return classRating;
     }
     
 }

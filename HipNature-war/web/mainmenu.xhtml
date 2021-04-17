@@ -21,7 +21,7 @@
                         <p:menuitem value ="Class Management" outcome="/classFolder/classManagement.xhtml" icon="pi pi-desktop" />
                         <p:menuitem value ="Session Management" outcome="/classFolder/sessionManagement.xhtml" icon="pi pi-desktop" />
                     </p:submenu>                        
-                    <p:submenu label="Resource" rendered="#{sessionScope.isLogin == true}">
+                    <p:submenu label="Instructor" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Instructor Management" outcome="/instructorFolder/resourceManagement.xhtml" icon="pi pi-desktop"/>
                     </p:submenu>
                     <p:submenu label="Report" rendered="#{sessionScope.isLogin == true}">

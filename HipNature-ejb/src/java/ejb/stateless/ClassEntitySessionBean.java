@@ -85,6 +85,7 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
             try{
                 ClassTypeEntity classTypeEntity = classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(newClassTypeId);
                 newClass.setClassTypeEntity(classTypeEntity);
+               // newClass.setClassRating(0);
                 em.persist(newClass);
                 classTypeEntity.getClassEntities().add(newClass);
                 if (newTagEntityId != null && !(newTagEntityId.isEmpty())){

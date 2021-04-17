@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -63,6 +64,14 @@ public class ClassEntity implements Serializable {
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     private PartnerEntity partnerEntity;
+    
+    //private String image;
+    
+    /*@Column
+    @Positive
+    @Min(0)
+    @Max(5)
+    private Integer classRating;*/
         
     public ClassEntity() {
         tagEntities = new ArrayList<>();
@@ -242,5 +251,16 @@ public class ClassEntity implements Serializable {
     public void setPartnerEntity(PartnerEntity partnerEntity) {
         this.partnerEntity = partnerEntity;
     }
+
+
+    /**
+    public Integer getClassRating() {
+        return classRating;
+    }
+
+
+    public void setClassRating(Integer classRating) {
+        this.classRating = classRating;
+    }*/
 
 }

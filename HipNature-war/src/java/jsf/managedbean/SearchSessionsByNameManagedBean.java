@@ -108,7 +108,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        classEntities = classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());
+        classEntities = getClassEntitySessionBeanLocal().retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());
         System.out.println("PartnerEntiy" + currentPartnerEntity.getPartnerEntityId());
         instructorEntities = instructorEntitySessionBean.retrieveInstructorsByPartner(currentPartnerEntity.getPartnerEntityId());
 
@@ -118,15 +118,15 @@ public class SearchSessionsByNameManagedBean implements Serializable {
         searchString = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionSearchString");
 
         if (searchString == null || searchString.trim().length() == 0) {
-            sessionEntities = sessionEntitySessionBean.retrieveAllSessions();
+            sessionEntities = getSessionEntitySessionBean().retrieveAllSessions();
             System.out.println(sessionEntities.size());
 
         } else {
-            sessionEntities = sessionEntitySessionBean.searchSessionByName(searchString);
+            sessionEntities = getSessionEntitySessionBean().searchSessionByName(searchString);
             System.out.println(sessionEntities.size());
         }
 
-        List<TagEntity> tagEntities = tagEntitySessionBeanLocal.retrieveAllTags();
+        List<TagEntity> tagEntities = getTagEntitySessionBeanLocal().retrieveAllTags();
         selectItems = new ArrayList<>();
 
         for (TagEntity tagEntity : tagEntities) {
@@ -143,11 +143,11 @@ public class SearchSessionsByNameManagedBean implements Serializable {
 
     public void searchSession() {
         if (searchString == null || searchString.trim().length() == 0) {
-            sessionEntities = sessionEntitySessionBean.retrieveAllSessions();
+            sessionEntities = getSessionEntitySessionBean().retrieveAllSessions();
             System.out.println(sessionEntities.size());
 
         } else {
-            sessionEntities = sessionEntitySessionBean.searchSessionByName(searchString);
+            sessionEntities = getSessionEntitySessionBean().searchSessionByName(searchString);
             System.out.println(sessionEntities.size());
 
         }
@@ -160,7 +160,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
 
         }
         System.out.println("Location" + location);
-        List<SessionEntity> sessionEntities2 = sessionEntitySessionBean.filterSessionsByTags(selectedTagIds, location);
+        List<SessionEntity> sessionEntities2 = getSessionEntitySessionBean().filterSessionsByTags(selectedTagIds, location);
 
 //               List<SessionEntity> listTwoCopy = new ArrayList<>(sessionEntities2);
 //        listTwoCopy.removeAll(sessionEntities);
@@ -224,7 +224,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
     public void doUpdate(ActionEvent event) {
         try {
             sessionEntityToUpdate = (SessionEntity) event.getComponent().getAttributes().get("sessionEntityToUpdate");
-            sessionEntityToUpdate = sessionEntitySessionBean.retrieveSessionBySessionId(sessionEntityToUpdate.getSessionId());
+            sessionEntityToUpdate = getSessionEntitySessionBean().retrieveSessionBySessionId(sessionEntityToUpdate.getSessionId());
             locationTypeEnumNew = null;
             newInstructorId = null;
         } catch (SessionNotFoundException ex) {
@@ -240,7 +240,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
             System.out.println(sessionEntityToUpdate.getLocationTypeEnum());
             System.out.println(sessionEntityToUpdate);
             sessionEntities.remove(sessionEntityToUpdate);
-            sessionEntitySessionBean.updateSession(sessionEntityToUpdate, selectedTagIds);
+            getSessionEntitySessionBean().updateSession(sessionEntityToUpdate, selectedTagIds);
             sessionEntities.add(sessionEntityToUpdate);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session Updated", null));
@@ -263,7 +263,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
     public void doDelete(ActionEvent event) {
         try {
             sessionEntityToDelete = (SessionEntity) event.getComponent().getAttributes().get("sessionEntityToDelete");
-            sessionEntitySessionBean.deleteSession(sessionEntityToDelete.getSessionId());
+            getSessionEntitySessionBean().deleteSession(sessionEntityToDelete.getSessionId());
             sessionEntities.remove(sessionEntityToDelete);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Session successfully deleted", null));
         } catch (DeleteSessionEntityException ex) {
@@ -348,10 +348,10 @@ public class SearchSessionsByNameManagedBean implements Serializable {
         try {
             newSessionEntity.setInstructor(instructorEntitySessionBean.retrieveInstructorByInstructorId(newInstructorId));
             newSessionEntity.setLocationTypeEnum(locationTypeEnumNew);
-            newSessionEntity.setClassEntity(classEntitySessionBeanLocal.retrieveClassByClassId(newClassId));
+            newSessionEntity.setClassEntity(getClassEntitySessionBeanLocal().retrieveClassByClassId(newClassId));
             newSessionEntity.setEndTime();
             newSessionEntity.setStatus("ACTIVE");
-            Long ce = sessionEntitySessionBean.createNewSession(newSessionEntity);
+            Long ce = getSessionEntitySessionBean().createNewSession(newSessionEntity);
             System.out.println("Created" + ce);
             sessionEntities.add(newSessionEntity);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Session Created", null));
@@ -359,5 +359,61 @@ public class SearchSessionsByNameManagedBean implements Serializable {
             Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    /**
+     * @return the classEntitySessionBeanLocal
+     */
+    public ClassEntitySessionBeanLocal getClassEntitySessionBeanLocal() {
+        return classEntitySessionBeanLocal;
+    }
+
+    /**
+     * @param classEntitySessionBeanLocal the classEntitySessionBeanLocal to set
+     */
+    public void setClassEntitySessionBeanLocal(ClassEntitySessionBeanLocal classEntitySessionBeanLocal) {
+        this.classEntitySessionBeanLocal = classEntitySessionBeanLocal;
+    }
+
+    /**
+     * @return the sessionEntitySessionBean
+     */
+    public SessionEntitySessionBeanLocal getSessionEntitySessionBean() {
+        return sessionEntitySessionBean;
+    }
+
+    /**
+     * @param sessionEntitySessionBean the sessionEntitySessionBean to set
+     */
+    public void setSessionEntitySessionBean(SessionEntitySessionBeanLocal sessionEntitySessionBean) {
+        this.sessionEntitySessionBean = sessionEntitySessionBean;
+    }
+
+    /**
+     * @return the tagEntitySessionBeanLocal
+     */
+    public TagEntitySessionBeanLocal getTagEntitySessionBeanLocal() {
+        return tagEntitySessionBeanLocal;
+    }
+
+    /**
+     * @param tagEntitySessionBeanLocal the tagEntitySessionBeanLocal to set
+     */
+    public void setTagEntitySessionBeanLocal(TagEntitySessionBeanLocal tagEntitySessionBeanLocal) {
+        this.tagEntitySessionBeanLocal = tagEntitySessionBeanLocal;
+    }
+
+    /**
+     * @return the filteredSessions
+     */
+    public List<SessionEntity> getFilteredSessions() {
+        return filteredSessions;
+    }
+
+    /**
+     * @param filteredSessions the filteredSessions to set
+     */
+    public void setFilteredSessions(List<SessionEntity> filteredSessions) {
+        this.filteredSessions = filteredSessions;
     }
 }
