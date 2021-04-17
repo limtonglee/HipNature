@@ -6,6 +6,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,6 +28,9 @@ public class TransactionEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
+    
+    @Column(nullable = false)
+    private LocalDate transactionDate;
     
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
@@ -114,6 +119,20 @@ public class TransactionEntity implements Serializable {
      */
     public void setPurchasedPlan(PurchasedPlanEntity purchasedPlan) {
         this.purchasedPlan = purchasedPlan;
+    }
+
+    /**
+     * @return the transactionDate
+     */
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    /**
+     * @param transactionDate the transactionDate to set
+     */
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
     }
     
 }

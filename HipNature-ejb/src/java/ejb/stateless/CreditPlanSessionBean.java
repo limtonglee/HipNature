@@ -25,7 +25,7 @@ public class CreditPlanSessionBean implements CreditPlanSessionBeanLocal {
 
     @Override
     public List<CreditPlanEntity> retrieveAllCreditPlans() {
-        Query query = em.createQuery("SELECT p FROM CreditPlanEntity P");
+        Query query = em.createQuery("SELECT p FROM CreditPlanEntity P WHERE P.transactionEntity IS NULL");
         
         return query.getResultList();
     }

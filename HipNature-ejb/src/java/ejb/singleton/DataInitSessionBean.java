@@ -7,6 +7,7 @@ package ejb.singleton;
 
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.ClassTypeEntitySessionBeanLocal;
+import ejb.stateless.CreditPlanSessionBeanLocal;
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.InstructorEntitySessionBeanLocal;
 import ejb.stateless.PartnerEntitySessionBean;
@@ -15,13 +16,13 @@ import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
+import entity.CreditPlanEntity;
 import entity.CustomerEntity;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.PlanEntity;
 import entity.SessionEntity;
 import entity.TagEntity;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -37,7 +38,6 @@ import javax.persistence.PersistenceContext;
 import util.enumeration.CustomerTypeEnum;
 import util.enumeration.LocationTypeEnum;
 import util.exception.CreateNewClassException;
-import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
 
 import util.exception.InputDataValidationException;
@@ -52,6 +52,9 @@ import util.exception.PartnerNotFoundException;
 @LocalBean
 @Startup
 public class DataInitSessionBean {
+
+    @EJB(name = "CreditPlanSessionBeanLocal")
+    private CreditPlanSessionBeanLocal creditPlanSessionBeanLocal;
 
     @EJB
     private ClassEntitySessionBeanLocal classEntitySessionBean;
@@ -76,6 +79,8 @@ public class DataInitSessionBean {
 
     @EJB
     private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
+    
+    
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
@@ -181,7 +186,10 @@ public class DataInitSessionBean {
     }
 
     private void createCreditPlan() {
-
+        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(10.00, 10L));
+         creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(20.00, 25L));
+          creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(30.00, 50L));
+           creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(40.00, 100L));
     }
 
     private void createClassTypeEntity() {
