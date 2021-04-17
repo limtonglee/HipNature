@@ -24,5 +24,7 @@ public interface ReviewEntitySessionBeanLocal {
     public List<ReviewEntity> retrieveAllReviews();
 
     public List<ReviewEntity> retrieveReviewsByClassId(Long classId);
+
+    public List<ReviewEntity> retrieveReviewsByPartnerId(Long partnerId);
     
 }

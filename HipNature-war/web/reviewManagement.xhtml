@@ -1,10 +1,77 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="content">
-        content
+
+        <ez:Breadcrumb pageName ="resourceManagement"/>
+        <div>
+            <h2>View All Reviews</h2>
+        </div>
+
+        <h:form id="formDataTable">
+
+            <p:messages id="messages" redisplay="false" closable="true" />
+
+            <p:dataTable id="dataTableReviews" widgetVar="dataTableReviews" value="#{reviewManagementManagedBean.reviews}" var="review" rowKey="#{review.reviewId}" rowIndexVar="row"
+                         filteredValue="#{reviewManagementManagedBean.filteredReviews}"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right;">
+                        <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('dataTableReviews').filter()" style="width:300px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Review Id" sortBy="#{review.reviewId}" filterBy="#{review.reviewId}" filterMatchMode="contains" width="100">
+                    <h:outputText value="#{review.reviewId}" />
+                </p:column>
+
+                <p:column headerText="Class Name" sortBy="#{review.classEntity.className}" filterBy="#{review.classEntity.className}" filterMatchMode="contains" width="130">
+                    <h:outputText value="#{review.classEntity.className}" />
+                </p:column>
+
+                <p:column headerText="Customer Name" sortBy="#{review.customerEntity.customerName}" filterBy="#{review.customerEntity.customerName}" filterMatchMode="contains" width="150">
+                    <h:outputText value="#{review.customerEntity.customerName}" />
+                </p:column>
+
+                <p:column headerText="Rating" sortBy="#{review.reviewRating}" filterBy="#{review.reviewRating}" filterMatchMode="contains" width="200">
+                    <p:rating value="#{review.reviewRating}" readonly="true"/>
+                </p:column>
+
+                <p:column headerText="Description">
+                    <p:scrollPanel style="width:250px;height:200px">
+                        <p class="p-m-0 p-p-3">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Vitae et leo duis ut diam.
+                            Ultricies mi quis hendrerit dolor magna eget est lorem. Amet consectetur adipiscing elit ut.
+                            Nam libero justo laoreet sit amet. Pharetra massa massa ultricies mi quis hendrerit dolor magna.
+                            Est ultricies integer quis auctor elit sed vulputate. Consequat ac felis donec et. Tellus orci ac auctor augue mauris.
+                            Semper feugiat nibh sed pulvinar proin gravida hendrerit lectus a. Tincidunt arcu non sodales neque sodales.
+                            Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Sodales ut etiam sit amet nisl purus.
+                            Cursus sit amet dictum sit amet. Tristique senectus et netus et malesuada fames ac turpis egestas.
+                            Et tortor consequat id porta nibh venenatis cras sed. Diam maecenas ultricies mi eget mauris.
+                            Eget egestas purus viverra accumsan in nisl nisi. Suscipit adipiscing bibendum est ultricies integer.
+                            Mattis aliquam faucibus purus in massa tempor nec.
+                        </p>
+                    </p:scrollPanel>
+                </p:column>
+
+                <f:facet name="footer">
+                    <h:outputText value="Total records is #{reviewManagementManagedBean.reviews.size()}" />
+                </f:facet>
+
+            </p:dataTable>
+
+        </h:form>
+
+
     </ui:define>
 
 </ui:composition>

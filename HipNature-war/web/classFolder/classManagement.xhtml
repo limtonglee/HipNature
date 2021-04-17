@@ -16,43 +16,55 @@
             </h:form>
 
             <h:form id="formAllClasses">
-                <p:messages redisplay="false"/>
-                <p:dataTable id="dataTableClasses" widgetVar="dataTableClasses" value="#{classManagementManagedBean.classEntities}" 
-                             var="classEntity" rowKey="#{classEntity.classId}" rowIndexVar="row"
-                             filteredValue="#{classManagementManagedBean.classEntitiesFiltered}" rows="10"
-                             paginator="true"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
-                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
+                <p:dataView var="classEntity" value="#{classManagementManagedBean.classEntities}" rows="10" paginator="true"
+                            rowsPerPageTemplate="10,25,50"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 
-                    <f:facet name="header">
-                        <p:outputPanel style="text-align: right;">
-                            <h:outputText value="Search all fields:" />
-                            <p:inputText id="globalFilter" onkeyup="PF('dataTableClasses').filter()" style="width:300px" placeholder="Enter keyword" />
-                        </p:outputPanel>
-                    </f:facet>
+                    <p:dataViewGridItem>
+                        <div class="product-grid-item card border-1">
+                            <div class="product-grid-item-top">
+                                <span> #{classEntity.locationTypeEnum.toLowerCase()} </span>
+                            </div>
+                            <div class="product-grid-item-content">
+                                <!--<p:graphicImage name="img/product/#{product.image}" library="demo"/>-->
+                                <div class="class-name">#{classEntity.className}</div>
+                                <div class="product-credit">#{classEntity.credit}</div>
+                                <!--<p:rating readonly="true" value="#{classEntity.classRating}"/>-->
+                            </div>
+                            <div class="product-grid-item-bottom">
+                                <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
+                                    <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
+                                </p:commandButton>
+                                <p:commandButton title="Delete" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses" icon="pi pi-trash">
+                                    <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </div>
+                        </div>
+                    </p:dataViewGridItem>
 
-                    <p:column id="col" headerText="Class ID" width="5%" sortBy="#{classEntity.classId}" filterBy="#{classEntity.classId}" filterStyle="display:none">
-                        <h:outputText value="#{classEntity.classId}" />
-                    </p:column>
-                    <p:column headerText="Class Name" width="25%" sortBy="#{classEntity.className}" filterBy="#{classEntity.className}" filterStyle="display:none">
-                        <h:outputText value="#{classEntity.className}" />
-                    </p:column>
-                    <p:column headerText="Credit Cost" width="5%" sortBy="#{classEntity.credit}" filterBy="#{classEntity.credit}" filterStyle="display:none">
-                        <h:outputText value="#{classEntity.credit}" />
-                    </p:column>
-                    <p:column headerText="Location" width="15%" sortBy="#{classEntity.locationTypeEnum}" filterBy="#{classEntity.locationTypeEnum}" filterStyle="display:none">
-                        <h:outputText value="#{classEntity.locationTypeEnum}" />
-                    </p:column>
-                    <p:column headerText="Action" width="10%">
-                        <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
-                            <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
-                        </p:commandButton>
-                        <p:commandButton title="Delete" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses" icon="pi pi-trash">
-                            <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
-                            <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
+                    <p:dataViewListItem>
+                        <div class="product-list-item">
+                            <!--<p:graphicImage name="demo/images/product/#{product.image}"/>-->
+                            <div class="product-list-detail">
+                                <div class="product-name">Class Id: #{classEntity.classId}</div>
+                                <div class="product-description">#{classEntity.className}</div>
+                                <p:rating readonly="true" value="#{classEntity.credit}"/>
+                                <div class="product-location">#{classEntity.locationTypeEnum}</div>
+                            </div>
+                            <div class="product-list-action" align="right">
+                                <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
+                                    <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
+                                </p:commandButton>
+                                <p:commandButton title="Delete" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses" icon="pi pi-trash">
+                                    <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </div>
+                        </div>
+                    </p:dataViewListItem>
+                </p:dataView>
                 <p:confirmDialog global="true" showEffect="clip" hideEffect="fade">
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
