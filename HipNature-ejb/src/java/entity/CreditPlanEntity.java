@@ -28,11 +28,24 @@ public class CreditPlanEntity implements Serializable {
     private Long creditPlanId;
     @Column(nullable = false,unique = true, length = 64)
     @NotNull
-    private double planPrice;
+    private double price;
+    
+    @Column(nullable = false,unique = true)
+    @NotNull
+    private Long creditValue;
     
     @OneToOne(fetch = FetchType.LAZY)
     private TransactionEntity transactionEntity;
 
+    public CreditPlanEntity() {
+    }
+
+    public CreditPlanEntity(double planPrice, Long creditValue) {
+        this.price = planPrice;
+        this.creditValue = creditValue;
+    }
+
+    
     public Long getCreditPlanId() {
         return creditPlanId;
     }
@@ -67,17 +80,17 @@ public class CreditPlanEntity implements Serializable {
     }
 
     /**
-     * @return the planPrice
+     * @return the price
      */
-    public double getPlanPrice() {
-        return planPrice;
+    public double getPrice() {
+        return price;
     }
 
     /**
-     * @param planPrice the planPrice to set
+     * @param price the price to set
      */
-    public void setPlanPrice(double planPrice) {
-        this.planPrice = planPrice;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     /**
@@ -93,5 +106,21 @@ public class CreditPlanEntity implements Serializable {
     public void setTransactionEntity(TransactionEntity transactionEntity) {
         this.transactionEntity = transactionEntity;
     }
+
+    /**
+     * @return the creditValue
+     */
+    public Long getCreditValue() {
+        return creditValue;
+    }
+
+    /**
+     * @param creditValue the creditValue to set
+     */
+    public void setCreditValue(Long creditValue) {
+        this.creditValue = creditValue;
+    }
+
+
     
 }

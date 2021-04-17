@@ -24,5 +24,7 @@ public interface PurchasedPlanEntitySessionBeanLocal {
     public Long createNewPurchasedPlan(PurchasedPlanEntity newPurchasedPlan, Long ccId);
 
     public PurchasedPlanEntity retrieveCurrentPlanByCusId(Long cusId) throws PurchasedPlanNotFoundException;
+
+    public void updateCreditValueForPurchasedPlanByPurchasedPlanId(Long purchasedPlanId, Long creditValue) throws PurchasedPlanNotFoundException;
     
 }

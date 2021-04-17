@@ -47,16 +47,14 @@ public class PurchasedPlanEntitySessionBean implements PurchasedPlanEntitySessio
         try {
             em.persist(newPurchasedPlan);
             em.flush();
-            System.out.println("makePurchasePlan6");
             PurchasedPlanEntity addedPlan = retrievePurchasedPlanByPurchasedPlanId(newPurchasedPlan.getPurchasedPlanId());
-            System.out.println("makePurchasePlan5");
             TransactionEntity te = new TransactionEntity();
             CreditCardEntity ce = customerEntitySessionBean.retrieveCreditCardById(ccId);
             te.setPurchasedPlan(newPurchasedPlan);
             te.setCreditCardEntity(ce);
+            te.setTransactionDate(java.time.LocalDate.now());
             TransactionEntity te2Add = transactionEntitySessionBeanLocal.createNewTransaction(te);
             addedPlan.setTransactionEntity(te2Add);
-
             return newPurchasedPlan.getPurchasedPlanId();
         } catch (PurchasedPlanNotFoundException ex) {
             Logger.getLogger(PurchasedPlanEntitySessionBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,18 +73,22 @@ public class PurchasedPlanEntitySessionBean implements PurchasedPlanEntitySessio
             throw new PurchasedPlanNotFoundException("Purchased Plan ID " + purchasedPlanId + " does not exist!");
         }
     }
+    
+    @Override
+    public void updateCreditValueForPurchasedPlanByPurchasedPlanId(Long purchasedPlanId, Long creditValue) throws PurchasedPlanNotFoundException {
+        PurchasedPlanEntity purchasedPlanEntity = retrievePurchasedPlanByPurchasedPlanId(purchasedPlanId);
+        purchasedPlanEntity.setCreditValue(purchasedPlanEntity.getCreditValue() + creditValue);
+    }
+    
     @Override
     public PurchasedPlanEntity retrieveCurrentPlanByCusId(Long cusId) throws PurchasedPlanNotFoundException {
         try{
             Query query = em.createQuery("SELECT s FROM PurchasedPlanEntity s WHERE s.customer.customerId =:cusId ORDER BY s.planId");
             query.setParameter("cusId", cusId);
-            System.out.println("retrieveCurrentPlanByCusId");
-            System.out.println(query.getResultList());
             return (PurchasedPlanEntity) query.getSingleResult();
         } catch(NoResultException ex){
             return null;
         }
-
     }
 
 }

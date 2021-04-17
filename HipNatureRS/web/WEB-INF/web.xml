@@ -77,4 +77,34 @@
         <local>ejb.stateless.BookingEntitySessionBeanLocal</local>
         <ejb-link>HipNature-ejb.jar#BookingEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CreditPlanSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.CreditPlanSessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#CreditPlanSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CreditPlanSessionBeanLocal1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.CreditPlanSessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#CreditPlanSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CustomerEntitySessionBeanLocal1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.CustomerEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#CustomerEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>PurchasedPlanEntitySessionBean1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.PurchasedPlanEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#PurchasedPlanEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>TransactionEntitySessionBean1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.TransactionEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#TransactionEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

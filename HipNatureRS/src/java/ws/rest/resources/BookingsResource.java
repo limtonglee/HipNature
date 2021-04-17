@@ -93,7 +93,7 @@ public class BookingsResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveMyBookings(@QueryParam("username") String username, @QueryParam("password") String password) {
-
+        System.out.println("Retrieve Current");
         try {
             CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(username, password);
             List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());
@@ -122,7 +122,44 @@ public class BookingsResource {
         }
 
     }
+    
+    @Path("retrieveMyPastBookings")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveMyPastBookings(@QueryParam("username") String username, @QueryParam("password") String password) {
 
+        System.out.println("Retrieve Past");
+        try {
+            CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(username, password);
+            List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());
+            List<RetrieveBookingsByCusReq> rbbcr = new ArrayList<>();
+            for (BookingEntity be : BookingList) {
+                System.out.println("be " + be);
+                if (be.getSessionEntity().getStartTime().compareTo((new java.util.Date())) == -1) {
+                    System.out.println("be2 " + be);
+                    RetrieveBookingsByCusReq temp = new RetrieveBookingsByCusReq();
+                    temp.setBookingId(be.getBookingId());
+                    temp.setSessionName(be.getSessionEntity().getClassEntity().getClassName());
+                    temp.setStartTime(be.getSessionEntity().getStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    temp.setEndTime(be.getSessionEntity().getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    temp.setPhone(be.getSessionEntity().getPhone());
+                    temp.setInstructor(be.getSessionEntity().getInstructor().getInstructorName());
+                    temp.setVenue(be.getSessionEntity().getVenue());
+                    temp.setBookingDate(be.getBookingDate());
+                    temp.setExpiryDate(be.getPurchasedplan().getExpiryDate());
+                    temp.setPurchasedplanId(be.getPurchasedplan().getPurchasedPlanId());
+                    rbbcr.add(temp);
+                }
+            }
+            GenericEntity<List<RetrieveBookingsByCusReq>> genericBookingList = new GenericEntity<List<RetrieveBookingsByCusReq>>(rbbcr) {
+            };
+            return Response.status(Status.OK).entity(genericBookingList).build();
+        } catch (Exception ex) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+
+    }
     private BookingEntitySessionBeanLocal lookupBookingEntitySessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
