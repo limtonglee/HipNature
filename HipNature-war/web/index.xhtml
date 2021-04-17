@@ -9,9 +9,9 @@
 
 
     <ui:define name="content">
-        <div class="card" style="width: 50%; float: left">
-            <!--<h:graphicImage library="img" name="test.png" style="width: 100%; height: 100%;"/>-->
-            <p:graphicImage name="img/HipNature_Logo.png" style="width: 400px"/>
+        <div class="card" style="width: 50%; float: left" >
+            
+            <p:graphicImage name="img/HipNature_Logo.png" style="width: 400px" rendered="#{sessionScope.isLogin == false}"/>
         </div>
 
         <div style="width: 50%; float: left" id="indexLeft">

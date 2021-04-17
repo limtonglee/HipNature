@@ -7,19 +7,15 @@ package jsf.managedbean;
 
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import entity.CustomerEntity;
+import entity.PartnerEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import org.primefaces.event.ItemSelectEvent;
-import org.primefaces.model.chart.DonutChartModel;
-import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.axes.cartesian.CartesianScales;
@@ -28,15 +24,9 @@ import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
 import org.primefaces.model.charts.bar.BarChartDataSet;
 import org.primefaces.model.charts.bar.BarChartModel;
 import org.primefaces.model.charts.bar.BarChartOptions;
-import org.primefaces.model.charts.bubble.BubbleChartModel;
-import org.primefaces.model.charts.hbar.HorizontalBarChartModel;
 import org.primefaces.model.charts.optionconfig.legend.Legend;
 import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
 import org.primefaces.model.charts.optionconfig.title.Title;
-import org.primefaces.model.charts.pie.PieChartDataSet;
-import org.primefaces.model.charts.polar.PolarAreaChartModel;
-import org.primefaces.model.charts.radar.RadarChartModel;
-import org.primefaces.model.charts.scatter.ScatterChartModel;
 
 /**
  *
@@ -55,6 +45,8 @@ public class ChartJsViewManagedBean implements Serializable {
 
     private List<CustomerEntity> records;
 
+    private PartnerEntity currentPartner;
+
     //normal 
     private int n = 0;
 
@@ -71,7 +63,7 @@ public class ChartJsViewManagedBean implements Serializable {
     }
 
     @PostConstruct
-    public void init() {
+    public void postConstruct() {
 
         setRecords(customerEntitySessionBeanLocal.retrieveAllCustomers());
 
@@ -79,6 +71,7 @@ public class ChartJsViewManagedBean implements Serializable {
 
         createPieModel();
 
+        currentPartner = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
     }
 
     //dummy chart to add in revenue later 
@@ -265,6 +258,20 @@ public class ChartJsViewManagedBean implements Serializable {
 
     public void setRecords(List<CustomerEntity> records) {
         this.records = records;
+    }
+
+    /**
+     * @return the currentPartner
+     */
+    public PartnerEntity getCurrentPartner() {
+        return currentPartner;
+    }
+
+    /**
+     * @param currentPartner the currentPartner to set
+     */
+    public void setCurrentPartner(PartnerEntity currentPartner) {
+        this.currentPartner = currentPartner;
     }
 
 }
