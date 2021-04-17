@@ -101,6 +101,8 @@ public class SearchSessionsByNameManagedBean implements Serializable
     private PartnerEntity currentPartnerEntity;
     private SessionEntity sessionEntityToUpdate;
     private SessionEntity sessionEntityToDelete;
+    
+    private List<SessionEntity> filteredSessions;
 
     public SearchSessionsByNameManagedBean() 
     {

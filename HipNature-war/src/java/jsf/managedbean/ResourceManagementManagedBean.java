@@ -179,7 +179,7 @@ public class ResourceManagementManagedBean implements Serializable {
         
         return partnerListOfSessions;
     }
-
+    
     public void doUpdateInstructor(ActionEvent event) {
         setSelectedInstructorToUpdate((InstructorEntity) event.getComponent().getAttributes().get("instructorToUpdate"));
         setSessionIdsUpdate(new ArrayList<>());
