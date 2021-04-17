@@ -31,6 +31,10 @@
                         </p:outputPanel>
                     </f:facet>
 
+                    <p:column headerText="Session ID" sortBy="#{sess.sessionId}" filterBy="#{sess.sessionId}" filterMatchMode="contains">
+                        <h:outputText value="#{sess.sessionId}" />
+                    </p:column>
+
                     <p:column headerText="Class Name" sortBy="#{sess.classEntity.className}" filterBy="#{sess.classEntity.className}" filterMatchMode="contains">
                         <h:outputText value="#{sess.classEntity.className}" />
                     </p:column>

@@ -19,10 +19,13 @@
 
                     <p:submenu label="Class Administration" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value ="Class Management" outcome="/classFolder/classManagement.xhtml" icon="pi pi-desktop" />
-                        <p:menuitem value ="Session Management" outcome="/classFolder/sessionManagement.xhtml" icon="pi pi-desktop" />
+                        <p:menuitem value ="Session Management" outcome="/classFolder/sessionManagement.xhtml" icon="pi pi-desktop"/>
                     </p:submenu>                        
                     <p:submenu label="Instructor" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Instructor Management" outcome="/instructorFolder/resourceManagement.xhtml" icon="pi pi-desktop"/>
+                    </p:submenu>
+                    <p:submenu label="Reviews" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Review Management" outcome="/reviewManagement.xhtml" icon="pi pi-desktop"/>
                     </p:submenu>
                     <p:submenu label="Report" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="View Business Report" outcome="/viewReport.xhtml" icon="pi pi-desktop" />

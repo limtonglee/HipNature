@@ -46,7 +46,7 @@
                                 </p:outputPanel>
                     </f:facet>
                     <row>          
-                        <p:column filterBy="#{tagEntity.tagId}" headerText="Tag Id" filterStyle="display:none">
+                        <p:column filterBy="#{tagEntity.tagId}" headerText="Tag Id" filterStyle="display:none" style="width:100px">
                             <h:outputText value="#{tagEntity.tagId}"/>
                         </p:column>
                     </row>
@@ -67,14 +67,14 @@
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
                     <f:facet name="header">
-                            <span style="font-weight: bold">TAGS</span>
+                            <span style="font-weight: bold">CLASS TAGS</span>
                                 <p:outputPanel style="text-align: right;">
                                     <h:outputText value="Search all Class Type:" />
                                     <p:inputText id="globalFilter" onkeyup="PF('dataTableClassLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
                                 </p:outputPanel>
                     </f:facet>
                     <row>          
-                        <p:column filterBy="#{classEntity.classTypeId}" headerText="Tag Id" filterStyle="display:none">
+                        <p:column filterBy="#{classEntity.classTypeId}" headerText="Tag Id" filterStyle="display:none" style="width:100px">
                             <h:outputText value="#{classEntity.classTypeId}"/>
                         </p:column>
                     </row>

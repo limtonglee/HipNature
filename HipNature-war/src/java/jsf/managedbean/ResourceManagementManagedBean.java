@@ -8,18 +8,15 @@ package jsf.managedbean;
 import ejb.stateless.InstructorEntitySessionBeanLocal;
 import ejb.stateless.PartnerEntitySessionBean;
 import ejb.stateless.SessionEntitySessionBeanLocal;
-import entity.ClassEntity;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.SessionEntity;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -70,6 +67,7 @@ public class ResourceManagementManagedBean implements Serializable {
 
     private PartnerEntity currentPartnerEntity;
     private List<SessionEntity> partnerListOfSessions;
+    private List<Long> listOfSessionsIds;
 
     public ResourceManagementManagedBean() {
         newInstructor = new InstructorEntity();
@@ -87,9 +85,8 @@ public class ResourceManagementManagedBean implements Serializable {
         System.out.print(instructors.size());
         currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
         currentPartnerEntity.getInstructorEntity().size();
-        
+
         //setPartnerListOfSessions(partnerEntitySessionBeanLocal.retrievePartnerClassesSessions(currentPartnerEntity.getPartnerEntityId()));
-        
         //setNewInstructorSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());
 
         /*System.out.println("*********** In ResourceManagementManagedBean, does retrieving logged in partner work?");
@@ -153,9 +150,9 @@ public class ResourceManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has ocurred while creating the new instructor: The instructor email/phone already exists!", null));
         }
     }
-    
-    public List<SessionEntity> retrievePartnerSessions(ActionEvent event) {
-        
+
+    /*public void retrievePartnerSessions(ActionEvent event) {
+
         PartnerEntity selectedPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedPartnerEntity");
         /*List<ClassEntity> partnerClasses = selectedPartnerEntity.getClassEntity();
 
@@ -170,22 +167,32 @@ public class ResourceManagementManagedBean implements Serializable {
             }
         }
         setPartnerListOfSessions(partnerListOfSessions);*/
-        
-        Long pid = selectedPartnerEntity.getPartnerEntityId();
-        
+
+ /*Long pid = currentPartnerEntity.getPartnerEntityId();
+
         List<SessionEntity> sess = sessionEntitySessionBeanLocal.retrieveSessionsByPartnerId(pid);
-        
+
         setPartnerListOfSessions(sess);
-        
-        return partnerListOfSessions;
-    }
-    
+
+    }*/
     public void doUpdateInstructor(ActionEvent event) {
         setSelectedInstructorToUpdate((InstructorEntity) event.getComponent().getAttributes().get("instructorToUpdate"));
         setSessionIdsUpdate(new ArrayList<>());
 
         for (SessionEntity sess : getSelectedInstructorToUpdate().getSessionEntity()) {
             getSessionIdsUpdate().add(sess.getSessionId());
+        }
+
+        Long pid = currentPartnerEntity.getPartnerEntityId();
+
+        List<SessionEntity> sess = sessionEntitySessionBeanLocal.retrieveSessionsByPartnerId(pid);
+
+        setPartnerListOfSessions(sess);
+
+        listOfSessionsIds = new ArrayList<>();
+
+        for (SessionEntity s : sess) {
+            listOfSessionsIds.add(s.getSessionId());
         }
     }
 
@@ -194,17 +201,20 @@ public class ResourceManagementManagedBean implements Serializable {
             instructorEntitySessionBeanLocal.updateInstructor(getSelectedInstructorToUpdate(), sessionIdsToAddToSelectedInstructorToUpdate);
             selectedInstructorToUpdate.setInstructorName(selectedInstructorToUpdate.getInstructorName());
             getSelectedInstructorToUpdate().getSessionEntity().clear();
-            for (SessionEntity s : getSessions()) {
-                if (getSessionIdsUpdate().contains(s.getSessionId())) {
-                    getSelectedInstructorToUpdate().getSessionEntity().add(s);
-                }
+            
+            for (Long sess: sessionIdsToAddToSelectedInstructorToUpdate) {
+                SessionEntity s = sessionEntitySessionBeanLocal.retrieveSessionBySessionId(sess);
+                selectedInstructorToUpdate.getSessionEntity().add(s);
+                s.setInstructor(selectedInstructorToUpdate);
             }
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Instructor updated successfully", null));
 
         } catch (InstructorNotFoundException | SessionNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating project: " + ex.getMessage(), null));
         }
     }
+    
 
     public void deleteInstructor(ActionEvent event) {
 
@@ -219,11 +229,9 @@ public class ResourceManagementManagedBean implements Serializable {
             insList.remove(instructorToDelete);
             loginManagedBean.setInstructorsToDisplay(insList);*/
  /*resourceManagementManagedBean.currentPartnerEntity.instructorEntity*/
-            
-            /*PartnerEntity partner = instructorToDelete.getPartnerEntity();
+ /*PartnerEntity partner = instructorToDelete.getPartnerEntity();
             List<InstructorEntity> partnerInstructors = partner.getInstructorEntity();
             partnerInstructors.remove(instructorToDelete);*/
-            
             currentPartnerEntity.getInstructorEntity().remove(instructorToDelete);
 
             instructorEntitySessionBeanLocal.deleteInstructor(instructorToDelete.getInstructorId());
@@ -389,6 +397,20 @@ public class ResourceManagementManagedBean implements Serializable {
      */
     public void setPartnerListOfSessions(List<SessionEntity> partnerListOfSessions) {
         this.partnerListOfSessions = partnerListOfSessions;
+    }
+
+    /**
+     * @return the listOfSessionsIds
+     */
+    public List<Long> getListOfSessionsIds() {
+        return listOfSessionsIds;
+    }
+
+    /**
+     * @param listOfSessionsIds the listOfSessionsIds to set
+     */
+    public void setListOfSessionsIds(List<Long> listOfSessionsIds) {
+        this.listOfSessionsIds = listOfSessionsIds;
     }
 
 }

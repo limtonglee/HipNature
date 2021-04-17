@@ -116,9 +116,8 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
         }
     }
 
-
-@Override
-        public InstructorEntity retrieveInstructorByInstructorId(Long instructorId) throws InstructorNotFoundException {
+    @Override
+    public InstructorEntity retrieveInstructorByInstructorId(Long instructorId) throws InstructorNotFoundException {
         InstructorEntity ins = em.find(InstructorEntity.class, instructorId);
 
         if (ins != null) {
@@ -129,7 +128,7 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
     }
 
     @Override
-        public List<InstructorEntity> retrieveInstructorsByPartner(Long pid) {
+    public List<InstructorEntity> retrieveInstructorsByPartner(Long pid) {
 
         Query query = em.createQuery("SELECT ins FROM InstructorEntity ins WHERE ins.partnerEntity.PartnerEntityId = :partnerId");
         query.setParameter("partnerId", pid);
@@ -139,39 +138,33 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
 
     public void updateInstructor(InstructorEntity instructor, List<Long> sessionIds) throws InstructorNotFoundException, SessionNotFoundException {
 
-        if (instructor != null && instructor.getInstructorId() != null) {
-            Set<ConstraintViolation<InstructorEntity>> constraintViolations = validator.validate(instructor);
+        Set<ConstraintViolation<InstructorEntity>> constraintViolations = validator.validate(instructor);
 
-            if (constraintViolations.isEmpty()) {
+        if (constraintViolations.isEmpty()) {
 
-                List<SessionEntity> sessionsOfInstructor = instructor.getSessionEntity();
+            InstructorEntity instructorToUpdate = retrieveInstructorByInstructorId(instructor.getInstructorId());
 
-                for (Long sessionIdsToAdd : sessionIds) {
-                    sessionsOfInstructor.add(sessionEntitySessionBeanLocal.retrieveSessionBySessionId(sessionIdsToAdd));
-                    sessionEntitySessionBeanLocal.retrieveSessionBySessionId(sessionIdsToAdd).setInstructor(instructor);
+            if (sessionIds != null && !(sessionIds.isEmpty())) {
+                for (SessionEntity removeId : instructorToUpdate.getSessionEntity()) {
+                    removeId.setInstructor(null);
                 }
-                instructor.setSessionEntity(sessionsOfInstructor);
+                instructorToUpdate.getSessionEntity().clear();
 
-                InstructorEntity instructorToUpdate = retrieveInstructorByInstructorId(instructor.getInstructorId());
-
-                instructor.setInstructorName(instructorToUpdate.getInstructorName());
-                instructor.setPhone(instructorToUpdate.getPhone());
-                instructor.setEmail(instructorToUpdate.getEmail());
-                instructor.setPartnerEntity(instructorToUpdate.getPartnerEntity());
-                instructor.setSessionEntity(instructorToUpdate.getSessionEntity());
-
+                for (Long sess : sessionIds) {
+                    SessionEntity s = sessionEntitySessionBeanLocal.retrieveSessionBySessionId(sess);
+                    instructorToUpdate.getSessionEntity().add(s);
+                }
             }
+
+            instructorToUpdate.setInstructorName(instructor.getInstructorName());
+            instructorToUpdate.setPhone(instructor.getPhone());
+
         }
     }
 
     @Override
-        public void deleteInstructor(Long instructorIdToDelete) {
-        InstructorEntity instructorToDelete = em.find(InstructorEntity
-
-.class  
-
-
-, instructorIdToDelete);
+    public void deleteInstructor(Long instructorIdToDelete) {
+        InstructorEntity instructorToDelete = em.find(InstructorEntity.class, instructorIdToDelete);
 
         if (instructorToDelete != null) {
             instructorToDelete.getPartnerEntity().getInstructorEntity().remove(instructorToDelete);
@@ -184,7 +177,7 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
     }
 
     @Override
-        public void deleteInstructors(List<Long> instructorIdsToDelete) {
+    public void deleteInstructors(List<Long> instructorIdsToDelete) {
         for (Long instructorIdToDelete : instructorIdsToDelete) {
             deleteInstructor(instructorIdToDelete);
         }

@@ -221,6 +221,7 @@
             <p:dialog id="dialogUpdateInstructor" widgetVar="dialogUpdateInstructor" header="Update Instructor" closable="true">
 
                 <p:messages id="messagesUpdateInstructor" redisplay="false" />
+                <p:message for="sessions" redisplay="false" />
 
                 <p:panelGrid>
 
@@ -285,8 +286,10 @@
                             <p:outputLabel for="sessions" value="Sessions: " />
                         </p:column>
                         <p:column>
-                            <p:selectCheckboxMenu id="sessions" value="#{resourceManagementManagedBean.partnerListOfSessions}" label="Sessions" multiple="true" filter="true" filterMatchMode="startsWith" scrollHeight="250" />
-                            <f:selectItems value="#{resourceManagementManagedBean.sessions}"/>
+                            <p:selectCheckboxMenu id="sessions" value="#{resourceManagementManagedBean.sessionIdsToAddToSelectedInstructorToUpdate}" label="Sessions" 
+                                                  multiple="true" filter="true" filterMatchMode="startsWith" scrollHeight="250">
+                                <f:selectItems value="#{resourceManagementManagedBean.listOfSessionsIds}"/>
+                            </p:selectCheckboxMenu>
                         </p:column>
                         <p:column>
                             <p:message for="sessions" />
@@ -295,7 +298,7 @@
 
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton id="updateInstructor" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveInstructor}" oncomplete="PF('dialogUpdateInstructor').show();" />
+                            <p:commandButton id="updateInstructor" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.updateInstructor}" oncomplete="PF('dialogUpdateInstructor').hide();" />
                         </p:column>
                     </p:row>
 
@@ -306,6 +309,6 @@
         </h:form>
 
     </ui:define>
-    
+
 
 </ui:composition>
