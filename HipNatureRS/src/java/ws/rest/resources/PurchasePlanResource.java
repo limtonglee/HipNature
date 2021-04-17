@@ -94,6 +94,7 @@ public class PurchasePlanResource {
                 planToAdd.setCustomer(ce);
                 planToAdd.setPlanId(planToUse);
                 planToAdd.setSessionLeft(Math.toIntExact(planToUse.getSessionLimit()));
+                planToAdd.setCreditValue(planToUse.getCreditValue());
 
                 Long toReturn = purchasedPlanEntitySessionBeanLocal.createNewPurchasedPlan(planToAdd, purchaseplanreq.getCcId());
 

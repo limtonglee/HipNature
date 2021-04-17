@@ -42,8 +42,8 @@ public class PurchasedPlanEntity implements Serializable {
     
     @Column(nullable = false)
     private LocalDate purchaseDate;
-    
-        
+    @Column(nullable = false)
+    private Long creditValue;
     @Column(nullable = false)
     private LocalDate expiryDate;
     
@@ -198,6 +198,20 @@ public class PurchasedPlanEntity implements Serializable {
      */
     public void setExpiryDate(LocalDate expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    /**
+     * @return the creditValue
+     */
+    public Long getCreditValue() {
+        return creditValue;
+    }
+
+    /**
+     * @param creditValue the creditValue to set
+     */
+    public void setCreditValue(Long creditValue) {
+        this.creditValue = creditValue;
     }
     
 }

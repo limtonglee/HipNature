@@ -149,5 +149,19 @@ public class BookingEntity implements Serializable {
     public void setPurchasedplan(PurchasedPlanEntity purchasedplan) {
         this.purchasedplan = purchasedplan;
     }
+
+    /**
+     * @return the bookingDate
+     */
+    public LocalDate getBookingDate() {
+        return bookingDate;
+    }
+
+    /**
+     * @param bookingDate the bookingDate to set
+     */
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
+    }
     
 }

@@ -68,7 +68,7 @@ public class BookingsResource {
         if (createNewBookingReq != null) {
             try {
                 System.out.println("Testing");
-                CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(createNewBookingReq.getUsername(),createNewBookingReq.getPassword());
+                CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(createNewBookingReq.getUsername(), createNewBookingReq.getPassword());
                 PurchasedPlanEntity ppeToUse = purchasedPlanEntitySessionBeanLocal.retrieveCurrentPlanByCusId(ce.getCustomerId());
                 for (retrieveSessionByClassId rsbci : createNewBookingReq.getSessionArray()) {
                     System.out.println("Session Id Selected: " + rsbci.getSessionId());
@@ -92,20 +92,27 @@ public class BookingsResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveMyBookings(@QueryParam("username") String username, @QueryParam("password") String password){
+    public Response retrieveMyBookings(@QueryParam("username") String username, @QueryParam("password") String password) {
 
         try {
             CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(username, password);
             List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());
             List<RetrieveBookingsByCusReq> rbbcr = new ArrayList<>();
-            for (BookingEntity be : BookingList){
-                RetrieveBookingsByCusReq temp = new RetrieveBookingsByCusReq();
-                temp.setBookingId(be.getBookingId());
-                temp.setSessionName(be.getSessionEntity().getClassEntity().getClassName());
-                
-                temp.setStartTime(be.getSessionEntity().getStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-                temp.setEndTime(be.getSessionEntity().getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-                rbbcr.add(temp);
+            for (BookingEntity be : BookingList) {
+                if (be.getSessionEntity().getStartTime().compareTo((new java.util.Date())) != -1) {
+                    RetrieveBookingsByCusReq temp = new RetrieveBookingsByCusReq();
+                    temp.setBookingId(be.getBookingId());
+                    temp.setSessionName(be.getSessionEntity().getClassEntity().getClassName());
+                    temp.setStartTime(be.getSessionEntity().getStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    temp.setEndTime(be.getSessionEntity().getEndTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    temp.setPhone(be.getSessionEntity().getPhone());
+                    temp.setInstructor(be.getSessionEntity().getInstructor().getInstructorName());
+                    temp.setVenue(be.getSessionEntity().getVenue());
+                    temp.setBookingDate(be.getBookingDate());
+                    temp.setExpiryDate(be.getPurchasedplan().getExpiryDate());
+                    temp.setPurchasedplanId(be.getPurchasedplan().getPurchasedPlanId());
+                    rbbcr.add(temp);
+                }
             }
             GenericEntity<List<RetrieveBookingsByCusReq>> genericBookingList = new GenericEntity<List<RetrieveBookingsByCusReq>>(rbbcr) {
             };

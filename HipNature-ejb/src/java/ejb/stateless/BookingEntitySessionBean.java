@@ -63,6 +63,7 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
             em.flush();
             purchasedPlan.getBooking().add(newBooking);
             purchasedPlan.setSessionLeft(purchasedPlan.getSessionLeft() - 1);
+            purchasedPlan.setCreditValue(purchasedPlan.getCreditValue() - newBooking.getSessionEntity().getClassEntity().getCredit());
             session.getParticipants().add(newBooking);
 
             return newBooking.getBookingId();
