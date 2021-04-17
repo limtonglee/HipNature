@@ -27,9 +27,9 @@
                         <p:ajax event="keyup" process="@this" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
                     </p:inputText>
                     &nbsp;
-                    <!--                <p:commandButton value="Search" style="font-size: x-large;">
-                                        <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
-                                    </p:commandButton>-->
+                    <p:commandButton value="Search" style="font-size: x-large;">
+                        <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
+                    </p:commandButton>
 
                     <p:separator style="margin: 20px"/>
 
