@@ -16,7 +16,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.UpdateCustomerException;
 import util.security.CryptographicHelper;
 
 /**
@@ -123,5 +125,30 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println(cce);
         return cce;
+    }
+    
+        @Override
+    public void updateCustomer(CustomerEntity customerEntity) throws UpdateCustomerException, CustomerNotFoundException
+    {
+        if(customerEntity != null && customerEntity.getCustomerId()!= null)
+        {
+ 
+                CustomerEntity customerEntityToUpdate = retrieveCustomerByCustomerId(customerEntity.getCustomerId());
+
+              
+                    
+                    customerEntityToUpdate.setAddress(customerEntity.getAddress());
+                    customerEntityToUpdate.setCustomerName(customerEntity.getCustomerName());
+
+                    customerEntityToUpdate.setEmail(customerEntity.getEmail());
+                    customerEntityToUpdate.setPhone(customerEntity.getPhone());
+                    customerEntityToUpdate.setPassword(customerEntity.getPassword());
+
+            }
+            else
+            {
+                throw new UpdateCustomerException("Not found");
+            }
+       
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.UpdateCustomerException;
 
 /**
  *
@@ -36,5 +37,7 @@ public interface CustomerEntitySessionBeanLocal {
     public void deleteCreditCard(Long creditCardId);
 
     public CreditCardEntity retrieveCreditCardById(Long creditCardId);
-    
+
+    public void updateCustomer(CustomerEntity customerEntity) throws UpdateCustomerException, CustomerNotFoundException;
+
 }
