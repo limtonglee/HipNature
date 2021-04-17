@@ -7,216 +7,223 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 template="./../template/defaultTemplate.xhtml">
 
+
     <ui:define name="content">
+        <ez:Breadcrumb pageName ="sessionManagement"/>
+        <div>
+            <h2>Session Management</h2>
+            <h:form>
+                <p:commandButton value="Create New Session" type="button" onclick="PF('dialogCreateNewSession').show()" icon="pi pi-plus"/>
+            </h:form>
+
+            <h:form id="formMain">
+                <p:messages redisplay="false"/>
+
+                <div style="text-align: center;">
+                    <h2>Search Sessions by Name</h2> 
+                    <p:outputLabel for="txtSearchString" value="Search: " style="font-weight: bold;margin-right: 10px;" />
+
+                    <p:inputText id="txtSearchString" value="#{searchSessionsByNameManagedBean.searchString}" style="">
+                        <p:ajax event="keyup" process="@this" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
+                    </p:inputText>
+                    &nbsp;
+                    <!--                <p:commandButton value="Search" style="font-size: x-large;">
+                                        <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
+                                    </p:commandButton>-->
+
+                    <p:separator style="margin: 20px"/>
+
+                    <p:outputLabel for="selLocation" value="Location: "  />
+                    <p:selectOneMenu id="selLocation" value="#{searchSessionsByNameManagedBean.location}"  style= "width: 20%; position: relative;">
+                        <f:selectItem itemValue="ALL" itemLabel="ALL" itemDescription="ALL" />
+                        <f:selectItem itemValue="NORTH" itemLabel="NORTH" itemDescription="NORTH" />
+                        <f:selectItem itemValue="WEST" itemLabel="WEST" itemDescription="WEST" />
+                        <f:selectItem itemValue="EAST" itemLabel="EAST" itemDescription="EAST" />
+                        <f:selectItem itemValue="CENTRAL" itemLabel="CENTRAL" itemDescription="CENTRAL" />
+                        <f:selectItem itemValue="SOUTH" itemLabel="SOUTH" itemDescription="SOUTH" />
+
+                        <p:ajax process="@form" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
+
+                    </p:selectOneMenu>
+
+                    <p:separator style="margin: 20px"/>
+
+                    <p:outputLabel for="selTags" value="Tags: " style="font-weight: bold;margin-right: 10px;" />
+                    <p:selectManyButton  id="selTags" value="#{searchSessionsByNameManagedBean.selectedTagIds}" style="margin-bottom: 20px;">
+                        <f:selectItems value="#{searchSessionsByNameManagedBean.selectItems}" />
+                        <p:ajax process="@form" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
+                    </p:selectManyButton >   
+                </div>
 
 
-        <h:form id="formMain">
-            <p:messages redisplay="false"/>
+                <p:dataView  id="dataViewMain" var="sessionEntity" value="#{searchSessionsByNameManagedBean.sessionEntities}" rows="12" paginator="true"
+                             rowsPerPageTemplate="6,12,16"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 
-            <div style="text-align: center;">
-                <h2>Search Sessions by Name</h2> 
-                <p:outputLabel for="txtSearchString" value="Search: " style="font-weight: bold;margin-right: 10px;" />
+                    <p:dataViewGridItem>
+                        <div class="product-grid-item card border-1">
+                            <p class="product-name">#{sessionEntity.classEntity.className}</p>
+                            <p class="product-name">#{sessionEntity.startTime} - #{sessionEntity.endTime}</p>
+                            <p class="product-name">#{sessionEntity.instructor.instructorName}</p>
+                            <p class="product-name">#{sessionEntity.maxCapacity}</p>
+                            <p class="product-description">#{sessionEntity.locationTypeEnum}</p>
+                            <br></br>
+                            <p:progressBar value="#{sessionEntity.participants.size()/sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
 
-                <p:inputText id="txtSearchString" value="#{searchSessionsByNameManagedBean.searchString}" style="">
-                    <p:ajax event="keyup" process="@this" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
-                </p:inputText>
-                &nbsp;
-                <!--                <p:commandButton value="Search" style="font-size: x-large;">
-                                    <p:ajax event="click" process="@this formMain:txtSearchString" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
-                                </p:commandButton>-->
+                            <div class="product-grid-item-bottom">
 
-                <p:separator style="margin: 20px"/>
+                                <f:facet name = "header">Action</f:facet>
 
-                <p:outputLabel for="selLocation" value="Location: "  />
-                <p:selectOneMenu id="selLocation" value="#{searchSessionsByNameManagedBean.location}"  style= "width: 20%; position: relative;">
-                    <f:selectItem itemValue="ALL" itemLabel="ALL" itemDescription="ALL" />
-                    <f:selectItem itemValue="NORTH" itemLabel="NORTH" itemDescription="NORTH" />
-                    <f:selectItem itemValue="WEST" itemLabel="WEST" itemDescription="WEST" />
-                    <f:selectItem itemValue="EAST" itemLabel="EAST" itemDescription="EAST" />
-                    <f:selectItem itemValue="CENTRAL" itemLabel="CENTRAL" itemDescription="CENTRAL" />
-                    <f:selectItem itemValue="SOUTH" itemLabel="SOUTH" itemDescription="SOUTH" />
+                                <p:commandButton 
+                                    value="Update" icon="ui-icon-document" actionListener="#{searchSessionsByNameManagedBean.doUpdate}" update="updateSession" 
+                                    oncomplete="PF('dialogUpdateSession').show()">
+                                    <f:attribute value="#{sessionEntity}" name="sessionEntityToUpdate" />
+                                </p:commandButton>
 
-                    <p:ajax process="@form" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
+                                <p:commandButton 
+                                    value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" process="@form" update="formMain:dataViewMain"  >
+                                    <f:attribute value="#{sessionEntity}" name="sessionEntityToDelete" />
+                                </p:commandButton>
 
-                </p:selectOneMenu>
-
-                <p:separator style="margin: 20px"/>
-
-                <p:outputLabel for="selTags" value="Tags: " style="font-weight: bold;margin-right: 10px;" />
-                <p:selectManyButton  id="selTags" value="#{searchSessionsByNameManagedBean.selectedTagIds}" style="margin-bottom: 20px;">
-                    <f:selectItems value="#{searchSessionsByNameManagedBean.selectItems}" />
-                    <p:ajax process="@form" update="formMain:dataViewMain" listener="#{searchSessionsByNameManagedBean.searchSession}" />
-                </p:selectManyButton >   
-            </div>
-
-
-            <p:dataView  id="dataViewMain" var="sessionEntity" value="#{searchSessionsByNameManagedBean.sessionEntities}" rows="12" paginator="true"
-                         rowsPerPageTemplate="6,12,16"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         gridIcon="pi pi-th-large" listIcon="pi pi-bars">
-
-                <p:dataViewGridItem>
-                    <div class="product-grid-item card border-1">
-                        <p class="product-name">#{sessionEntity.classEntity.className}</p>
-                        <p class="product-name">#{sessionEntity.startTime} - #{sessionEntity.endTime}</p>
-                        <p class="product-name">#{sessionEntity.instructor.instructorName}</p>
-                        <p class="product-name">#{sessionEntity.maxCapacity}</p>
-                        <p class="product-description">#{sessionEntity.locationTypeEnum}</p>
-                        <br></br>
-                        <p:progressBar value="#{sessionEntity.participants.size()/sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
-                        <h:outputText value="&lt;br/&gt;" escape="false" />
-
-                        <div class="product-grid-item-bottom">
-
-                            <f:facet name = "header">Action</f:facet>
-
-                            <p:commandButton 
-                                value="Update" icon="ui-icon-document" actionListener="#{searchSessionsByNameManagedBean.doUpdate}" update="updateSession" 
-                                oncomplete="PF('dialogUpdateSession').show()">
-                                <f:attribute value="#{sessionEntity}" name="sessionEntityToUpdate" />
-                            </p:commandButton>
-
-                            <p:commandButton 
-                                value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" process="@form" update="formMain:dataViewMain"  >
-                                <f:attribute value="#{sessionEntity}" name="sessionEntityToDelete" />
-                            </p:commandButton>
-
+                            </div>
                         </div>
-                    </div>
-                </p:dataViewGridItem>
+                    </p:dataViewGridItem>
 
-                <p:dataViewListItem>
-                    <div class="product-grid-item card border-1">
-                        <p class="product-name">#{sessionEntity.classEntity.className}</p>
-                        <p class="product-name">#{sessionEntity.startTime} - #{sessionEntity.endTime}</p>
-                        <p class="product-name">#{sessionEntity.instructor.instructorName}</p>
-                        <p class="product-name">#{sessionEntity.maxCapacity}</p>
-                        <p class="product-description">#{sessionEntity.locationTypeEnum}</p>
-                        <p:progressBar value="#{sessionEntity.participants.size()/sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
-                        <h:outputText value="&lt;br/&gt;" escape="false" />
+                    <p:dataViewListItem>
+                        <div class="product-grid-item card border-1">
+                            <p class="product-name">#{sessionEntity.classEntity.className}</p>
+                            <p class="product-name">#{sessionEntity.startTime} - #{sessionEntity.endTime}</p>
+                            <p class="product-name">#{sessionEntity.instructor.instructorName}</p>
+                            <p class="product-name">#{sessionEntity.maxCapacity}</p>
+                            <p class="product-description">#{sessionEntity.locationTypeEnum}</p>
+                            <p:progressBar value="#{sessionEntity.participants.size()/sessionEntity.maxCapacity}" labelTemplate="{value}%" displayOnly="true"/>
+                            <h:outputText value="&lt;br/&gt;" escape="false" />
 
-                        <div class="product-grid-item-bottom">
+                            <div class="product-grid-item-bottom">
 
-                            <f:facet name = "header">Action</f:facet>
+                                <f:facet name = "header">Action</f:facet>
 
-                            <p:commandButton 
-                                value="Update" icon="ui-icon-document" actionListener="#{searchSessionsByNameManagedBean.doUpdate}" update="updateSession" 
-                                oncomplete="PF('dialogUpdateSession').show()">
-                                <f:attribute value="#{sessionEntity}" name="sessionEntityToUpdate" />
-                            </p:commandButton>
+                                <p:commandButton 
+                                    value="Update" icon="ui-icon-document" actionListener="#{searchSessionsByNameManagedBean.doUpdate}" update="updateSession" 
+                                    oncomplete="PF('dialogUpdateSession').show()">
+                                    <f:attribute value="#{sessionEntity}" name="sessionEntityToUpdate" />
+                                </p:commandButton>
 
-                            <p:commandButton 
-                                value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" process="@form" update="formMain:dataViewMain"  >
-                                <f:attribute value="#{sessionEntity}" name="sessionEntityToDelete" />
-                            </p:commandButton>
+                                <p:commandButton 
+                                    value="Delete" icon="ui-icon-trash" actionListener="#{searchSessionsByNameManagedBean.doDelete}" process="@form" update="formMain:dataViewMain"  >
+                                    <f:attribute value="#{sessionEntity}" name="sessionEntityToDelete" />
+                                </p:commandButton>
 
+                            </div>
                         </div>
-                    </div>
-                </p:dataViewListItem>
-            </p:dataView>
+                    </p:dataViewListItem>
+                </p:dataView>
 
-        </h:form>
+            </h:form>
 
-        <h:form id="updateSession">
-            <p:growl id="growl" showDetail="true"/>
+            <h:form id="updateSession">
+                <p:growl id="growl" showDetail="true"/>
 
-            <div class="card">
+                <div class="card">
 
-                <p:dialog id="dialogUpdateSession" widgetVar="dialogUpdateSession" header="Update Session" closable="true">
-                    <p:messages id="messageUpdateSession" redisplay="false"/>
-                    <p:panelGrid>
-                        <p:row>
-                            <p:column>
-                                <h:outputText value="Class Name"/>
-                            </p:column>
-                            <p:column>
-                                <h:outputText value="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.classEntity.className}"/>
-                            </p:column>
-                        </p:row>
-                        <p:row>
-                            <p:column>
-                                <h:outputText value="Location: "/>
-                            </p:column>
-                            <p:column>
-                                <p:selectOneMenu id ="selClassLocation" value="#{searchSessionsByNameManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
-                                    <f:selectItem itemDisabled="true" itemLabel="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.locationTypeEnum}" />
-                                    <f:selectItems value="#{searchSessionsByNameManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
-                                </p:selectOneMenu>
-                            </p:column>
-                        </p:row>
-                        <p:row>
-                            <p:column>
-                                <h:outputText value="Instructor "/>
-                            </p:column>
-                            <p:column>
-                                <p:selectOneMenu id ="selSesInstructor" value="#{searchSessionsByNameManagedBean.newInstructorId}" required="true" requiredMessage="Instructor cannot be empty">
-                                    <f:selectItem itemDisabled="true" itemLabel="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.instructor.instructorName}" noSelectionOption="true"/>
-                                    <f:selectItems value="#{searchSessionsByNameManagedBean.instructorEntities}" var="instructorEntity" itemValue="#{instructorEntity.instructorId}" itemLabel="#{instructorEntity.instructorName}"/>
-                                </p:selectOneMenu>
-                            </p:column>
-                        </p:row>
-                        <p:row>
-                            <p:column>
-                                <h:outputText value="Max Capacity"/>
-                            </p:column>
-                            <p:column>
-                                <p:spinner id="updateClassName" value="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.maxCapacity}" placeholder="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.maxCapacity}" required="true" min="0" />
-                            </p:column>
-                        </p:row>
+                    <p:dialog id="dialogUpdateSession" widgetVar="dialogUpdateSession" header="Update Session" closable="true">
+                        <p:messages id="messageUpdateSession" redisplay="false"/>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <h:outputText value="Class Name"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.classEntity.className}"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <h:outputText value="Location: "/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id ="selClassLocation" value="#{searchSessionsByNameManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
+                                        <f:selectItem itemDisabled="true" itemLabel="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.locationTypeEnum}" />
+                                        <f:selectItems value="#{searchSessionsByNameManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <h:outputText value="Instructor "/>
+                                </p:column>
+                                <p:column>
+                                    <p:selectOneMenu id ="selSesInstructor" value="#{searchSessionsByNameManagedBean.newInstructorId}" required="true" requiredMessage="Instructor cannot be empty">
+                                        <f:selectItem itemDisabled="true" itemLabel="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.instructor.instructorName}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{searchSessionsByNameManagedBean.instructorEntities}" var="instructorEntity" itemValue="#{instructorEntity.instructorId}" itemLabel="#{instructorEntity.instructorName}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <h:outputText value="Max Capacity"/>
+                                </p:column>
+                                <p:column>
+                                    <p:spinner id="updateClassName" value="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.maxCapacity}" placeholder="#{searchSessionsByNameManagedBean.sessionEntityToUpdate.maxCapacity}" required="true" min="0" />
+                                </p:column>
+                            </p:row>
 
-                        <p:row>
-                            <p:column colspan="2">
-                                <p:commandButton value="Update Class" update="@form formMain" oncomplete="PF('dialogUpdateClass').hide()" actionListener="#{searchSessionsByNameManagedBean.updateSession(event)}"/>
-                            </p:column>
-                        </p:row>
-                    </p:panelGrid>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <p:commandButton value="Update Class" update="@form formMain" oncomplete="PF('dialogUpdateClass').hide()" actionListener="#{searchSessionsByNameManagedBean.updateSession(event)}"/>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
 
+                    </p:dialog>
+                </div>
+            </h:form>
+
+            <h:form id="formCreateNewSession">
+                <p:dialog id="dialogCreateNewSession" widgetVar="dialogCreateNewSession" header="Create New Session" closable="true">
+                    <p:messages id="messageCreateNewSession" redisplay="false"/>
+                    <p:wizard>
+                        <p:tab id="SessionInformation" title="Session">
+                            <p:panel header="Session Information">
+                                <p:messages/>
+                                <h:panelGrid columns="2" columnClasses="label, value">
+                                    <h:outputText value="Session Venue: "/>
+                                    <p:inputText id="venue" value="#{searchSessionsByNameManagedBean.newSessionEntity.venue}" required="true" placeholder="" requiredMessage="Class Name cannot be empty"/>
+                                    <p:outputLabel for="time" value="Time"/> 
+                                    <p:datePicker id="time" value="#{searchSessionsByNameManagedBean.newSessionEntity.startTime}" showTime="true" required="true" />
+                                    <p:outputLabel for="input1" value="Duration"/>
+                                    <p:inputNumber id="input1" value="#{searchSessionsByNameManagedBean.newSessionEntity.duration}" required="true" /> 
+                                    <p:outputLabel for="input3" value="Max Capacity"/>
+                                    <p:inputNumber id="input3" value="#{searchSessionsByNameManagedBean.newSessionEntity.maxCapacity}"  required="true"/> 
+                                    <p:outputLabel for="input4" value="Phone"/>
+                                    <p:inputNumber id="input4" value="#{searchSessionsByNameManagedBean.newSessionEntity.phone}" required="true"/> 
+                                    <h:outputText value="Class : "/>
+                                    <p:selectOneMenu id ="selClass" value="#{searchSessionsByNameManagedBean.newClassId}" required="true" requiredMessage="Class cannot be empty">
+                                        <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{searchSessionsByNameManagedBean.classEntities}" var="classEntity" itemValue="#{classEntity.classId}" itemLabel="#{classEntity.className}"/>
+                                    </p:selectOneMenu>
+                                    <h:outputText value="Instructor : "/>
+                                    <p:selectOneMenu id ="selInstructor" value="#{searchSessionsByNameManagedBean.newInstructorId}" required="true" requiredMessage="Instructor cannot be empty">
+                                        <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{searchSessionsByNameManagedBean.instructorEntities}" var="instructorEntity" itemValue="#{instructorEntity.instructorId}" itemLabel="#{instructorEntity.instructorName}"/>
+                                    </p:selectOneMenu>
+                                    <h:outputText value="Location: "/>
+                                    <p:selectOneMenu id ="selClassLocation" value="#{searchSessionsByNameManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
+                                        <f:selectItem itemDisabled="true" itemLabel="[Select One]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{searchSessionsByNameManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:commandButton value="Confirm" oncomplete="PF('dialogCreateNewSession').hide()" actionListener="#{searchSessionsByNameManagedBean.createNewSession}" style="float: right;" update="@form formMain:dataViewMain"/>
+
+                        </p:tab>
+
+                    </p:wizard>
                 </p:dialog>
-            </div>
-        </h:form>
-
-        <h:form id="formCreateNewSession">
-            <p:dialog id="dialogCreateNewClass" widgetVar="dialogCreateNewSession" header="Create New Session" closable="true">
-                <p:messages id="messageCreateNewSession" redisplay="false"/>
-                <p:wizard>
-                    <p:tab id="SessionInformation" title="Session">
-                        <p:panel header="Class Information">
-                            <p:messages/>
-                            <h:panelGrid columns="2" columnClasses="label, value">
-                                <h:outputText value="Session Venue: "/>
-                                <p:inputText id="venue" value="#{searchSessionsByNameManagedBean.newSessionEntity.venue}" required="true" placeholder="" requiredMessage="Class Name cannot be empty"/>
-                                <p:outputLabel for="time" value="Time"/> 
-                                <p:datePicker id="time" value="#{searchSessionsByNameManagedBean.newSessionEntity.startTime}" showTime="true" required="true" />
-                                <p:outputLabel for="input1" value="Duration"/>
-                                <p:inputNumber id="input1" value="#{searchSessionsByNameManagedBean.newSessionEntity.duration}" required="true" /> 
-                                <p:outputLabel for="input3" value="Max Capacity"/>
-                                <p:inputNumber id="input3" value="#{searchSessionsByNameManagedBean.newSessionEntity.maxCapacity}"  required="true"/> 
-                                <p:outputLabel for="input4" value="Phone"/>
-                                <p:inputNumber id="input4" value="#{searchSessionsByNameManagedBean.newSessionEntity.phone}" required="true"/> 
-                                <h:outputText value="Class : "/>
-                                <p:selectOneMenu id ="selClass" value="#{searchSessionsByNameManagedBean.newClassId}" required="true" requiredMessage="Class cannot be empty">
-                                    <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
-                                    <f:selectItems value="#{searchSessionsByNameManagedBean.classEntities}" var="classEntity" itemValue="#{classEntity.classId}" itemLabel="#{classEntity.className}"/>
-                                </p:selectOneMenu>
-                                <h:outputText value="Instructor : "/>
-                                <p:selectOneMenu id ="selInstructor" value="#{searchSessionsByNameManagedBean.newInstructorId}" required="true" requiredMessage="Instructor cannot be empty">
-                                    <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true"/>
-                                    <f:selectItems value="#{searchSessionsByNameManagedBean.instructorEntities}" var="instructorEntity" itemValue="#{instructorEntity.instructorId}" itemLabel="#{instructorEntity.instructorName}"/>
-                                </p:selectOneMenu>
-                                <h:outputText value="Location: "/>
-                                <p:selectOneMenu id ="selClassLocation" value="#{searchSessionsByNameManagedBean.locationTypeEnumNew}" required="true" requiredMessage="Location cannot be empty">
-                                    <f:selectItem itemDisabled="true" itemLabel="[Select One]" noSelectionOption="true"/>
-                                    <f:selectItems value="#{searchSessionsByNameManagedBean.locationTypeEnum}" var="location" itemValue="#{location}"/>
-                                </p:selectOneMenu>
-                            </h:panelGrid>
-                        </p:panel>
-                        <p:commandButton value="Confirm" oncomplete="PF('dialogCreateNewSession').hide()" actionListener="#{searchSessionsByNameManagedBean.createNewSession}" style="float: right;" update="@form formMain:dataViewMain"/>
-
-                    </p:tab>
-
-                </p:wizard>
-            </p:dialog>
-        </h:form>
+            </h:form>
+        </div>
     </ui:define>
 
 </ui:composition>

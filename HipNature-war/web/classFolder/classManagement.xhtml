@@ -6,26 +6,15 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    <style>
-        hide{
-            display:none;
-            visibility:hidden;
-        }
-    </style>
+
     <ui:define name="content">
         <ez:Breadcrumb pageName ="classManagement"/>
         <div>
             <h2>Class Management</h2>
             <h:form>
-                <p:panelMenu style="width: 20%;font-size: 15px">
-                    <p:submenu label="File" icon="ui-icon-document">
-                        <p:menuitem value ="Create new Class" onclick="PF('dialogCreateNewClass').show()" icon="pi pi-plus">
-                            <p:resetInput target="@form formCreateNewClass"/>
-                        </p:menuitem>
-                    </p:submenu>
-                </p:panelMenu>
+                <p:commandButton value="Create New Class" type="button" onclick="PF('dialogCreateNewClass').show()" icon="pi pi-plus"/>
             </h:form>
-            
+
             <h:form id="formAllClasses">
                 <p:messages redisplay="false"/>
                 <p:dataTable id="dataTableClasses" widgetVar="dataTableClasses" value="#{classManagementManagedBean.classEntities}" 
@@ -34,14 +23,14 @@
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
-                    
+
                     <f:facet name="header">
                         <p:outputPanel style="text-align: right;">
                             <h:outputText value="Search all fields:" />
                             <p:inputText id="globalFilter" onkeyup="PF('dataTableClasses').filter()" style="width:300px" placeholder="Enter keyword" />
                         </p:outputPanel>
                     </f:facet>
-                    
+
                     <p:column id="col" headerText="Class ID" width="5%" sortBy="#{classEntity.classId}" filterBy="#{classEntity.classId}" filterStyle="display:none">
                         <h:outputText value="#{classEntity.classId}" />
                     </p:column>
@@ -55,18 +44,18 @@
                         <h:outputText value="#{classEntity.locationTypeEnum}" />
                     </p:column>
                     <p:column headerText="Action" width="10%">
-                        <p:commandButton title="Update" icon="ui-icon-document" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()">
+                        <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
                             <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
                         </p:commandButton>
-                        <p:commandButton title="Delete" icon="ui-icon-trash" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses">
+                        <p:commandButton title="Delete" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses" icon="pi pi-trash">
                             <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
-                            <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="ui-icon-alert"/>
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
                 <p:confirmDialog global="true" showEffect="clip" hideEffect="fade">
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
                 </p:confirmDialog>
             </h:form>
 
@@ -173,9 +162,9 @@
                             </p:column>
                         </p:row>
                     </p:panelGrid>
-                    
+
                 </p:dialog>
-                
+
             </h:form>
         </div>
     </ui:define>

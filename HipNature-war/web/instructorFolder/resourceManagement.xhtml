@@ -4,75 +4,77 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/template/defaultTemplate.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="content">
 
+        <ez:Breadcrumb pageName ="resourceManagement"/>
         <div>
             <h2>Instructor Management</h2>
+            <h:form>
+                <p:commandButton value="Create New Instructor" type="button" onclick="PF('dialogCreateNewInstructor').show()" icon="pi pi-plus"/>
+            </h:form>
         </div>
 
-        <h:form id="formCreateNewInstructor">                
+        <h:form> 
+            <p:dialog id="dialogCreateNewInstructor" widgetVar="dialogCreateNewInstructor" header="Create New Instructor" closable="true">
+                <p:messages id="messageCreateNewInstructor" redisplay="false"/>
+                    <p:tab id="InstructorInformation" title="Instructor">
+                            <p:messages/>
+                            <p:panelGrid>
 
-            <p:panel header="Create New Instructor" toggleable="true" collapsed="true">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="name" value="Name: " />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="name" value="#{resourceManagementManagedBean.newInstructor.instructorName}" maxlength="100" required="true" requiredMessage="Name is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="name" />
+                                    </p:column>
+                                </p:row>
 
-                <p:messages id="messagesCreateNewInstructor" redisplay="false" />
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="phone" value="Phone: " />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="phone" value="#{resourceManagementManagedBean.newInstructor.phone}" maxlength="15" required="true" requiredMessage="Phone is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="phone" />
+                                    </p:column>
+                                </p:row>
 
-                <p:panelGrid>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel for="email" value="Email: " />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="email" value="#{resourceManagementManagedBean.newInstructor.email}" maxlength="50" required="true" requiredMessage="Email is required" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:message for="email" />
+                                    </p:column>
+                                </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="name" value="Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="name" value="#{resourceManagementManagedBean.newInstructor.instructorName}" maxlength="100" required="true" requiredMessage="Name is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="name" />
-                        </p:column>
-                    </p:row>
+                                <p:row>
+                                    <p:column colspan="3">
+                                        <!-- <p:commandButton ajax="false" type="submit" value="Create" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" /> -->
+                                        <p:commandButton ajax="false" id="createNewInstructor" value="Create" icon="pi pi-save" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" />    
+                                            <!-- <f:attribute name="partnerTagged" value="#{resourceManagementManagedBean.newInstructor.partnerEntity}" /> -->
+                                        <f:attribute name="currentPartnerEntity" value="#{sessionScope.currentPartnerEntity}" /> 
+                                    </p:column>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="phone" value="Phone: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="phone" value="#{resourceManagementManagedBean.newInstructor.phone}" maxlength="15" required="true" requiredMessage="Phone is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="phone" />
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="email" value="Email: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="email" value="#{resourceManagementManagedBean.newInstructor.email}" maxlength="50" required="true" requiredMessage="Email is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="email" />
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column colspan="3">
-                            <!-- <p:commandButton ajax="false" type="submit" value="Create" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" /> -->
-                            <p:commandButton ajax="false" id="createNewInstructor" value="Create" icon="pi pi-save" process="@form" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveNewInstructor}" />    
-                                <!-- <f:attribute name="partnerTagged" value="#{resourceManagementManagedBean.newInstructor.partnerEntity}" /> -->
-                            <f:attribute name="currentPartnerEntity" value="#{sessionScope.currentPartnerEntity}" /> 
-                        </p:column>
-
-                        <!-- <p:column colspan="3">
-                            <p:commandButton id="createNewBook" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableBooks" actionListener="#{demo01ManagedBean.saveNewBook}"/>
-                        </p:column> -->
-                    </p:row>
-
-                </p:panelGrid>
-
-            </p:panel>
-
+                                    <!-- <p:column colspan="3">
+                                        <p:commandButton id="createNewBook" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableBooks" actionListener="#{demo01ManagedBean.saveNewBook}"/>
+                                    </p:column> -->
+                                </p:row>
+                            </p:panelGrid>
+                    </p:tab>
+            </p:dialog>
         </h:form>
 
 
@@ -296,7 +298,7 @@
                             <p:message for="sessions" />
                         </p:column>
                     </p:row>
-                    
+
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton id="updateInstructor" value="Save" icon="pi pi-save" update="@form formDataTable:dataTableInstructors" actionListener="#{resourceManagementManagedBean.saveInstructor}" oncomplete="PF('dialogUpdateInstructor').show();" />

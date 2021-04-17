@@ -10,7 +10,7 @@
         <nav>
             <h:form>
 
-                <p:menu style="width:200px;">
+                <p:menu style="width:95%;">
 
                     <p:submenu label="System">
                         <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
@@ -28,15 +28,11 @@
                         <p:menuitem value="View Business Report" outcome="/viewReport.xhtml" icon="pi pi-desktop" />
                         <p:menuitem value="Download Customer Report" outcome="/recordReport.xhtml" icon="pi pi-desktop" />    
                     </p:submenu>
-
-                </p:menu>
-                <p:panelMenu style="width:200px;">
                     <p:submenu label="Library" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Tag/ClassType Library" outcome="/information/tagAndClassInformationLibrary.xhtml" icon="pi pi-desktop" />
                         <p:menuitem value="Competitor Library" outcome="/information/competitorLibrary.xhtml" icon="pi pi-desktop" />
                     </p:submenu>
-                </p:panelMenu>
-
+                </p:menu>
             </h:form>
         </nav>
 
