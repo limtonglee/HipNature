@@ -38,6 +38,5 @@ public interface CustomerEntitySessionBeanLocal {
 
     public CreditCardEntity retrieveCreditCardById(Long creditCardId);
 
-    public void updateCustomer(CustomerEntity customerEntity) throws UpdateCustomerException, CustomerNotFoundException;
-
+public void updateCustomer(CustomerEntity customerEntity, String password) throws UpdateCustomerException, CustomerNotFoundException;
 }

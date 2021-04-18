@@ -11,6 +11,7 @@ import ejb.stateless.ReviewEntitySessionBeanLocal;
 import entity.ClassEntity;
 import entity.CustomerEntity;
 import entity.ReviewEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import util.exception.InvalidLoginCredentialException;
 import ws.rest.model.CreateReviewReq;
 import ws.rest.model.ErrorRsp;
+import ws.rest.model.GetReviews;
 import ws.rest.model.RetrieveClassReviewsRsp;
 
 /**
@@ -60,7 +62,7 @@ public class ReviewResource {
     public ReviewResource() {
     }
 
-    @GET
+     @GET
     @Path("retrieveReviewsByClassId/{classId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveReviewsByClassId(@PathParam("classId") Long classId) {
@@ -72,13 +74,14 @@ public class ReviewResource {
             }
             GenericEntity<List<ReviewEntity>> genericEntity = new GenericEntity<List<ReviewEntity>>(reviews) {
             };
+            
             return Response.status(Response.Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
-
+    
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
