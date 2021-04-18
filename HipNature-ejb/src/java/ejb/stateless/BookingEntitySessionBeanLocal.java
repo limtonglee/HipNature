@@ -21,11 +21,13 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface BookingEntitySessionBeanLocal {
 
-    public BookingEntity retrieveClassByClassId(Long bookingId) throws BookingNotFoundException;
+    public BookingEntity retrieveBookingByBookingId(Long bookingId) throws BookingNotFoundException;
 
     public List<BookingEntity> retrieveAllBookings();
 
     public Long createNewBooking(BookingEntity newBooking, Long sessionEntityId, Long purchasePlanId) throws BookingExistsException, SessionNotFoundException, PurchasedPlanNotFoundException, UnknownPersistenceException;
 
     public List<BookingEntity> retrieveMyBookings(Long cusId);
+    
+    public List<BookingEntity> retrieveBookingsByPartnerId(Long partnerId);
 }

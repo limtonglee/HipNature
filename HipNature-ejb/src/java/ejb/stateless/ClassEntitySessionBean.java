@@ -105,6 +105,15 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
     }
 
     @Override
+    public List<ClassEntity> searchClassByName(String searchString) {
+        Query query = em.createQuery("SELECT c FROM ClassEntity c where c.className LIKE :inSearchString");
+        query.setParameter("inSearchString", "%" + searchString + "%");
+        List<ClassEntity> classEntities = query.getResultList();
+
+        return classEntities;
+    }
+
+    @Override
     public void updateClass(ClassEntity updateClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException, ClassNotFoundException {
         Set<ConstraintViolation<ClassEntity>> constraintViolations = validator.validate(updateClass);
         if (constraintViolations.isEmpty()) {

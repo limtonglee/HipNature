@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="content">
+
+        <ez:Breadcrumb pageName ="registrationManagement"/>
+        <div>
+            <h2>View All Registrations</h2>
+        </div>
+
+        <h:form id="formDataTable">
+
+            <p:messages id="messages" redisplay="false" closable="true" />
+
+            <p:dataTable id="dataTableReg" widgetVar="dataTableReg" value="#{regManagementManagedBean.bookings}" var="b" rowKey="#{b.bookingId}" rowIndexVar="row"
+                         filteredValue="#{regManagementManagedBean.filteredBookings}"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right;">
+                        <h:outputText value="Search all fields:" />
+                        <p:inputText id="globalFilter" onkeyup="PF('dataTableReg').filter()" style="width:300px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:column headerText="Booking Id" sortBy="#{b.bookingId}" filterBy="#{b.bookingId}" filterMatchMode="contains" width="100">
+                    <h:outputText value="#{b.bookingId}" />
+                </p:column>
+
+                <p:column headerText="Booking Date" sortBy="#{b.bookingDate}" filterBy="#{b.bookingDate}" filterMatchMode="contains" width="130">
+                    <h:outputText value="#{b.bookingDate}" />
+                </p:column>
+
+                <p:column headerText="Class" sortBy="#{b.sessionEntity.classEntity.className}" filterBy="#{b.sessionEntity.classEntity.className}" filterMatchMode="contains" width="150">
+                    <h:outputText value="#{b.sessionEntity.classEntity.className}" />
+                </p:column>
+
+                <p:column headerText="Customer" sortBy="#{b.purchasedplan.customer.customerName}" filterBy="#{b.purchasedplan.customer.customerName}" filterMatchMode="contains" width="150">
+                    <h:outputText value="#{b.purchasedplan.customer.customerName}" />
+                </p:column>
+               
+                <f:facet name="footer">
+                    <h:outputText value="Total records is #{regManagementManagedBean.bookings.size()}" />
+                </f:facet>
+
+            </p:dataTable>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

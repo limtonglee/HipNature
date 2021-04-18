@@ -71,6 +71,8 @@ public class ClassManagementManagedBean implements Serializable {
     //Update
     private ClassEntity classEntityToUpdate;
 
+    private String searchString;
+
     /**
      * @return the newClassEntity
      */
@@ -101,7 +103,7 @@ public class ClassManagementManagedBean implements Serializable {
     public void createNewClass(ActionEvent event) {
         try {
             System.out.println("test");
-            System.out.println("jsf: class to be persisted is: " + newClassEntity.getClassName());            
+            System.out.println("jsf: class to be persisted is: " + newClassEntity.getClassName());
             ClassEntity ce = classEntitySessionBeanLocal.createNewClass(newClassEntity, classTypeIdNew, tagIdsNew);
             System.out.println("jsf: successfully created new classentity: " + ce.getClassId());
             currentPartnerEntity.getClassEntity().add(ce);
@@ -116,6 +118,20 @@ public class ClassManagementManagedBean implements Serializable {
             System.out.print(ex.getMessage());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void searchClass() {
+
+        if (searchString == null || searchString.trim().length() == 0) {
+            classEntitiesFiltered = classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());
+            System.out.println(classEntitiesFiltered.size());
+
+        } else {
+            classEntitiesFiltered = classEntitySessionBeanLocal.searchClassByName(searchString);
+            System.out.println(classEntitiesFiltered.size());
+
         }
 
     }
@@ -324,6 +340,20 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public Integer getClassRating() {
         return classRating;
+    }
+
+    /**
+     * @return the searchString
+     */
+    public String getSearchString() {
+        return searchString;
+    }
+
+    /**
+     * @param searchString the searchString to set
+     */
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 
 }

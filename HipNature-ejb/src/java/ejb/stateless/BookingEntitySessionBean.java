@@ -85,7 +85,7 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
     }
 
     @Override
-    public BookingEntity retrieveClassByClassId(Long bookingId) throws BookingNotFoundException {
+    public BookingEntity retrieveBookingByBookingId(Long bookingId) throws BookingNotFoundException {
         BookingEntity bookingEntity = em.find(BookingEntity.class, bookingId);
 
         if (bookingEntity != null) {
@@ -93,6 +93,15 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
         } else {
             throw new BookingNotFoundException("Booking ID " + bookingId + " does not exist!");
         }
+    }
+    
+    @Override
+    public List<BookingEntity> retrieveBookingsByPartnerId(Long partnerId) {
+
+        Query query = em.createQuery("SELECT b FROM BookingEntity b WHERE b.sessionEntity.classEntity.partnerEntity.PartnerEntityId =:pid");
+        query.setParameter("pid", partnerId);
+        return query.getResultList();
+
     }
 
 }

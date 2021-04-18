@@ -15,6 +15,7 @@ import ejb.stateless.PlanEntitySessionBeanLocal;
 import ejb.stateless.ReviewEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
+import entity.BookingEntity;
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
 import entity.CreditPlanEntity;
@@ -22,6 +23,7 @@ import entity.CustomerEntity;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.PlanEntity;
+import entity.PurchasedPlanEntity;
 import entity.ReviewEntity;
 import entity.SessionEntity;
 import entity.TagEntity;
@@ -200,7 +202,11 @@ public class DataInitSessionBean {
             reviewEntitySessionBeanLocal.createNewReview(review2);
             ReviewEntity review3 = new ReviewEntity(5, "Loved it", cus3, class4);
             reviewEntitySessionBeanLocal.createNewReview(review3);
-
+            
+            //PurchasedPlanEntity pp1 = new PurchasedPlanEntity()
+            
+            //BookingEntity booking1 = new BookingEntity(purchasedplan, sessionEntity)
+            
         } catch (InputDataValidationException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -238,20 +244,6 @@ public class DataInitSessionBean {
         }
     }
 
-    private void createInstructorEntity() {
-        //instructorEntitySessionBean.createNewInstructor(new InstructorEntity("Mr Woekout", "12345678", "Mona@gmail.com"));
-    }
-
-    private void createClassEntity() throws ClassNotFoundException, CreateNewClassException {
-        classEntitySessionBean.NewClass(new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL));
-    }
-
-    private void createSessionEntity() throws InstructorNotFoundException, ClassNotFoundException {
-        sessionEntitySessionBean.createNewSession(new SessionEntity("Singapore 1", new java.util.Date(), new Integer(2), "12345678", 30, "ON", LocationTypeEnum.CENTRAL, instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(1l), classEntitySessionBean.retrieveClassByClassId(1l)));
-        sessionEntitySessionBean.createNewSession(new SessionEntity("Singapore 2", new java.util.Date(), new Integer(2), "12345678", 30, "ON", LocationTypeEnum.CENTRAL, instructorEntitySessionBeanLocal.retrieveInstructorByInstructorId(1l), classEntitySessionBean.retrieveClassByClassId(1l)));
-
-    }
-
     private void initializeData() throws InstructorNotFoundException, ClassNotFoundException, CreateNewClassException, ParseException {
         createPartner();
         createCustomer();
@@ -259,9 +251,6 @@ public class DataInitSessionBean {
         createCreditPlan();
         createClassTypeEntity();
         createTagEntity();
-        createInstructorEntity();
-        createClassEntity();
-        createSessionEntity();
 
     }
 

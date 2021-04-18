@@ -5,7 +5,6 @@ import ejb.stateless.InstructorEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
 import entity.ClassEntity;
-import entity.ClassTypeEntity;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.SessionEntity;
@@ -13,10 +12,7 @@ import entity.TagEntity;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -27,11 +23,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import org.primefaces.model.TreeNode;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.ScheduleEvent;
 import util.enumeration.LocationTypeEnum;
-import util.exception.CreateNewClassException;
-import util.exception.DeleteClassEntityException;
 import util.exception.DeleteSessionEntityException;
 import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
@@ -94,7 +89,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
     private PartnerEntity currentPartnerEntity;
     private SessionEntity sessionEntityToUpdate;
     private SessionEntity sessionEntityToDelete;
-    
+
     private List<SessionEntity> filteredSessions;
 
     public SearchSessionsByNameManagedBean() {
