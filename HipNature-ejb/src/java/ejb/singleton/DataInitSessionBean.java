@@ -207,9 +207,6 @@ public class DataInitSessionBean {
     }
 
     private void createCustomer() {
-        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Mark", "91234567", "mark.tan@gmail.com", "123 Kent Ridge Road", "marktan123", "password123", CustomerTypeEnum.NORMAL));
-        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Rachel", "93244543", "rachel.lee@gmail.com", "456 Orchard Road", "rachellee", "password123", CustomerTypeEnum.STUDENT));
-        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Edith", "95359465", "edith.chan@gmail.com", "12 Namly Place", "edithchan", "password123", CustomerTypeEnum.ELDERLY));
     }
 
     private void createPlan() {
@@ -227,13 +224,6 @@ public class DataInitSessionBean {
     }
 
     private void createClassTypeEntity() {
-        try {
-            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
-            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
-            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
-        } catch (InputDataValidationException ex) {
-            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     private void createTagEntity() {

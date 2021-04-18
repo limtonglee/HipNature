@@ -67,7 +67,7 @@ public class BookingsResource {
     public Response createBooking(CreateNewBookingReq createNewBookingReq) {
         if (createNewBookingReq != null) {
             try {
-                System.out.println("Testing");
+                
                 CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(createNewBookingReq.getUsername(), createNewBookingReq.getPassword());
                 PurchasedPlanEntity ppeToUse = purchasedPlanEntitySessionBeanLocal.retrieveCurrentPlanByCusId(ce.getCustomerId());
                 for (retrieveSessionByClassId rsbci : createNewBookingReq.getSessionArray()) {
@@ -93,7 +93,7 @@ public class BookingsResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveMyBookings(@QueryParam("username") String username, @QueryParam("password") String password) {
-        System.out.println("Retrieve Current");
+        
         try {
             CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(username, password);
             List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());
@@ -129,7 +129,7 @@ public class BookingsResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveMyPastBookings(@QueryParam("username") String username, @QueryParam("password") String password) {
 
-        System.out.println("Retrieve Past");
+        
         try {
             CustomerEntity ce = customerEntitySessionBeanLocal.customerLogin(username, password);
             List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());

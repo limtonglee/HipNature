@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,10 +38,15 @@ public class RefundEntity implements Serializable {
     @Positive
     @Min(1)
     private Integer refundValue;
-    
+    @Column(nullable = false)
+    private LocalDate refundDate;
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private BookingEntity bookingEntity;
 
+    public RefundEntity() {
+        this.refundDate = java.time.LocalDate.now();
+    }
+    
     public Long getRefundId() {
         return refundId;
     }
@@ -114,6 +120,20 @@ public class RefundEntity implements Serializable {
      */
     public void setBookingEntity(BookingEntity bookingEntity) {
         this.bookingEntity = bookingEntity;
+    }
+
+    /**
+     * @return the refundDate
+     */
+    public LocalDate getRefundDate() {
+        return refundDate;
+    }
+
+    /**
+     * @param refundDate the refundDate to set
+     */
+    public void setRefundDate(LocalDate refundDate) {
+        this.refundDate = refundDate;
     }
     
 }
