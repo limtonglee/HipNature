@@ -67,9 +67,9 @@ public class ClassEntity implements Serializable {
     
     //private String image;
     
-    @Column
+    @Column(nullable = true)
     @Positive
-    @Min(0)
+    @Min(1)
     @Max(5)
     private Integer classRating;
         

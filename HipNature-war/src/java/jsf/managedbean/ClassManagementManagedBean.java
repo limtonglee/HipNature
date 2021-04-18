@@ -46,35 +46,34 @@ public class ClassManagementManagedBean implements Serializable {
 
     @EJB
     private TagEntitySessionBeanLocal tagEntitySessionBeanLocal;
-    
+
     private PartnerEntity currentPartnerEntity;
-    
-    private Integer classRating; 
-    
+
+    private Integer classRating;
+
     //Use for creating new class Entity
     private ClassEntity newClassEntity;
     private List<Long> tagIdsNew;
     private Long classTypeIdNew;
     private LocationTypeEnum locationTypeEnumNew;
-    
+
     //Use for PostConstruct 
     private List<ClassEntity> classEntities;
     private List<TagEntity> tagEntities;
     private List<ClassTypeEntity> classTypeEntities;
-    
+
     //Filter
     private List<ClassEntity> classEntitiesFiltered;
-    
+
     //EntityToDelete
     private ClassEntity classEntityToDelete;
-    
+
     //Update
     private ClassEntity classEntityToUpdate;
-    
+
     /**
      * @return the newClassEntity
      */
-    
     public ClassEntity getNewClassEntity() {
         return newClassEntity;
     }
@@ -85,26 +84,28 @@ public class ClassManagementManagedBean implements Serializable {
     public void setNewClassEntity(ClassEntity newClassEntity) {
         this.newClassEntity = newClassEntity;
     }
-    
-    
+
     public ClassManagementManagedBean() {
-        currentPartnerEntity = (PartnerEntity)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
+        currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
         newClassEntity = new ClassEntity();
         newClassEntity.setPartnerEntity(currentPartnerEntity);
     }
-    
+
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         classEntities = classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId());
         classTypeEntities = classTypeEntitySessionBeanLocal.retrieveAllClassTypeEntity();
         tagEntities = tagEntitySessionBeanLocal.retrieveAllTags();
     }
-    
-    public void createNewClass(ActionEvent event){
-        try{
+
+    public void createNewClass(ActionEvent event) {
+        try {
+            System.out.println("test");
+            System.out.println("jsf: class to be persisted is: " + newClassEntity.getClassName());            
             ClassEntity ce = classEntitySessionBeanLocal.createNewClass(newClassEntity, classTypeIdNew, tagIdsNew);
+            System.out.println("jsf: successfully created new classentity: " + ce.getClassId());
             currentPartnerEntity.getClassEntity().add(ce);
-            if (classEntitiesFiltered != null){
+            if (classEntitiesFiltered != null) {
                 classEntitiesFiltered.add(ce);
             }
             classEntities.add(ce);
@@ -116,38 +117,37 @@ public class ClassManagementManagedBean implements Serializable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClassManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-    public void doDelete(ActionEvent event){
-        try{
+
+    public void doDelete(ActionEvent event) {
+        try {
             classEntityToDelete = (ClassEntity) event.getComponent().getAttributes().get("classEntityToDelete");
-            if (classEntityToDelete.getSessionEntities().isEmpty()){
+            if (classEntityToDelete.getSessionEntities().isEmpty()) {
                 classEntitySessionBeanLocal.deleteClass(classEntityToDelete.getClassId());
                 classEntities.remove(classEntityToDelete);
-                if (classEntitiesFiltered != null){
+                if (classEntitiesFiltered != null) {
                     classEntitiesFiltered.remove(classEntityToDelete);
                 }
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Class successfully deleted", null));
-            }
-            else {
-                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class: There are sessions still running", null));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class: There are sessions still running", null));
             }
         } catch (ClassNotFoundException | DeleteClassEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to delete class", null));
         }
     }
-    
-    public void doUpdate(ActionEvent event){
-            classEntityToUpdate = (ClassEntity) event.getComponent().getAttributes().get("classEntityToUpdate");
-            locationTypeEnumNew = null;
-            tagIdsNew = new ArrayList<>();
-            for (TagEntity tag:classEntityToUpdate.getTagEntities()){
-                tagIdsNew.add(tag.getTagId());
-            }
+
+    public void doUpdate(ActionEvent event) {
+        classEntityToUpdate = (ClassEntity) event.getComponent().getAttributes().get("classEntityToUpdate");
+        locationTypeEnumNew = null;
+        tagIdsNew = new ArrayList<>();
+        for (TagEntity tag : classEntityToUpdate.getTagEntities()) {
+            tagIdsNew.add(tag.getTagId());
+        }
     }
-    
-    public void updateClass(ActionEvent event){
+
+    public void updateClass(ActionEvent event) {
         try {
             classEntityToUpdate.setLocationTypeEnum(locationTypeEnumNew);
             classEntitySessionBeanLocal.updateClass(classEntityToUpdate, classTypeIdNew, tagIdsNew);
@@ -156,24 +156,26 @@ public class ClassManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update class", null));
         }
     }
-   
+
     /*public Integer retrieveClassRating() {
         
         
     }*/
-    
-    public LocationTypeEnum[] getEnumLocation(){
+    public LocationTypeEnum[] getEnumLocation() {
         return LocationTypeEnum.values();
     }
+
     /**
      * @return the classEntities
      */
     public List<ClassEntity> getClassEntities() {
         return classEntities;
     }
-    public LocationTypeEnum[] getLocationTypeEnum(){
+
+    public LocationTypeEnum[] getLocationTypeEnum() {
         return LocationTypeEnum.values();
     }
+
     /**
      * @param classEntities the classEntities to set
      */
@@ -207,12 +209,11 @@ public class ClassManagementManagedBean implements Serializable {
      */
     public void setTagIdsNew(List<Long> tagIdsNew) {
         this.tagIdsNew = tagIdsNew;
-    }   
+    }
 
     /**
      * @return the classTypeIdNew
      */
-
     /**
      * @return the classTypeEntities
      */
@@ -324,5 +325,5 @@ public class ClassManagementManagedBean implements Serializable {
     public Integer getClassRating() {
         return classRating;
     }
-    
+
 }

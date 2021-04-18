@@ -40,56 +40,55 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
-    
-    
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
     public ClassEntitySessionBean() {
-        this.validatorFactory = Validation.buildDefaultValidatorFactory(); 
+        this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public List<ClassEntity> retrieveAllClasses() {
         Query query = em.createQuery("SELECT c FROM ClassEntity c ORDER BY c.className ASC");
         List<ClassEntity> list = query.getResultList();
-        if (list != null){
-            for (ClassEntity classE:list){
+        if (list != null) {
+            for (ClassEntity classE : list) {
                 classE.getTagEntities().size();
             }
             return list;
-            }
+        }
         return null;
     }
-        
+
     @Override
     public List<ClassEntity> retrieveAllClassesByPartnerId(Long idValue) {
         Query query = em.createQuery("SELECT c FROM ClassEntity c WHERE c.partnerEntity.PartnerEntityId = :idNumber ORDER BY c.classId ASC");
         query.setParameter("idNumber", idValue);
         List<ClassEntity> list = query.getResultList();
-        if (list != null){
-            for (ClassEntity classE:list){
+        if (list != null) {
+            for (ClassEntity classE : list) {
                 classE.getTagEntities().size();
             }
             return list;
-            }
+        }
         return null;
     }
 
     @Override
-    public ClassEntity createNewClass(ClassEntity newClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException,ClassNotFoundException {
-        Set<ConstraintViolation<ClassEntity>>constraintViolations = validator.validate(newClass);
-        if (constraintViolations.isEmpty()){
-            try{
+    public ClassEntity createNewClass(ClassEntity newClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException, ClassNotFoundException {
+        Set<ConstraintViolation<ClassEntity>> constraintViolations = validator.validate(newClass);
+        if (constraintViolations.isEmpty()) {
+
+            try {
                 ClassTypeEntity classTypeEntity = classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(newClassTypeId);
                 newClass.setClassTypeEntity(classTypeEntity);
-                newClass.setClassRating(0);
+
                 em.persist(newClass);
                 classTypeEntity.getClassEntities().add(newClass);
-                if (newTagEntityId != null && !(newTagEntityId.isEmpty())){
-                    for (Long tag:newTagEntityId){
+                if (newTagEntityId != null && !(newTagEntityId.isEmpty())) {
+                    for (Long tag : newTagEntityId) {
                         TagEntity tagEntity = tagEntitySessionBeanLocal.retrieveTagByTagId(tag);
                         newClass.addTag(tagEntity);
                     }
@@ -99,25 +98,25 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
                 return newClass;
             } catch (TagNotFoundException ex) {
                 throw new CreateNewClassException("An Error has occurred: " + ex.getMessage());
-            } 
-        }
-        else {
+            }
+        } else {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
     }
+
     @Override
-    public void updateClass(ClassEntity updateClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException,ClassNotFoundException {
-        Set<ConstraintViolation<ClassEntity>>constraintViolations = validator.validate(updateClass);
-        if (constraintViolations.isEmpty()){
-            try{
+    public void updateClass(ClassEntity updateClass, Long newClassTypeId, List<Long> newTagEntityId) throws InputDataValidationException, CreateNewClassException, ClassNotFoundException {
+        Set<ConstraintViolation<ClassEntity>> constraintViolations = validator.validate(updateClass);
+        if (constraintViolations.isEmpty()) {
+            try {
                 ClassTypeEntity classTypeEntity = classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(newClassTypeId);
                 ClassEntity classToUpdate = retrieveClassByClassId(updateClass.getClassId());
-                if (newTagEntityId != null && !(newTagEntityId.isEmpty())){
-                    for (TagEntity removeId:classToUpdate.getTagEntities()){
+                if (newTagEntityId != null && !(newTagEntityId.isEmpty())) {
+                    for (TagEntity removeId : classToUpdate.getTagEntities()) {
                         removeId.getClassEntities().remove(classToUpdate);
                     }
                     classToUpdate.getTagEntities().clear();
-                    for (Long tag:newTagEntityId){
+                    for (Long tag : newTagEntityId) {
                         TagEntity tagEntity = tagEntitySessionBeanLocal.retrieveTagByTagId(tag);
                         classToUpdate.addTag(tagEntity);
                     }
@@ -128,62 +127,58 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
                 classToUpdate.setClassRating(updateClass.getClassRating());
             } catch (TagNotFoundException ex) {
                 throw new CreateNewClassException("An Error has occurred: " + ex.getMessage());
-            } 
-        }
-        else {
+            }
+        } else {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
     }
+
     //This delete method remove ClassEntity from database as well
     @Override
-    public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException{
+    public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException {
         ClassEntity classEntityToDelete = em.find(ClassEntity.class, classEntityToDeleteId);
         int size = classEntityToDelete.getSessionEntities().size();
         if (classEntityToDelete.getSessionEntities().size() == 0) {
             em.remove(classEntityToDelete);
         } else {
-            throw new DeleteClassEntityException("Unable to delete class Id: " + classEntityToDeleteId + " There are still " + size + " session(s) left" );
+            throw new DeleteClassEntityException("Unable to delete class Id: " + classEntityToDeleteId + " There are still " + size + " session(s) left");
         }
     }
-        
-    
+
     @Override
     public ClassEntity NewClass(ClassEntity newClass) {
-                em.persist(newClass);
-                em.flush();
-                return newClass;
-        
+        em.persist(newClass);
+        em.flush();
+        return newClass;
+
     }
-    
+
     @Override
     public ClassEntity retrieveClassByClassId(Long classId) throws ClassNotFoundException {
         ClassEntity classEntity = em.find(ClassEntity.class, classId);
-        
+
         if (classEntity != null) {
             return classEntity;
         } else {
             throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
         }
     }
-    
+
     //public void updateClass()
-    
     // public List<ClassEntity> retrieveClassesByName(String classname) 
-    
     // public List<ClassEntity> retrieveClassesByPartner(Long pid) 
-    
-     private String prepareInputDataValidationException(Set<ConstraintViolation<ClassEntity>>constraintViolations){
+    private String prepareInputDataValidationException(Set<ConstraintViolation<ClassEntity>> constraintViolations) {
         String msg = "Input data validation error: ";
-        for (ConstraintViolation constraint: constraintViolations){
-            msg +="\n\t" + constraint.getPropertyPath() + " - " + constraint.getInvalidValue() + " : " + constraint.getMessage();
+        for (ConstraintViolation constraint : constraintViolations) {
+            msg += "\n\t" + constraint.getPropertyPath() + " - " + constraint.getInvalidValue() + " : " + constraint.getMessage();
         }
         return msg;
     }
-     
+
     @Override
-     public List<ClassEntity> retrieveAllClassEntityByLocation(LocationTypeEnum location){
-         Query query = em.createQuery("SELECT s from ClassEntity s WHERE s.locationTypeEnum = :location");
-         query.setParameter("location", location);
-         return query.getResultList();
-     }
+    public List<ClassEntity> retrieveAllClassEntityByLocation(LocationTypeEnum location) {
+        Query query = em.createQuery("SELECT s from ClassEntity s WHERE s.locationTypeEnum = :location");
+        query.setParameter("location", location);
+        return query.getResultList();
+    }
 }

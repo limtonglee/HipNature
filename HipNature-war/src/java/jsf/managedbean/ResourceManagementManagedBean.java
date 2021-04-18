@@ -198,7 +198,7 @@ public class ResourceManagementManagedBean implements Serializable {
 
     public void updateInstructor(ActionEvent event) {
         for (Long id: sessionIdsToAddToSelectedInstructorToUpdate) {
-            System.out.println("Instructor works harder, instructs this class: "+ id);
+            System.out.println("Instructor instructs this class: "+ id);
         }
         try {
             instructorEntitySessionBeanLocal.updateInstructor(getSelectedInstructorToUpdate(), sessionIdsToAddToSelectedInstructorToUpdate);
