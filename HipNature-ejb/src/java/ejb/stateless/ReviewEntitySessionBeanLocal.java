@@ -26,5 +26,7 @@ public interface ReviewEntitySessionBeanLocal {
     public List<ReviewEntity> retrieveReviewsByClassId(Long classId);
 
     public List<ReviewEntity> retrieveReviewsByPartnerId(Long partnerId);
+
+    public void updateAvgRating(Long classId) throws ClassNotFoundException;
     
 }

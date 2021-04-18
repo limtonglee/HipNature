@@ -12,6 +12,7 @@ import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.InstructorEntitySessionBeanLocal;
 import ejb.stateless.PartnerEntitySessionBean;
 import ejb.stateless.PlanEntitySessionBeanLocal;
+import ejb.stateless.ReviewEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
 import entity.ClassEntity;
@@ -54,8 +55,13 @@ import util.exception.PartnerNotFoundException;
 @Startup
 public class DataInitSessionBean {
 
+    @EJB(name = "ReviewEntitySessionBeanLocal")
+    private ReviewEntitySessionBeanLocal reviewEntitySessionBeanLocal;
+
     @EJB(name = "CreditPlanSessionBeanLocal")
     private CreditPlanSessionBeanLocal creditPlanSessionBeanLocal;
+    
+    
 
     @EJB
     private ClassEntitySessionBeanLocal classEntitySessionBean;
@@ -171,16 +177,26 @@ public class DataInitSessionBean {
             CustomerEntity cus3 = new CustomerEntity("Edith", "95359465", "edith.chan@gmail.com", "12 Namly Place", "edithchan", "password123", CustomerTypeEnum.ELDERLY);
             customerEntitySessionBeanLocal.createNewCustomer(cus3);
 
-            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
-            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
-            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
-
-            ClassEntity class1 = new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL);
-            classEntitySessionBean.NewClass(class1);
+            ClassTypeEntity classType1 = new ClassTypeEntity("Art");
+            classTypeEntitySessionBeanLocal.createClassType(classType1); 
+            ClassTypeEntity classType2 = new ClassTypeEntity("Dance");
+            classTypeEntitySessionBeanLocal.createClassType(classType2); 
+            ClassTypeEntity classType3 = new ClassTypeEntity("Meditation");
+            classTypeEntitySessionBeanLocal.createClassType(classType3); 
+            
+            ClassEntity class2 = new ClassEntity("Yoga", 3, LocationTypeEnum.CENTRAL, classType2, partner1, 5);
+            classEntitySessionBean.NewClass(class2);
+            ClassEntity class3 = new ClassEntity("Pottery", 3, LocationTypeEnum.WEST, classType1, partner1, 3);
+            classEntitySessionBean.NewClass(class3);
+            ClassEntity class4 = new ClassEntity("Painting", 3, LocationTypeEnum.CENTRAL, classType1, partner1, 4);
+            classEntitySessionBean.NewClass(class4);
                     
-            ReviewEntity review1 = new ReviewEntity(3, "Decent class but instructor was 5 mins late.", cus1, class1);
-            ReviewEntity review2 = new ReviewEntity(1, "Hated it", cus2, class1);
-            ReviewEntity review3 = new ReviewEntity(5, "Loved it", cus3, class1);
+            ReviewEntity review1 = new ReviewEntity(3, "Decent class but instructor was 5 mins late.", cus1, class2);
+            reviewEntitySessionBeanLocal.createNewReview(review1);
+            ReviewEntity review2 = new ReviewEntity(1, "Hated it", cus2, class3);
+            reviewEntitySessionBeanLocal.createNewReview(review2);
+            ReviewEntity review3 = new ReviewEntity(5, "Loved it", cus3, class4);
+            reviewEntitySessionBeanLocal.createNewReview(review3);
 
         } catch (InputDataValidationException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);

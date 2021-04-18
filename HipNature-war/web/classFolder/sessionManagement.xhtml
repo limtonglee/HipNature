@@ -31,23 +31,23 @@
                         </p:outputPanel>
                     </f:facet>
 
-                    <p:column headerText="Session ID" sortBy="#{sess.sessionId}" filterBy="#{sess.sessionId}" filterMatchMode="contains">
+                    <p:column headerText="Session Id" sortBy="#{sess.sessionId}" filterBy="#{sess.sessionId}" filterMatchMode="contains" width="100">
                         <h:outputText value="#{sess.sessionId}" />
                     </p:column>
 
-                    <p:column headerText="Class Name" sortBy="#{sess.classEntity.className}" filterBy="#{sess.classEntity.className}" filterMatchMode="contains">
+                    <p:column headerText="Class Name" sortBy="#{sess.classEntity.className}" filterBy="#{sess.classEntity.className}" filterMatchMode="contains" width="130">
                         <h:outputText value="#{sess.classEntity.className}" />
                     </p:column>
 
-                    <p:column headerText="Start Time" sortBy="#{sess.startTime}" filterBy="#{sess.classEntity.startTime}" filterMatchMode="contains">
+                    <p:column headerText="Start Time" sortBy="#{sess.startTime}" filterBy="#{sess.startTime}" filterMatchMode="contains" width="150">
                         <h:outputText value="#{sess.startTime}" />
                     </p:column>
 
-                    <p:column headerText="End Time" sortBy="#{sess.endTime}" filterBy="#{sess.endTime}" filterMatchMode="contains">
+                    <p:column headerText="End Time" sortBy="#{sess.endTime}" filterBy="#{sess.endTime}" filterMatchMode="contains" width="200">
                         <h:outputText value="#{sess.endTime}" />
                     </p:column>
 
-                    <p:column headerText="Instructor" sortBy="#{sess.instructor.instructorName}" filterBy="#{sess.instructor.instructorName}" filterMatchMode="contains">
+                    <p:column headerText="Instructor" sortBy="#{sess.instructor.instructorName}" filterBy="#{sess.instructor.instructorName}" filterMatchMode="contains" width="200">
                         <h:outputText value="#{sess.instructor.instructorName}" />
                     </p:column>
 
@@ -68,6 +68,10 @@
                             <p:confirm header="Confirmation" message="Are you sure you want to delete Session ID: #{sess.sessionId}?" icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </p:column>
+
+                    <f:facet name="footer">
+                        <h:outputText value="Total records is #{searchSessionsByNameManagedBean.sessionEntities.size()}" />
+                    </f:facet>
 
                 </p:dataTable>
 

@@ -67,11 +67,11 @@ public class ClassEntity implements Serializable {
     
     //private String image;
     
-    /*@Column
+    @Column
     @Positive
     @Min(0)
     @Max(5)
-    private Integer classRating;*/
+    private Integer classRating;
         
     public ClassEntity() {
         tagEntities = new ArrayList<>();
@@ -84,7 +84,18 @@ public class ClassEntity implements Serializable {
         this.credit = credit;
         this.locationTypeEnum = locationTypeEnum;
         this.classTypeEntity = classTypeEntity;
+        this.classRating = 0;
     }
+
+    public ClassEntity(String className, Integer credit, LocationTypeEnum locationTypeEnum, ClassTypeEntity classTypeEntity, PartnerEntity partnerEntity, Integer classRating) {
+        this.className = className;
+        this.credit = credit;
+        this.locationTypeEnum = locationTypeEnum;
+        this.classTypeEntity = classTypeEntity;
+        this.partnerEntity = partnerEntity;
+        this.classRating = classRating;
+    }
+    
 
     /*public ClassEntity(String className, Integer credit, LocationTypeEnum locationTypeEnum, List<SessionEntity> sessionEntities, PartnerEntity partnerEntity) {
         this.className = className;
@@ -250,6 +261,20 @@ public class ClassEntity implements Serializable {
      */
     public void setPartnerEntity(PartnerEntity partnerEntity) {
         this.partnerEntity = partnerEntity;
+    }
+
+    /**
+     * @return the classRating
+     */
+    public Integer getClassRating() {
+        return classRating;
+    }
+
+    /**
+     * @param classRating the classRating to set
+     */
+    public void setClassRating(Integer classRating) {
+        this.classRating = classRating;
     }
 
 

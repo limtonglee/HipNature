@@ -85,7 +85,7 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
             try{
                 ClassTypeEntity classTypeEntity = classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(newClassTypeId);
                 newClass.setClassTypeEntity(classTypeEntity);
-               // newClass.setClassRating(0);
+                newClass.setClassRating(0);
                 em.persist(newClass);
                 classTypeEntity.getClassEntities().add(newClass);
                 if (newTagEntityId != null && !(newTagEntityId.isEmpty())){
@@ -125,6 +125,7 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
                 classToUpdate.setCredit(updateClass.getCredit());
                 classToUpdate.setClassTypeEntity(classTypeEntity);
                 classToUpdate.setLocationTypeEnum(updateClass.getLocationTypeEnum());
+                classToUpdate.setClassRating(updateClass.getClassRating());
             } catch (TagNotFoundException ex) {
                 throw new CreateNewClassException("An Error has occurred: " + ex.getMessage());
             } 
@@ -147,7 +148,7 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
         
     
     @Override
-    public ClassEntity NewClass(ClassEntity newClass) throws CreateNewClassException {
+    public ClassEntity NewClass(ClassEntity newClass) {
                 em.persist(newClass);
                 em.flush();
                 return newClass;

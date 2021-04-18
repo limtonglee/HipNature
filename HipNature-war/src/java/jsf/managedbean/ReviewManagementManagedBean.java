@@ -5,7 +5,10 @@
  */
 package jsf.managedbean;
 
+import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.ReviewEntitySessionBeanLocal;
+import entity.ClassEntity;
+import static entity.ClassEntity_.classId;
 import entity.PartnerEntity;
 import entity.ReviewEntity;
 import java.io.Serializable;
@@ -24,14 +27,20 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class ReviewManagementManagedBean implements Serializable {
 
+    @EJB(name = "ClassEntitySessionBeanLocal")
+    private ClassEntitySessionBeanLocal classEntitySessionBeanLocal;
+
     @EJB(name = "ReviewEntitySessionBeanLocal")
     private ReviewEntitySessionBeanLocal reviewEntitySessionBeanLocal;
 
     private List<ReviewEntity> reviews;
 
     private PartnerEntity currentPartnerEntity;
-    
+
     private List<ReviewEntity> filteredReviews;
+
+    private List<ClassEntity> partnerClasses;
+
     /**
      * Creates a new instance of ReviewManagementManagedBean
      */
@@ -42,6 +51,19 @@ public class ReviewManagementManagedBean implements Serializable {
     public void postConstruct() {
         setCurrentPartnerEntity((PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity"));
         setReviews(reviewEntitySessionBeanLocal.retrieveReviewsByPartnerId(currentPartnerEntity.getPartnerEntityId()));
+        setPartnerClasses(classEntitySessionBeanLocal.retrieveAllClassesByPartnerId(currentPartnerEntity.getPartnerEntityId()));
+
+    }
+
+    public void updateAllRatings() throws ClassNotFoundException {
+        try {
+            for (ClassEntity cls : partnerClasses) {
+                Long classId = cls.getClassId();
+                reviewEntitySessionBeanLocal.updateAvgRating(classId);
+            }
+        } catch (ClassNotFoundException ex) {
+            throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
+        }
     }
 
     /**
@@ -84,6 +106,20 @@ public class ReviewManagementManagedBean implements Serializable {
      */
     public void setFilteredReviews(List<ReviewEntity> filteredReviews) {
         this.filteredReviews = filteredReviews;
+    }
+
+    /**
+     * @return the partnerClasses
+     */
+    public List<ClassEntity> getPartnerClasses() {
+        return partnerClasses;
+    }
+
+    /**
+     * @param partnerClasses the partnerClasses to set
+     */
+    public void setPartnerClasses(List<ClassEntity> partnerClasses) {
+        this.partnerClasses = partnerClasses;
     }
 
 }

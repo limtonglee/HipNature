@@ -5,8 +5,10 @@
  */
 package ejb.stateless;
 
+import entity.ClassEntity;
 import entity.ReviewEntity;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,8 +22,12 @@ import util.exception.ReviewNotFoundException;
 @Stateless
 public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
 
+    @EJB(name = "ClassEntitySessionBeanLocal")
+    private ClassEntitySessionBeanLocal classEntitySessionBeanLocal;
+
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
+    
 
     @Override
     public List<ReviewEntity> retrieveAllReviews() {
@@ -41,6 +47,25 @@ public class ReviewEntitySessionBean implements ReviewEntitySessionBeanLocal {
 
         return newReview.getReviewId();
 
+    }
+
+    @Override
+    public void updateAvgRating(Long classId) throws ClassNotFoundException {
+        
+       try {
+        ClassEntity classEntity = classEntitySessionBeanLocal.retrieveClassByClassId(classId);
+        
+        List<ReviewEntity> classReviews = retrieveReviewsByClassId(classId);
+        Integer numReviews = classReviews.size();
+        Integer totalRating = 0;
+        for (ReviewEntity rev : classReviews) {
+            totalRating += rev.getReviewRating();
+        }
+        Integer calculatedRating = totalRating / numReviews;
+        classEntity.setClassRating(calculatedRating);
+       } catch (ClassNotFoundException ex) {
+           throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
+       }
     }
 
     @Override
