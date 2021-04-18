@@ -197,8 +197,16 @@ public class ResourceManagementManagedBean implements Serializable {
     }
 
     public void updateInstructor(ActionEvent event) {
+        for (Long id: sessionIdsToAddToSelectedInstructorToUpdate) {
+            System.out.println("Instructor works harder, instructs this class: "+ id);
+        }
         try {
             instructorEntitySessionBeanLocal.updateInstructor(getSelectedInstructorToUpdate(), sessionIdsToAddToSelectedInstructorToUpdate);
+            List<SessionEntity> sessi = getSelectedInstructorToUpdate().getSessionEntity();
+            for (SessionEntity se : sessi) {
+                System.out.println("Instructor session is now: " + se.getSessionId());
+            }
+            
             selectedInstructorToUpdate.setInstructorName(selectedInstructorToUpdate.getInstructorName());
             getSelectedInstructorToUpdate().getSessionEntity().clear();
             

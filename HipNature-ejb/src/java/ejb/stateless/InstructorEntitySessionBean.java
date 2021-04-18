@@ -141,19 +141,27 @@ public class InstructorEntitySessionBean implements InstructorEntitySessionBeanL
         Set<ConstraintViolation<InstructorEntity>> constraintViolations = validator.validate(instructor);
 
         if (constraintViolations.isEmpty()) {
+            System.out.println("updateInstructor in ejb: constraint is empty");
 
             InstructorEntity instructorToUpdate = retrieveInstructorByInstructorId(instructor.getInstructorId());
+            System.out.println("updateInstructor in ejb: retrieved instructor " + instructorToUpdate.getInstructorName());
 
             if (sessionIds != null && !(sessionIds.isEmpty())) {
                 for (SessionEntity removeId : instructorToUpdate.getSessionEntity()) {
                     removeId.setInstructor(null);
                 }
                 instructorToUpdate.getSessionEntity().clear();
+            }
 
-                for (Long sess : sessionIds) {
-                    SessionEntity s = sessionEntitySessionBeanLocal.retrieveSessionBySessionId(sess);
-                    instructorToUpdate.getSessionEntity().add(s);
-                }
+            for (Long sess : sessionIds) {
+                SessionEntity s = sessionEntitySessionBeanLocal.retrieveSessionBySessionId(sess);
+                instructorToUpdate.getSessionEntity().add(s);
+                s.setInstructor(instructorToUpdate);
+            }
+
+            List<SessionEntity> sessi = instructorToUpdate.getSessionEntity();
+            for (SessionEntity se : sessi) {
+                System.out.println("In ejb, Instructor session is now: " + se.getSessionId());
             }
 
             instructorToUpdate.setInstructorName(instructor.getInstructorName());

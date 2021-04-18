@@ -249,38 +249,6 @@
                         </p:column>
                     </p:row>
 
-                    <!--
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="email" value="Email: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="email" value="#{resourceManagementManagedBean.selectedInstructorToUpdate.email}" maxlength="100" required="true" requiredMessage="Email is required" />
-                        </p:column>
-                        <p:column>
-                            <p:message for="email" />
-                        </p:column>
-                    </p:row>*/          
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="sessions" value="Sessions: " />
-                        </p:column>
-                        <p:column>
-                            <p:selectCheckboxMenu id="sessions" value="#{resourceManagementManagedBean.partnerListOfSessions}" label="Sessions"
-                                                  multiple="true" filter="true" filterMatchMode="startsWith">
-                                <f:selectItems value="#{resourceManagementManagedBean.sessions}" var="sess" itemLabel="#{sess.sessionId}" />
-                            </p:selectCheckboxMenu>
-                        </p:column>
-                        <p:column>
-                            <p:message for="sessions" />
-                        </p:column>
-                    </p:row> 
-                    <p:selectCheckboxMenu id="grouped" value="#{checkboxView.selectedCountries}" label="Countries" style="width: 15rem"
-                                          multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="width: 15rem" scrollHeight="250">
-                        <f:selectItems value="#{checkboxView.countries}"/>
-                    </p:selectCheckboxMenu> -->
-
-
                     <p:row>
                         <p:column>
                             <p:outputLabel for="sessions" value="Sessions: " />
