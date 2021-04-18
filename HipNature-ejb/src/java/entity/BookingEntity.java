@@ -29,6 +29,7 @@ public class BookingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
+    
     @Column(nullable = false)
     @NotNull
     private String status;

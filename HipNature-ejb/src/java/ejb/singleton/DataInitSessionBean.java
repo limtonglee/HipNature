@@ -15,6 +15,7 @@ import ejb.stateless.PlanEntitySessionBeanLocal;
 import ejb.stateless.ReviewEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TagEntitySessionBeanLocal;
+import entity.BookingEntity;
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
 import entity.CreditPlanEntity;
@@ -22,6 +23,7 @@ import entity.CustomerEntity;
 import entity.InstructorEntity;
 import entity.PartnerEntity;
 import entity.PlanEntity;
+import entity.PurchasedPlanEntity;
 import entity.ReviewEntity;
 import entity.SessionEntity;
 import entity.TagEntity;
@@ -200,6 +202,10 @@ public class DataInitSessionBean {
             reviewEntitySessionBeanLocal.createNewReview(review2);
             ReviewEntity review3 = new ReviewEntity(5, "Loved it", cus3, class4);
             reviewEntitySessionBeanLocal.createNewReview(review3);
+            
+            //PurchasedPlanEntity pp1 = new PurchasedPlanEntity()
+            
+            //BookingEntity booking1 = new BookingEntity(purchasedplan, sessionEntity)
             
         } catch (InputDataValidationException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);

@@ -24,7 +24,8 @@
                     <p:submenu label="Instructor" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Instructor Management" outcome="/instructorFolder/resourceManagement.xhtml" icon="pi pi-user"/>
                     </p:submenu>
-                    <p:submenu label="Reviews" rendered="#{sessionScope.isLogin == true}">
+                    <p:submenu label="Customer" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Registration Management" outcome="/registrationManagement.xhtml" icon="pi pi-ticket" />
                         <p:menuitem value="Review Management" outcome="/reviewManagement.xhtml" icon="pi pi-comment"/>
                     </p:submenu>
                     <p:submenu label="Report" rendered="#{sessionScope.isLogin == true}">
