@@ -8,23 +8,23 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="content">
-        
+
         <div class="card">
-            <h5>#{chartJsViewManagedBean.currentPartner.partnerEntityName}</h5>
-    <p:barChart model="#{chartJsViewManagedBean.barModel}" style="width: 100%; height: 500px;"/>
+
+            <p:barChart model="#{chartJsViewManagedBean.barModel}" style="width: 100%; height: 500px;"/>
         </div>
-     
+
         <br></br>
         <br></br>
         <br></br>
         <br></br>
         <br></br>
-        
-    <div class="card">
-        <center><h3>Customer Breakdown Report</h3></center>
-    <p:chart type="pie" model="#{chartJsViewManagedBean.pieModel}" style="width: 84%; height: 300px;"/>
-    </div>
-        
+
+        <div class="card">
+            <center><h3>Customer Breakdown Report</h3></center>
+            <p:chart type="pie" model="#{chartJsViewManagedBean.pieModel}" style="width: 84%; height: 300px;"/>
+        </div>
+
     </ui:define> 
 
 </ui:composition>

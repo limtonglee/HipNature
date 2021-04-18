@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui"
+                template="./template/newTemplate.xhtml">
+
+    <ui:define name="content">
+        <div class="card" style="width: 50%; float: left" >
+
+            <p:graphicImage name="img/final3.png" style="width: 1700px" rendered="#{sessionScope.isLogin == false}"/>
+        </div>
+
+        <div style="width: 50%; float: left" id="indexLeft">
+            <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+
+            </h:panelGroup>
+
+        </div>
+        <div style="width: 50%; float: right;" id="indexRight">
+
+            <h:form id="formCreateNewPartner">
+
+                <h:panelGroup rendered="#{sessionScope.isLogin == false}" style="display: inline-block;float: right;margin-right: 61%; text-align: center" >
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+
+                    <p:commandButton value="Become Our Partner Today!" type="button" onclick="PF('dialogRegister').show()"/>
+
+                    <h:form id="formRegister">
+                        <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register New Account" closable="true">
+                            <p:messages id="messageRegister" redisplay="false"/>
+                            <p:panelGrid>
+                                <p:messages/>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Name: "/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <p:inputText id="partnerEntityName" value="#{partnerManagedBean.newPartnerEntity.partnerEntityName}" required="true" requiredMessage="Name cannot be empty"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Phone: "/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="phone" value="#{partnerManagedBean.newPartnerEntity.phone}" required="true" requiredMessage="Phone cannot be empty"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Email: "/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="email" value="#{partnerManagedBean.newPartnerEntity.email}" required="true" requiredMessage="Email cannot be empty"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Address: "/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="address" value="#{partnerManagedBean.newPartnerEntity.address}" required="true" requiredMessage="Address cannot be empty"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Username: "/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="username" value="#{partnerManagedBean.newPartnerEntity.username}" required="true" requiredMessage="Username cannot be empty"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Password: "/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText type="password" id="password" value="#{partnerManagedBean.newPartnerEntity.password}" required="true" requiredMessage="Password cannot be empty"/>
+                                    </p:column>                                 
+                                </p:row>
+                                <p:row style="text-align: center">
+                                    <p:column colspan="2">
+                                        <p:commandButton value="reset" type="reset"/>
+                                        <p:commandButton value="submit" actionListener="#{partnerManagedBean.createNewPartner}" update="@form formCreateNewPartner"/> 
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:dialog>
+                    </h:form>
+                </h:panelGroup>
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

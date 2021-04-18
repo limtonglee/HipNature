@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    
+
     <ui:define name="content">
         <ez:Breadcrumb pageName ="classManagement"/>
         <div>
@@ -14,6 +14,19 @@
             <h:form>
                 <p:commandButton value="Create New Class" type="button" onclick="PF('dialogCreateNewClass').show()" icon="pi pi-plus"/>
             </h:form>
+
+            <p:messages redisplay="false"/>
+            <!--
+            <h2>Search Classes by Name</h2> 
+            <p:outputLabel for="txtSearchString" value="Search: " style="font-weight: bold;margin-right: 10px;" />
+
+            <p:inputText id="txtSearchString" value="#{classManagementManagedBean.searchString}" style="">
+                <p:ajax event="keyup" process="@this" update="formAllClasses" listener="#{classManagementManagedBean.searchClass}" />
+            </p:inputText>
+
+            <p:commandButton value="Search">
+                <p:ajax event="click" process="@this txtSearchString" update="formAllClasses" listener="#{classManagementManagedBean.searchClass}" />
+            </p:commandButton> -->
 
             <h:form id="formAllClasses">
                 <p:dataView var="classEntity" value="#{classManagementManagedBean.classEntities}" rows="10" paginator="true"
@@ -75,10 +88,9 @@
                     </p:dataViewListItem>
                 </p:dataView>
                 <p:confirmDialog global="true" showEffect="clip" hideEffect="fade">
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
                 </p:confirmDialog>
-
 
             </h:form>
 

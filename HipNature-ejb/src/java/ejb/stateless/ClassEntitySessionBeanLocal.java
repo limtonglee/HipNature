@@ -37,4 +37,6 @@ public interface ClassEntitySessionBeanLocal {
 
     public List<ClassEntity> retrieveAllClassEntityByLocation(LocationTypeEnum location);
 
+    public List<ClassEntity> searchClassByName(String searchString);
+
 }

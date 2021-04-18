@@ -13,17 +13,17 @@
         </p>
         <h:form>
             <p:toolbar>
-                        <p:toolbarGroup>
-                            <p:commandButton id= "addNewTrigger" value="Add New" icon="pi pi-plus" style="margin-right: .5rem;background: #339900;color: #ffffff"/>
-                            <p:slideMenu style="width:200px;align-content: center;margin: auto" overlay="true" trigger="addNewTrigger" my="left top" at="left bottom">
-                                <p:menuitem value="Add New Tag" onclick="PF('dialogCreateNewTag').show()">
-                                    <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
-                                </p:menuitem>
-                                <p:menuitem value="Add New Class Type" onclick="PF('dialogCreateNewClassType').show()">
-                                    <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
-                                </p:menuitem>
-                            </p:slideMenu>
-                        </p:toolbarGroup>
+                <p:toolbarGroup>
+                    <p:commandButton id= "addNewTrigger" value="Add New" icon="pi pi-plus" style="margin-right: .5rem; background: #339900; color: #ffffff"/>
+                    <p:slideMenu style="width:200px;align-content: center;margin: auto" overlay="true" trigger="addNewTrigger" my="left top" at="left bottom">
+                        <p:menuitem value="Add New Tag" onclick="PF('dialogCreateNewTag').show()">
+                            <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
+                        </p:menuitem>
+                        <p:menuitem value="Add New Class Type" onclick="PF('dialogCreateNewClassType').show()">
+                            <p:confirm header="Confirmation"  icon="ui-icon-alert"/>
+                        </p:menuitem>
+                    </p:slideMenu>
+                </p:toolbarGroup>
             </p:toolbar>
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="500" message="Any Creation of New Tag or Class Type cannot be deleted. Please Search the Library carefully before proceeding">
                 <p:commandButton value="Bring me back to the library" type="button" styleClass="ui-confirmdialog-no ui-button-flat" style="background: #ff6666;color: #000000"/>
@@ -39,11 +39,13 @@
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
                     <f:facet name="header">
-                            <span style="font-weight: bold">TAGS</span>
-                                <p:outputPanel style="text-align: right;">
-                                    <h:outputText value="Search all tags:" />
-                                    <p:inputText id="globalFilter" onkeyup="PF('dataTableTagsLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
-                                </p:outputPanel>
+                        <span style="font-weight: bold">TAGS</span>
+                        <br></br>
+                        <br></br>
+                        <p:outputPanel style="text-align: right;">
+                            <h:outputText value="Search all tags: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableTagsLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
+                        </p:outputPanel>
                     </f:facet>
                     <row>          
                         <p:column filterBy="#{tagEntity.tagId}" headerText="Tag Id" filterStyle="display:none" style="width:100px">
@@ -67,11 +69,13 @@
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records">
                     <f:facet name="header">
-                            <span style="font-weight: bold">CLASS TAGS</span>
-                                <p:outputPanel style="text-align: right;">
-                                    <h:outputText value="Search all Class Type:" />
-                                    <p:inputText id="globalFilter" onkeyup="PF('dataTableClassLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
-                                </p:outputPanel>
+                        <span style="font-weight: bold">CLASS TAGS</span>
+                        <br></br>
+                        <br></br>
+                        <p:outputPanel style="text-align: right;">
+                            <h:outputText value="Search all Class Type: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableClassLibrary').filter()" style="width:300px" placeholder="Enter keyword" />
+                        </p:outputPanel>
                     </f:facet>
                     <row>          
                         <p:column filterBy="#{classEntity.classTypeId}" headerText="Tag Id" filterStyle="display:none" style="width:100px">
@@ -101,7 +105,7 @@
                         <p:commandButton value="Create" actionListener="#{tagInformationLibraryManagedBean.createNewTagEntity}" update="@form formAllTagsLibrary" oncomplete="PF('dialogCreateNewTag').hide()" />
                     </p:column>
                 </p:row>
-                
+
             </p:dialog>
         </h:form>
 
@@ -120,7 +124,7 @@
                         <p:commandButton value="Create" actionListener="#{classTypeInformationLibraryManagedBean.createNewClassTypeEntity}" update="@form formAllClassLibrary" oncomplete="PF('dialogCreateNewClassType').hide()"/>
                     </p:column>
                 </p:row>
-                
+
             </p:dialog>
         </h:form>
     </ui:define>
