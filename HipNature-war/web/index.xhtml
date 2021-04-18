@@ -10,7 +10,7 @@
 
     <ui:define name="content">
         <div class="card" style="width: 50%; float: left" >
-            
+
             <p:graphicImage name="img/landingpagenew.png" style="width: 800px" rendered="#{sessionScope.isLogin == false}"/>
         </div>
 
@@ -92,8 +92,25 @@
             <h:panelGroup rendered="#{sessionScope.isLogin == true}" style="display: inline-block;word-wrap: break-word">
                 <h:form>
                     <p:schedule value="#{sessionScheduleControllerManagedBean.eventModel}" draggable="false" aspectRatio="2.5">
-
+                        <p:ajax event="eventSelect" listener="#{sessionScheduleControllerManagedBean.onEventSelect}" update="eventDetails"
+                                oncomplete="PF('eventDialog').show();"/>
                     </p:schedule>
+
+
+                    <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="fade" hideEffect="fade">
+                        <h:panelGrid id="eventDetails" columns="2" cellpadding="7">
+                            <h:outputText value="Class: " styleClass="text-secondary" />
+                            <h:outputText value="#{sessionScheduleControllerManagedBean.event.title}"/>
+                            <h:outputText value="Start Time: " styleClass="text-secondary" />
+                            <h:outputText value="#{sessionScheduleControllerManagedBean.event.startDate}"/>
+                            <h:outputText value="Class: " styleClass="text-secondary" />
+                            <h:outputText value="#{sessionScheduleControllerManagedBean.event.endDate}"/>
+                            <!--<h:outputText value="Instructor: " styleClass="text-secondary" />
+                            <h:outputText value="#{classEntity.classId}"/>
+                            <h:outputText value="Location: " styleClass="text-secondary" />
+                            <h:outputText value="#{classEntity.classId}"/>-->
+                        </h:panelGrid>
+                    </p:dialog>
                 </h:form>
             </h:panelGroup>
         </div>
