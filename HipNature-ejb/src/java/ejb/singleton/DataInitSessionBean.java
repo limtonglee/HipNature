@@ -86,6 +86,8 @@ public class DataInitSessionBean {
 
     @EJB
     private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
+    
+    
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
@@ -110,7 +112,7 @@ public class DataInitSessionBean {
 
     }
 
-    private void createPartner() throws ParseException, CreateNewClassException, ClassNotFoundException {
+    private void createPartner() throws ParseException, CreateNewClassException {
         try {
             PartnerEntity partner1 = new PartnerEntity("Partner 1", "87654321", "partner1@gmail.com", "Singapore", "partner1", "password");
             partnerEntitySessionBeanLocal.createNewPartner(partner1);
@@ -149,8 +151,9 @@ public class DataInitSessionBean {
             java.util.Date endTime4 = sdf.parse("09/12/2019 14:00");
             java.util.Date startTime5 = sdf.parse("10/12/2019 12:00");
             java.util.Date endTime5 = sdf.parse("10/12/2019 14:00");
-
+            
             // to test update sessions, need to create new classes and link to partner. then create sessions that link to the classes
+
 //            SessionEntity session1 = new SessionEntity("Tembusu", startTime1, endTime1, 2, "61234594", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
 //            sessionEntitySessionBean.createNewSession(session1);
 //            instructor1.getSessionEntity().add(session1);
@@ -204,7 +207,9 @@ public class DataInitSessionBean {
     }
 
     private void createCustomer() {
-
+        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Mark", "91234567", "mark.tan@gmail.com", "123 Kent Ridge Road", "marktan123", "password123", CustomerTypeEnum.NORMAL));
+        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Rachel", "93244543", "rachel.lee@gmail.com", "456 Orchard Road", "rachellee", "password123", CustomerTypeEnum.STUDENT));
+        customerEntitySessionBeanLocal.createNewCustomer(new CustomerEntity("Edith", "95359465", "edith.chan@gmail.com", "12 Namly Place", "edithchan", "password123", CustomerTypeEnum.ELDERLY));
     }
 
     private void createPlan() {
@@ -216,12 +221,19 @@ public class DataInitSessionBean {
 
     private void createCreditPlan() {
         creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(10.00, 10L));
-        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(20.00, 25L));
-        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(30.00, 50L));
-        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(40.00, 100L));
+         creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(20.00, 25L));
+          creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(30.00, 50L));
+           creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(40.00, 100L));
     }
 
     private void createClassTypeEntity() {
+        try {
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Art"));
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Dance"));
+            classTypeEntitySessionBeanLocal.createClassType(new ClassTypeEntity("Meditation"));
+        } catch (InputDataValidationException ex) {
+            Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void createTagEntity() {
@@ -241,6 +253,7 @@ public class DataInitSessionBean {
     }
 
     private void createClassEntity() throws ClassNotFoundException, CreateNewClassException {
+        classEntitySessionBean.NewClass(new ClassEntity(classTypeEntitySessionBeanLocal.retrieveClassTypeByClassId(1l), "ART 101", new Integer(30), LocationTypeEnum.CENTRAL));
     }
 
     private void createSessionEntity() throws InstructorNotFoundException, ClassNotFoundException {

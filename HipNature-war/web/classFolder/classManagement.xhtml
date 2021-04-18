@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
-    
+
     <ui:define name="content">
         <ez:Breadcrumb pageName ="classManagement"/>
         <div>
@@ -19,21 +19,20 @@
                 <p:dataView var="classEntity" value="#{classManagementManagedBean.classEntities}" rows="10" paginator="true"
                             rowsPerPageTemplate="10,25,50"
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            gridIcon="pi pi-th-large" listIcon="pi pi-bars" style="height:70%; width:100%" layout="grid">
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 
                     <p:dataViewGridItem>
-                        <h:panelGrid columns="2" cellpadding="7">
-                            <h:outputText value="Class Id: " styleClass="text-secondary" />
-                            <h:outputText value="#{classEntity.classId}"/>
-                            <h:outputText value="Class Name: " styleClass="text-secondary"/>
-                            <h:outputText value="#{classEntity.className}"/>
-                            <h:outputText value="Credits: " styleClass="text-secondary"/>
-                            <h:outputText value="#{classEntity.credit}"/>
-                            <h:outputText value="Rating: " styleClass="text-secondary"/>
-                            <p:rating readonly="true" value="#{classEntity.credit}"/>
-                            <h:outputText value="Location: " styleClass="text-secondary"/>
-                            <h:outputText value="#{classEntity.locationTypeEnum}"/>
-                            <p:panelGrid>
+                        <div class="product-grid-item card border-1">
+                            <div class="product-grid-item-top">
+                                <span> #{classEntity.locationTypeEnum.toLowerCase()} </span>
+                            </div>
+                            <div class="product-grid-item-content">
+                                <!--<p:graphicImage name="img/product/#{product.image}" library="demo"/>-->
+                                <div class="class-name">#{classEntity.className}</div>
+                                <div class="product-credit">#{classEntity.credit}</div>
+                                <!--<p:rating readonly="true" value="#{classEntity.classRating}"/>-->
+                            </div>
+                            <div class="product-grid-item-bottom">
                                 <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
                                     <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
                                 </p:commandButton>
@@ -41,45 +40,35 @@
                                     <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
                                     <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
-                            </p:panelGrid>
-                        </h:panelGrid>                                    
+                            </div>
+                        </div>
                     </p:dataViewGridItem>
 
                     <p:dataViewListItem>
-
-                        <h:panelGrid columns="2" cellspacing="20">
-                            <p:outputPanel>
-                                <h:panelGrid columns="2" cellpadding="7" styleClass="ui-dataview-list">
-                                    <h:outputText value="Class Id: " styleClass="text-secondary" />
-                                    <h:outputText value="#{classEntity.classId}"/>
-                                    <h:outputText value="Class Name: " styleClass="text-secondary"/>
-                                    <h:outputText value="#{classEntity.className}"/>
-                                    <h:outputText value="Credits: " styleClass="text-secondary"/>
-                                    <h:outputText value="#{classEntity.credit}"/>
-                                    <h:outputText value="Rating: " styleClass="text-secondary"/>
-                                    <p:rating readonly="true" value="#{classEntity.credit}"/>
-                                    <h:outputText value="Location: " styleClass="text-secondary"/>
-                                    <h:outputText value="#{classEntity.locationTypeEnum}"/>
-                                    <p:panelGrid>
-                                        <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
-                                            <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
-                                        </p:commandButton>
-                                        <p:commandButton title="Delete" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses" icon="pi pi-trash">
-                                            <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
-                                            <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
-                                        </p:commandButton>
-                                    </p:panelGrid>
-                                </h:panelGrid>
-                            </p:outputPanel>
-                        </h:panelGrid>
+                        <div class="product-list-item">
+                            <!--<p:graphicImage name="demo/images/product/#{product.image}"/>-->
+                            <div class="product-list-detail">
+                                <div class="product-name">Class Id: #{classEntity.classId}</div>
+                                <div class="product-description">#{classEntity.className}</div>
+                                <p:rating readonly="true" value="#{classEntity.credit}"/>
+                                <div class="product-location">#{classEntity.locationTypeEnum}</div>
+                            </div>
+                            <div class="product-list-action" align="right">
+                                <p:commandButton title="Update" actionListener="#{classManagementManagedBean.doUpdate}" update="formUpdateClass" oncomplete="PF('dialogUpdateClass').show()" icon="pi pi-pencil">
+                                    <f:attribute name="classEntityToUpdate" value="#{classEntity}"/>
+                                </p:commandButton>
+                                <p:commandButton title="Delete" actionListener="#{classManagementManagedBean.doDelete}" update="formAllClasses" icon="pi pi-trash">
+                                    <f:attribute name="classEntityToDelete"  value="#{classEntity}"/>
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete Class Id: #{classEntity.classId} : Class Name: #{classEntity.className} ?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                            </div>
+                        </div>
                     </p:dataViewListItem>
                 </p:dataView>
                 <p:confirmDialog global="true" showEffect="clip" hideEffect="fade">
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
                 </p:confirmDialog>
-
-
             </h:form>
 
             <h:form id="formCreateNewClass">
@@ -191,6 +180,4 @@
             </h:form>
         </div>
     </ui:define>
-
 </ui:composition>
-
