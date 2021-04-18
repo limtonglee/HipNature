@@ -66,13 +66,24 @@ public class ReviewResource {
     @Path("retrieveReviewsByClassId/{classId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveReviewsByClassId(@PathParam("classId") Long classId) {
+        System.out.println("hERE");
         try {
             List<ReviewEntity> reviews = reviewEntitySessionBean.retrieveReviewsByClassId(classId);
+                                  System.out.println(reviews.size());
+
+            List<GetReviews> ge = new ArrayList<>();
+                                              System.out.println(reviews.size());
+
             for (ReviewEntity review : reviews) {
-                review.setClassEntity(null);
-                review.setCustomerEntity(null);
+                GetReviews newReview = new GetReviews(review.getReviewId(), review.getReviewRating(), review.getDescription(), review.getCustomerEntity().getCustomerName());
+                System.out.println("New GR");
+                ge.add(newReview);
+            
             }
-            GenericEntity<List<ReviewEntity>> genericEntity = new GenericEntity<List<ReviewEntity>>(reviews) {
+                       System.out.println(ge.size());
+
+           System.out.println(ge);
+            GenericEntity<List<GetReviews>> genericEntity = new GenericEntity<List<GetReviews>>(ge) {
             };
             
             return Response.status(Response.Status.OK).entity(genericEntity).build();
