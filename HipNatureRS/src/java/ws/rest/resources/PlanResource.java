@@ -7,6 +7,7 @@ package ws.rest.resources;
 
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PlanEntitySessionBeanLocal;
+import entity.CustomerEntity;
 import entity.PlanEntity;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ import javax.ws.rs.PUT;
 import javax.enterprise.context.RequestScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -39,6 +41,8 @@ public class PlanResource {
 
     PlanEntitySessionBeanLocal planEntitySessionBeanLocal;
 
+    CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
+    
     @Context
     private UriInfo context;
  
@@ -57,15 +61,18 @@ public class PlanResource {
     public PlanResource() {
                         sessionBeanLookup = new SessionBeanLookup();
                 planEntitySessionBeanLocal= sessionBeanLookup.lookupPlanEntitySessionBeanLocal();
+                customerEntitySessionBeanLocal = sessionBeanLookup.lookupCustomerEntitySessionBeanLocal();
 
     }
 
     @Path("retrieveAllPlans")
     @GET
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveAllPlans() {
+    public Response retrieveAllPlans(@QueryParam("username") String username, @QueryParam("password") String password){
         try {
-            List<PlanEntity> planEntities = planEntitySessionBeanLocal.retrieveAllPlans();
+            CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(username, password);
+            List<PlanEntity> planEntities = planEntitySessionBeanLocal.retrievePlanByCustomerType(customerEntity.getCustomerTypeEnum().toString());
 
             for (PlanEntity p : planEntities) {
                 p.getPurchasedPlans().clear();              
