@@ -62,8 +62,6 @@ public class DataInitSessionBean {
 
     @EJB(name = "CreditPlanSessionBeanLocal")
     private CreditPlanSessionBeanLocal creditPlanSessionBeanLocal;
-    
-    
 
     @EJB
     private ClassEntitySessionBeanLocal classEntitySessionBean;
@@ -88,8 +86,6 @@ public class DataInitSessionBean {
 
     @EJB
     private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
-    
-    
 
     @PersistenceContext(unitName = "HipNature-ejbPU")
     private EntityManager em;
@@ -153,9 +149,8 @@ public class DataInitSessionBean {
             java.util.Date endTime4 = sdf.parse("09/12/2019 14:00");
             java.util.Date startTime5 = sdf.parse("10/12/2019 12:00");
             java.util.Date endTime5 = sdf.parse("10/12/2019 14:00");
-            
-            // to test update sessions, need to create new classes and link to partner. then create sessions that link to the classes
 
+            // to test update sessions, need to create new classes and link to partner. then create sessions that link to the classes
 //            SessionEntity session1 = new SessionEntity("Tembusu", startTime1, endTime1, 2, "61234594", 40, "Available", LocationTypeEnum.CENTRAL, instructor1);
 //            sessionEntitySessionBean.createNewSession(session1);
 //            instructor1.getSessionEntity().add(session1);
@@ -183,30 +178,28 @@ public class DataInitSessionBean {
             customerEntitySessionBeanLocal.createNewCustomer(cus3);
 
             ClassTypeEntity classType1 = new ClassTypeEntity("Art");
-            classTypeEntitySessionBeanLocal.createClassType(classType1); 
+            classTypeEntitySessionBeanLocal.createClassType(classType1);
             ClassTypeEntity classType2 = new ClassTypeEntity("Dance");
-            classTypeEntitySessionBeanLocal.createClassType(classType2); 
+            classTypeEntitySessionBeanLocal.createClassType(classType2);
             ClassTypeEntity classType3 = new ClassTypeEntity("Meditation");
-            classTypeEntitySessionBeanLocal.createClassType(classType3); 
-            
+            classTypeEntitySessionBeanLocal.createClassType(classType3);
+
             ClassEntity class2 = new ClassEntity("Yoga", 3, LocationTypeEnum.CENTRAL, classType2, partner1, 5);
             classEntitySessionBean.NewClass(class2);
             ClassEntity class3 = new ClassEntity("Pottery", 3, LocationTypeEnum.WEST, classType1, partner1, 3);
             classEntitySessionBean.NewClass(class3);
             ClassEntity class4 = new ClassEntity("Painting", 3, LocationTypeEnum.CENTRAL, classType1, partner1, 4);
             classEntitySessionBean.NewClass(class4);
-                    
+
             ReviewEntity review1 = new ReviewEntity(3, "Decent class but instructor was 5 mins late.", cus1, class2);
             reviewEntitySessionBeanLocal.createNewReview(review1);
             ReviewEntity review2 = new ReviewEntity(1, "Hated it", cus2, class3);
             reviewEntitySessionBeanLocal.createNewReview(review2);
             ReviewEntity review3 = new ReviewEntity(5, "Loved it", cus3, class4);
             reviewEntitySessionBeanLocal.createNewReview(review3);
-            
+
             //PurchasedPlanEntity pp1 = new PurchasedPlanEntity()
-            
             //BookingEntity booking1 = new BookingEntity(purchasedplan, sessionEntity)
-            
         } catch (InputDataValidationException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -216,17 +209,24 @@ public class DataInitSessionBean {
     }
 
     private void createPlan() {
-        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(19.00, Long.valueOf(10), "Lite Plan", Long.valueOf(3)));
-        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(49.00, Long.valueOf(27), "Basic Plan", Long.valueOf(9)));
-        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(79.00, Long.valueOf(45), "Standard Plan", Long.valueOf(15)));
-        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(159.00, Long.valueOf(100), "Premium Plan", Long.valueOf(33)));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(19.00, Long.valueOf(10), "Lite Plan", Long.valueOf(3), "NORMAL"));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(49.00, Long.valueOf(27), "Basic Plan", Long.valueOf(9), "NORMAL"));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(79.00, Long.valueOf(45), "Standard Plan", Long.valueOf(15), "NORMAL"));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(159.00, Long.valueOf(100), "Premium Plan", Long.valueOf(33), "NORMAL"));
+        
+       
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(69.00, Long.valueOf(50), "Standard Student Plan", Long.valueOf(15), "STUDENT"));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(129.00, Long.valueOf(150), "Premium Student Plan", Long.valueOf(49), "STUDENT"));
+        
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(59.00, Long.valueOf(45), "Standard Elderly Plan", Long.valueOf(15), "ELDERLY"));
+        planEntitySessionBeanLocal.createNewPlan(new PlanEntity(109.00, Long.valueOf(110), "Premium Elderly Plan", Long.valueOf(33), "ELDERLY"));
     }
 
     private void createCreditPlan() {
         creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(10.00, 10L));
-         creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(20.00, 25L));
-          creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(30.00, 50L));
-           creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(40.00, 100L));
+        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(20.00, 25L));
+        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(30.00, 50L));
+        creditPlanSessionBeanLocal.createNewCreditPlan(new CreditPlanEntity(40.00, 100L));
     }
 
     private void createClassTypeEntity() {

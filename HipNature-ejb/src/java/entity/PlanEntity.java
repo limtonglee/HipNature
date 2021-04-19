@@ -46,6 +46,9 @@ public class PlanEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Long sessionLimit;
+    @Column(nullable = false)
+    @NotNull
+    private String type;
     
     @OneToMany(mappedBy = "planId",fetch = FetchType.LAZY)
     @JoinColumn(nullable = true)
@@ -55,11 +58,12 @@ public class PlanEntity implements Serializable {
         this.purchasedPlans = new ArrayList<PurchasedPlanEntity>();
     }
 
-    public PlanEntity(double price, Long creditValue, String planName, Long sessionLimit) {
+    public PlanEntity(double price, Long creditValue, String planName, Long sessionLimit, String type) {
         this.price = price;
         this.creditValue = creditValue;
         this.planName = planName;
         this.sessionLimit = sessionLimit;
+        this.type = type;
     }
     
     public double getPrice() {
@@ -141,6 +145,20 @@ public class PlanEntity implements Serializable {
 
     public void setPurchasedPlans(List<PurchasedPlanEntity> purchasedPlans) {
         this.purchasedPlans = purchasedPlans;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
     
 }

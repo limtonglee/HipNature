@@ -52,5 +52,14 @@ public class PlanEntitySessionBean implements PlanEntitySessionBeanLocal {
         }
     }
     
+    @Override
+    public List<PlanEntity> retrievePlanByCustomerType(String type) throws PlanNotFoundException {
+         Query query = em.createQuery("SELECT p FROM PlanEntity P WHERE P.type = :type");
+         query.setParameter("type", type);
+         
+         return query.getResultList();
+        
+    }
+    
     
 }

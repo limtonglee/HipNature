@@ -22,5 +22,7 @@ public interface PlanEntitySessionBeanLocal {
     public Long createNewPlan(PlanEntity newPlan);
 
     public PlanEntity retrievePlanByPlanId(Long planId) throws PlanNotFoundException;
+
+    public List<PlanEntity> retrievePlanByCustomerType(String type) throws PlanNotFoundException;
     
 }
