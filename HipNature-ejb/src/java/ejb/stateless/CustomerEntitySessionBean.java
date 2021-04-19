@@ -107,7 +107,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
     public List<CreditCardEntity> getAllCreditCardsFromCustomer(CustomerEntity customerToget) throws InvalidLoginCredentialException {
         try {
             CustomerEntity ce = retrieveCustomerByCustomerId(customerToget.getCustomerId());
-            Query query = em.createQuery("SELECT s from CreditCardEntity s WHERE s.customerEntity.customerId = :cusId");
+            Query query = em.createQuery("SELECT s from CreditCardEntity s WHERE s.Status != 'REMOVED' AND s.customerEntity.customerId = :cusId");
             query.setParameter("cusId", ce.getCustomerId());
             List<CreditCardEntity> results = query.getResultList();
             return results;
@@ -119,7 +119,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanLocal
     @Override
     public void deleteCreditCard(Long creditCardId) {
         CreditCardEntity cce = em.find(CreditCardEntity.class, creditCardId);
-        em.remove(cce);
+        cce.setStatus("REMOVED");
     }
 
     @Override
