@@ -6,6 +6,7 @@
 package ws.rest.resources;
 
 import java.util.Set;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 /**
  *
@@ -18,6 +19,8 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
         addRestResourceClasses(resources);
+        resources.add(MultiPartFeature.class);
+
         return resources;
     }
 
@@ -34,6 +37,7 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
         resources.add(ws.rest.resources.CreditCardResource.class);
         resources.add(ws.rest.resources.CreditPlanResource.class);
         resources.add(ws.rest.resources.CustomerResource.class);
+        resources.add(ws.rest.resources.FileResource.class);
         resources.add(ws.rest.resources.PlanResource.class);
         resources.add(ws.rest.resources.PurchasePlanResource.class);
         resources.add(ws.rest.resources.RefundResource.class);
