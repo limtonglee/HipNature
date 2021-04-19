@@ -72,7 +72,7 @@ public class PartnerProfileManagedBean implements Serializable {
 //           ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).setAttribute("companyToUpdatePhoto", companyToUpdatePhoto); 
             String uploadedFileName = event.getFile().getFileName();
 
-            String newFileName = CryptographicHelper.getInstance().generateUUID().toString() + "_profile_" + uploadedFileName;
+            String newFileName = currentPartnerEntity.getPartnerEntityName() + "_logo_" + uploadedFileName;
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1")
                     + System.getProperty("file.separator")
                     + newFileName;
