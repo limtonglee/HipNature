@@ -5,9 +5,8 @@
  */
 package ejb.stateless;
 
-import entity.ClassEntity;
+import entity.BookingEntity;
 import entity.SessionEntity;
-import entity.TagEntity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,18 +18,16 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.enumeration.LocationTypeEnum;
-import util.exception.DeleteClassEntityException;
 import util.exception.DeleteSessionEntityException;
 import util.exception.InputDataValidationException;
+import util.exception.RefundProcessException;
 import util.exception.SessionNotFoundException;
-import util.exception.TagNotFoundException;
 import util.exception.UpdateSessionException;
 
 /**
@@ -220,5 +217,15 @@ public class SessionEntitySessionBean implements SessionEntitySessionBeanLocal {
         Query query = em.createQuery("SELECT S FROM SessionEntity s WHERE s.classEntity.classId =:classId");
         query.setParameter("classId", classId);
         return query.getResultList();
+    }
+    @Override
+    public void updateSessionList(List<BookingEntity> updatedList, Long sessionId) throws RefundProcessException{
+        try {
+            SessionEntity toUpdate = retrieveSessionBySessionId(sessionId);
+            toUpdate.setParticipants(updatedList);
+            //em.merge(toUpdate);
+        } catch (SessionNotFoundException ex) {
+            throw new RefundProcessException("Unable to process Refund. Please Try Again");
+        }
     }
 }

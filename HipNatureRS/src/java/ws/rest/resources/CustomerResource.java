@@ -7,6 +7,8 @@ package ws.rest.resources;
 
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import entity.CustomerEntity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -19,6 +21,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.enumeration.CustomerTypeEnum;
+import util.exception.CustomerNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UpdateCustomerException;
 import ws.rest.model.UpdateCustomer;
@@ -104,17 +108,26 @@ public class CustomerResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProduct(UpdateCustomer customer)
+    public Response updateCustomer(UpdateCustomer customer)
     {
         if(customer != null)
         {
             try
-            {                
-                CustomerEntity staffEntity = customerEntitySessionBean.customerLogin(customer.getUsername(), customer.getPassword());
-                System.out.println("********** ProductResource.updateProduct(): Staff " + staffEntity.getUsername() + " login remotely via web service");
-                
-                customerEntitySessionBean.updateCustomer(customer.getCustomer());
-                
+            {          
+                System.out.println(customer.getUsername());
+                                System.out.println(customer.getPassword());
+
+                CustomerEntity customerEntity = customerEntitySessionBean.customerLogin(customer.getUsername(), customer.getPassword());
+                System.out.println("********** ProductResource.updateProduct(): Staff " + customer.getUsername() + " login remotely via web service");
+
+
+                 customerEntity.setAddress(customer.getAddress());
+                customerEntity.setCustomerName(customer.getCustomerName());
+
+                customerEntity.setEmail(customer.getEmail());
+                customerEntity.setPhone(customer.getPhone());
+                customerEntitySessionBean.updateCustomer(customerEntity,customer.getPassword());
+                System.out.println("All ok");
                 return Response.status(Response.Status.OK).build();
             }
             catch(InvalidLoginCredentialException ex)
@@ -124,11 +137,10 @@ public class CustomerResource {
             catch(UpdateCustomerException ex)
             {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+            } catch (CustomerNotFoundException ex) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
             }
-            catch(Exception ex)
-            {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-            }
+            
         }
         else
         {

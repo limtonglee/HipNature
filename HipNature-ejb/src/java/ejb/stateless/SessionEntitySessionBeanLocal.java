@@ -5,6 +5,7 @@
  */
 package ejb.stateless;
 
+import entity.BookingEntity;
 import entity.SessionEntity;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import javax.ejb.Local;
 import javax.validation.ConstraintViolation;
 import util.exception.DeleteSessionEntityException;
 import util.exception.InputDataValidationException;
+import util.exception.RefundProcessException;
 import util.exception.SessionNotFoundException;
 import util.exception.TagNotFoundException;
 import util.exception.UpdateSessionException;
@@ -36,6 +38,8 @@ public interface SessionEntitySessionBeanLocal {
     public List<SessionEntity> retrieveSessionsByPartnerId(Long partnerId);
 
     public List<SessionEntity> retrieveSessionsByClassId(Long classId);
+
+    public void updateSessionList(List<BookingEntity> updatedList, Long sessionId) throws RefundProcessException;
 
 
 }

@@ -53,7 +53,7 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
             PurchasedPlanEntity purchasedPlan = purchasedPlanEntitySessionBeanLocal.retrievePurchasedPlanByPurchasedPlanId(purchasePlanId);
             CustomerEntity customer = purchasedPlan.getCustomer();
             for (BookingEntity be : purchasedPlan.getBooking()) {
-                if (be.getSessionEntity().getSessionId().equals(session.getSessionId())) {
+                if (be.getSessionEntity().getSessionId().equals(session.getSessionId()) && !be.getStatus().equals("Refund")) {
                     throw new BookingExistsException("Booking has already been created for this session.");
                 }
             }

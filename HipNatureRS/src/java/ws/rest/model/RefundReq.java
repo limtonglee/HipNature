@@ -13,15 +13,17 @@ public class RefundReq {
     private String username;
     private String password;
     private Long bookingId;
+    private String reason;
 
     public RefundReq() {
     }
 
     
-    public RefundReq(String username, String password, Long BookingId) {
+    public RefundReq(String username, String password, Long BookingId, String reason) {
         this.username = username;
         this.password = password;
         this.bookingId = BookingId;
+        this.reason = reason;
     }
 
     /**
@@ -64,6 +66,20 @@ public class RefundReq {
      */
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
+    }
+
+    /**
+     * @return the reason
+     */
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * @param reason the reason to set
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
     }
     
     

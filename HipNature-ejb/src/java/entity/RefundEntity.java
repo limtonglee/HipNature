@@ -35,8 +35,6 @@ public class RefundEntity implements Serializable {
     private String reason;
     @Column(nullable = false)
     @NotNull
-    @Positive
-    @Min(1)
     private Integer refundValue;
     @Column(nullable = false)
     private LocalDate refundDate;

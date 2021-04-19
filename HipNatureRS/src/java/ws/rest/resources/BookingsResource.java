@@ -99,7 +99,7 @@ public class BookingsResource {
             List<BookingEntity> BookingList = bookingEntitySessionBeanLocal.retrieveMyBookings(ce.getCustomerId());
             List<RetrieveBookingsByCusReq> rbbcr = new ArrayList<>();
             for (BookingEntity be : BookingList) {
-                if (be.getSessionEntity().getStartTime().compareTo((new java.util.Date())) != -1) {
+                if (be.getSessionEntity().getStartTime().compareTo((new java.util.Date())) != -1 && be.getRefundEntity() == null) {
                     RetrieveBookingsByCusReq temp = new RetrieveBookingsByCusReq();
                     temp.setBookingId(be.getBookingId());
                     temp.setSessionName(be.getSessionEntity().getClassEntity().getClassName());

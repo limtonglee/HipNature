@@ -7,6 +7,13 @@ package ws.rest.model;
 
 import entity.CustomerEntity;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import util.enumeration.CustomerTypeEnum;
 
 /**
  *
@@ -15,8 +22,12 @@ import java.util.List;
 public class UpdateCustomer {
     private String username;
     private String password;
-    private CustomerEntity customer;
-
+    private Long customerId;
+    private String customerName;
+    private String phone;
+    private String email;
+    private String address;
+    private CustomerTypeEnum customerTypeEnum;
 
     
     
@@ -24,10 +35,15 @@ public class UpdateCustomer {
     {        
     }
 
-    public UpdateCustomer(String username, String password, CustomerEntity customer) {
+    public UpdateCustomer(String username, String password, Long customerId, String customerName, String phone, String email, String address, CustomerTypeEnum customerTypeEnum) {
         this.username = username;
         this.password = password;
-        this.customer = customer;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.customerTypeEnum = customerTypeEnum;
     }
 
     public String getUsername() {
@@ -46,13 +62,55 @@ public class UpdateCustomer {
         this.password = password;
     }
 
-    public CustomerEntity getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public CustomerTypeEnum getCustomerTypeEnum() {
+        return customerTypeEnum;
+    }
+
+    public void setCustomerTypeEnum(CustomerTypeEnum customerTypeEnum) {
+        this.customerTypeEnum = customerTypeEnum;
+    }
+
+   
 
     
     

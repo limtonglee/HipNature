@@ -11,6 +11,7 @@ import ejb.stateless.ReviewEntitySessionBeanLocal;
 import entity.ClassEntity;
 import entity.CustomerEntity;
 import entity.ReviewEntity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import util.exception.InvalidLoginCredentialException;
 import ws.rest.model.CreateReviewReq;
 import ws.rest.model.ErrorRsp;
+import ws.rest.model.GetReviews;
 import ws.rest.model.RetrieveClassReviewsRsp;
 
 /**
@@ -60,25 +62,37 @@ public class ReviewResource {
     public ReviewResource() {
     }
 
-    @GET
+     @GET
     @Path("retrieveReviewsByClassId/{classId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveReviewsByClassId(@PathParam("classId") Long classId) {
+        System.out.println("hERE");
         try {
             List<ReviewEntity> reviews = reviewEntitySessionBean.retrieveReviewsByClassId(classId);
+                                  System.out.println(reviews.size());
+
+            List<GetReviews> ge = new ArrayList<>();
+                                              System.out.println(reviews.size());
+
             for (ReviewEntity review : reviews) {
-                review.setClassEntity(null);
-                review.setCustomerEntity(null);
+                GetReviews newReview = new GetReviews(review.getReviewId(), review.getReviewRating(), review.getDescription(), review.getCustomerEntity().getCustomerName());
+                System.out.println("New GR");
+                ge.add(newReview);
+            
             }
-            GenericEntity<List<ReviewEntity>> genericEntity = new GenericEntity<List<ReviewEntity>>(reviews) {
+                       System.out.println(ge.size());
+
+           System.out.println(ge);
+            GenericEntity<List<GetReviews>> genericEntity = new GenericEntity<List<GetReviews>>(ge) {
             };
+            
             return Response.status(Response.Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
         }
     }
-
+    
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

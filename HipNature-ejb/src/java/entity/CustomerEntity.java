@@ -101,6 +101,15 @@ public class CustomerEntity implements Serializable {
         purchasedPlans = new ArrayList<>();
     }
     
+    public CustomerEntity(String customerName, String phone, String email, String address, String username,  CustomerTypeEnum customerTypeEnum) {
+        this();
+        this.customerName = customerName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.username = username;
+        this.customerTypeEnum = customerTypeEnum;
+    }
     
 
     public CustomerEntity(String customerName, String phone, String email, String address, String username, String password, CustomerTypeEnum customerTypeEnum) {
