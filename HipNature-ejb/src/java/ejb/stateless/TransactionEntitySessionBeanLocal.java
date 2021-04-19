@@ -22,5 +22,7 @@ public interface TransactionEntitySessionBeanLocal {
     public TransactionEntity retrieveTransactionByTransactionId(Long transactionId) throws TransactionNotFoundException;
 
     public List<TransactionEntity> retrieveAllTransactions();
+
+    public List<TransactionEntity> getAllTransactionsFromCustomerId(Long cusId);
     
 }

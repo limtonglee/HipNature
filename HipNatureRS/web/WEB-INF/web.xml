@@ -117,4 +117,22 @@
         <local>ejb.stateless.RefundEntitySessionBeanLocal</local>
         <ejb-link>HipNature-ejb.jar#RefundEntitySessionBean</ejb-link>
     </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>PlanEntitySessionBeanLocal1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.PlanEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#PlanEntitySessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CreditPlanSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.CreditPlanSessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#CreditPlanSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>TransactionEntitySessionBean2</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.stateless.TransactionEntitySessionBeanLocal</local>
+        <ejb-link>HipNature-ejb.jar#TransactionEntitySessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>

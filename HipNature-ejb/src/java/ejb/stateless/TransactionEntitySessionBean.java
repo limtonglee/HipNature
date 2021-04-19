@@ -47,6 +47,15 @@ public class TransactionEntitySessionBean implements TransactionEntitySessionBea
             throw new TransactionNotFoundException("Transaction ID " + transactionId + " does not exist!");
         }
     }
+    
+    @Override
+    public List<TransactionEntity> getAllTransactionsFromCustomerId(Long cusId){
+       
+            Query query = em.createQuery("SELECT s from TransactionEntity s WHERE s.creditCardEntity.customerEntity.customerId = :cusId");
+            query.setParameter("cusId", cusId);
+            List<TransactionEntity> results = query.getResultList();
+            return results;
+    }
 
     
     
