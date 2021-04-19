@@ -21,7 +21,7 @@
         <h:panelGroup rendered="#{sessionScope.isLogin == true}" style="text-align:center; color: #301934">
 
             <center><h2>#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}</h2></center>
-            <!--<center><p:graphicImage value="/uploadedFiles/#{sessionScope.currentPartnerEntity.icon}"  width="20%" rendered="#{sessionScope.currentPartnerEntity.icon != null}"/></center>-->
+            <center><p:graphicImage value="/uploadedFiles/#{sessionScope.currentPartnerEntity.profilePicString}"  width="20%" rendered="#{sessionScope.currentPartnerEntity.profilePicString != null}"/></center>
                 <br/>
                 <br/>
 
@@ -97,11 +97,11 @@
 
                             <p:row>
                                 <p:column>
-                                    <p:outputLabel value="Images: "/>
+                                    <p:outputLabel value="Company Logo: "/>
                                 </p:column>
                                 <p:column>
                                     <p:panel id="images">
-                                        <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}" multiple="true" />
+                                        <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}"/>
                                     </p:panel>
                                 </p:column>
                             </p:row>

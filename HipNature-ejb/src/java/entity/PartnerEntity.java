@@ -29,6 +29,20 @@ import util.security.CryptographicHelper;
 public class PartnerEntity implements Serializable {
 
     /**
+     * @return the profilePicString
+     */
+    public String getProfilePicString() {
+        return profilePicString;
+    }
+
+    /**
+     * @param profilePicString the profilePicString to set
+     */
+    public void setProfilePicString(String profilePicString) {
+        this.profilePicString = profilePicString;
+    }
+
+    /**
      * @return the images
      */
     public List<String> getImages() {
@@ -77,6 +91,9 @@ public class PartnerEntity implements Serializable {
     @NotNull
     @Size(min = 8, max = 32)
     private String password;
+    
+    @Column(nullable = true)
+    private String profilePicString;
     
     @Column(nullable = true)
     private List<String> images;
