@@ -6,6 +6,7 @@
 package ejb.stateless;
 
 import entity.ClassEntity;
+import entity.PartnerEntity;
 import java.util.List;
 import javax.ejb.Local;
 import util.enumeration.LocationTypeEnum;
@@ -39,4 +40,5 @@ public interface ClassEntitySessionBeanLocal {
 
     public List<ClassEntity> searchClassByName(String searchString);
 
+    public PartnerEntity retrievePartnerIdByClass(Long idValue) ;
 }

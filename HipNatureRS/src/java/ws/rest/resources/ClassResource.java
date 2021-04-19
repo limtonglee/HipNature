@@ -8,6 +8,7 @@ package ws.rest.resources;
 import ws.rest.model.ErrorRsp;
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import entity.ClassEntity;
+import entity.PartnerEntity;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -82,6 +83,23 @@ public class ClassResource {
             classEntity.setClassTypeEntity(null);
             classEntity.setPartnerEntity(null);
             GenericEntity<ClassEntity> genericEntity = new GenericEntity<ClassEntity>(classEntity) {            };
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (Exception ex) {
+            ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorRsp).build();
+        }
+    }
+    
+    @GET
+    @Path("retrievePartnerByClass/{classId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrievePartnerByClass(@PathParam("classId") Long classId) {
+        try {
+            PartnerEntity classEntity = classEntitySessionBeanLocal.retrievePartnerIdByClass(classId);
+            classEntity.getInstructorEntity().clear();
+            classEntity.getClassEntity().clear();
+//            classEntity.getImages().clear();
+            GenericEntity<PartnerEntity> genericEntity = new GenericEntity<PartnerEntity>(classEntity) {            };
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (Exception ex) {
             ErrorRsp errorRsp = new ErrorRsp(ex.getMessage());

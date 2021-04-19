@@ -73,6 +73,7 @@ public class PartnerProfileManagedBean implements Serializable {
             String uploadedFileName = event.getFile().getFileName();
 
             String newFileName = currentPartnerEntity.getPartnerEntityName() + "_logo_" + uploadedFileName;
+//            String newFileName = currentPartnerEntity.getPartnerEntityName();
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1")
                     + System.getProperty("file.separator")
                     + newFileName;

@@ -7,6 +7,7 @@ package ejb.stateless;
 
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
+import entity.PartnerEntity;
 import entity.TagEntity;
 import java.util.List;
 import java.util.Set;
@@ -71,6 +72,20 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
             for (ClassEntity classE : list) {
                 classE.getTagEntities().size();
             }
+            return list;
+        }
+        return null;
+    }
+    
+     @Override
+    public PartnerEntity retrievePartnerIdByClass(Long idValue) {
+        Query query = em.createQuery("SELECT p FROM PartnerEntity p join  ClassEntity c on c.partnerEntity.PartnerEntityId = p.PartnerEntityId and c.classId=:idNumber");
+        query.setParameter("idNumber", idValue);
+        PartnerEntity list = (PartnerEntity) query.getSingleResult();
+         System.out.println(list);
+        if (list != null) {
+                list.getClassEntity().size();
+                list.getInstructorEntity().size();
             return list;
         }
         return null;
