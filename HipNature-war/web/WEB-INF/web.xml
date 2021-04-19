@@ -45,8 +45,8 @@
     <welcome-file-list>
         <welcome-file>landingPage.xhtml</welcome-file>
     </welcome-file-list>
-    <!--<context-param>
+    <context-param>
         <param-name>alternatedocroot_1</param-name>
-        <param-value>C:/glassfish-5.1.0-uploadedfiles/uploadedFiles</param-value>
-    </context-param>-->
+        <param-value>/Users/kelly/NetBeansProjects/uploadedFiles</param-value>
+    </context-param>
 </web-app>
