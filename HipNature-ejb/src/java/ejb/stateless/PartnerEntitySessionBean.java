@@ -181,7 +181,36 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
     }
-
+   
+    
+    @Override
+    public void setProfilePicString(PartnerEntity pa, String s) throws PartnerNotFoundException {
+        PartnerEntity partner = retrievePartnerByPartnerId(pa.getPartnerEntityId());
+        
+        partner.setProfilePicString(s);
+    }
+    
+    @Override
+    public void setImages(PartnerEntity pa, List<String> img) throws PartnerNotFoundException {
+        PartnerEntity partner = retrievePartnerByPartnerId(pa.getPartnerEntityId());
+        
+        partner.setImages(img);
+    }
+    
+    @Override
+    public void setImage(PartnerEntity pa, String img) throws PartnerNotFoundException {
+        PartnerEntity partner = retrievePartnerByPartnerId(pa.getPartnerEntityId());
+        
+        if (partner.getImages().isEmpty() == true) {
+            List<String> newimages = new ArrayList<>();
+            newimages.add("/uploadedFiles/" + img);
+            partner.setImages(newimages);
+        } else {
+            partner.getImages().add("/uploadedFiles/" + img);
+        }
+        
+    }
+    
     private String prepareInputDataValidationException(Set<ConstraintViolation<PartnerEntity>> constraintViolations) {
         String msg = "Input data validation error: ";
         for (ConstraintViolation constraint : constraintViolations) {

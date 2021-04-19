@@ -5,7 +5,6 @@
  */
 package ejb.stateless;
 
-import static entity.CreditPlanEntity_.creditPlanId;
 import entity.PlanEntity;
 import java.util.List;
 import javax.ejb.Stateless;

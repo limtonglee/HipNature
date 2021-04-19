@@ -6,7 +6,6 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <section id="mainmenu" class="mainmenu">
-        <h3>Main Menu</h3>
         <nav>
             <h:form>
 
@@ -14,7 +13,8 @@
 
                     <p:submenu label="System">
                         <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
-                        <p:menuitem value ="My Profile" outcome="/partnerProfile.xhtml" icon="pi pi-id-card" />
+                        <p:menuitem value ="My Profile" outcome="/partnerProfile.xhtml" icon="pi pi-id-card" rendered="#{sessionScope.isLogin == true}"/>
+                        <!--<p:menuitem value ="Image Gallery" outcome="/imgGallery.xhtml" icon="pi pi-image" rendered="#{sessionScope.isLogin == true}"/>-->
                         <p:menuitem value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" rendered="#{sessionScope.isLogin == true}" />
                     </p:submenu>
 

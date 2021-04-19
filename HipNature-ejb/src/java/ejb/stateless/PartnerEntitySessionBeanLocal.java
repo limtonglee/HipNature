@@ -35,5 +35,10 @@ public interface PartnerEntitySessionBeanLocal {
     public List<PartnerEntity> retrieveAllPartnerLessCurrent(Long partnerId);
     
     public void updatePartner(PartnerEntity partner) throws PartnerNotFoundException, InputDataValidationException;
+ 
+    public void setProfilePicString(PartnerEntity pa, String s) throws PartnerNotFoundException;
     
+    public void setImages(PartnerEntity pa, List<String> img) throws PartnerNotFoundException;
+    
+    public void setImage(PartnerEntity pa, String img) throws PartnerNotFoundException;
 }

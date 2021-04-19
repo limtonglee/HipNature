@@ -55,7 +55,8 @@
                 <br></br>
 
                 <center>
-                    <p:commandButton value="Update Details" type="button" onclick="PF('dialogUpdatePartner').show()"/> </center>
+                    <p:commandButton value="Update Details" type="button" onclick="PF('dialogUpdatePartner').show()"/> 
+                </center>
 
                 <h:form id="formPartner">
                     <p:dialog id="dialogUpdatePartner" widgetVar="dialogUpdatePartner" header="Update Partner Details" closable="true">
@@ -101,7 +102,7 @@
                                 </p:column>
                                 <p:column>
                                     <p:panel id="images">
-                                        <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}"/>
+                                        <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}" oncomplete="PF('dialogUpdatePartner').hide()" />
                                     </p:panel>
                                 </p:column>
                             </p:row>

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="content">
+
+        <h:panelGroup rendered="#{!sessionScope.isLogin}">
+            <article>
+                <h2>Please login.</h2>
+            </article>
+        </h:panelGroup>
+
+        <ez:Breadcrumb pageName ="imgGallery"/>
+
+        <center>
+
+            <h2> Partner Image Gallery </h2>
+
+            <div class="card">
+                <p:galleria value="#{imageGalleryManagedBean.images}" var="image" panelWidth="1000" panelHeight="500" showCaption="false" rendered="#{imageGalleryManagedBean.currentPartnerEntity.images.size() > 0}">
+                    <p:graphicImage />
+                </p:galleria>
+            </div>
+
+            <br></br>
+            <p:commandButton value="Upload Images" type="button" onclick="PF('dialogUploadImages').show()"/> 
+
+        </center>
+
+        <h:form id="formImages">
+            <p:growl id="messages" showDetail="true"/>
+
+            <p:dialog id="dialogUploadImages" widgetVar="dialogUploadImages" header="Upload Images" closable="true">
+                <p:messages id="messageUploadImages" redisplay="false"/>
+                <p:panelGrid>    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Images: "/>
+                        </p:column>
+                        <p:column>
+                            <p:panel id="images">
+                                <p:fileUpload listener="#{imageGalleryManagedBean.handleFileUpload}"/>
+                            </p:panel>
+                        </p:column>
+                    </p:row>
+                    <!--<p:row style="text-align: center">
+                        <p:column colspan="2">
+                            <p:commandButton value="submit" actionListener="#{imageGalleryManagedBean.updateImageGallery}" update="@form formImages" oncomplete="PF('dialogUploadImages').hide()"/> 
+                        </p:column>
+                    </p:row>-->
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

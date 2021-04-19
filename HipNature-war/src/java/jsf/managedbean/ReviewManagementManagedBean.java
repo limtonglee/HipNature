@@ -8,7 +8,6 @@ package jsf.managedbean;
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.ReviewEntitySessionBeanLocal;
 import entity.ClassEntity;
-import static entity.ClassEntity_.classId;
 import entity.PartnerEntity;
 import entity.ReviewEntity;
 import java.io.Serializable;
@@ -56,13 +55,14 @@ public class ReviewManagementManagedBean implements Serializable {
     }
 
     public void updateAllRatings() throws ClassNotFoundException {
-        try {
-            for (ClassEntity cls : partnerClasses) {
-                Long classId = cls.getClassId();
+        Long classId; 
+        for (ClassEntity cls : partnerClasses) {
+            try {
+                classId = cls.getClassId();
                 reviewEntitySessionBeanLocal.updateAvgRating(classId);
+            } catch (ClassNotFoundException ex) {
+                throw new ClassNotFoundException("Class ID does not exist!");
             }
-        } catch (ClassNotFoundException ex) {
-            throw new ClassNotFoundException("Class ID " + classId + " does not exist!");
         }
     }
 

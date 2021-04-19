@@ -5,7 +5,6 @@
  */
 package ws.rest.model;
 
-import static entity.CustomerEntity_.customerId;
 import entity.SessionEntity;
 
 /**

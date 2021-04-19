@@ -12,15 +12,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.FileUploadEvent;
-import util.exception.InputDataValidationException;
 import util.exception.PartnerNotFoundException;
 import util.security.CryptographicHelper;
 
@@ -28,43 +28,38 @@ import util.security.CryptographicHelper;
  *
  * @author kelly
  */
-@Named(value = "partnerProfileManagedBean")
+@Named(value = "imageGalleryManagedBean")
 @ViewScoped
-public class PartnerProfileManagedBean implements Serializable {
+public class ImageGalleryManagedBean implements Serializable {
 
     @EJB
     private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
 
     private PartnerEntity currentPartnerEntity;
 
+    private List<String> images;
+
     /**
-     * Creates a new instance of PartnerProfileManagedBean
+     * Creates a new instance of PartnerImageGalleryManagedBean
      */
-    public PartnerProfileManagedBean() {
+    public ImageGalleryManagedBean() {
+        images = new ArrayList<String>();
     }
 
     @PostConstruct
     public void postConstruct() {
 
         setCurrentPartnerEntity((PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity"));
-
+        System.out.println("can set currentpartnerentity");
+        //if (!currentPartnerEntity.getImages().isEmpty()) {
+            setImages(currentPartnerEntity.getImages());
+        //}
+        System.out.println("can't set images");
     }
-    
-    public void updatePartner(ActionEvent event) throws InputDataValidationException {
 
-        try {
-            partnerEntitySessionBeanLocal.updatePartner(currentPartnerEntity);
-            setCurrentPartnerEntity(currentPartnerEntity);
-
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Partner Details updated successfully", null));
-
-        } catch (PartnerNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating project: " + ex.getMessage(), null));
-        }
-    }
-    
     public void handleFileUpload(FileUploadEvent event) throws PartnerNotFoundException {
-       try {
+        
+        try {
             //Long newCompanyId = companySessionBeanLocal.createNewCompany(newCompany);
             //Company newC = companySessionBeanLocal.retrieveCompanyByCompanyId(newCompanyId);
 
@@ -72,18 +67,32 @@ public class PartnerProfileManagedBean implements Serializable {
 //           ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).setAttribute("companyToUpdatePhoto", companyToUpdatePhoto); 
             String uploadedFileName = event.getFile().getFileName();
 
-            String newFileName = CryptographicHelper.getInstance().generateUUID().toString() + "_profile_" + uploadedFileName;
+            String newFileName = CryptographicHelper.getInstance().generateUUID().toString() + "_imggallery_" + uploadedFileName;
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1")
                     + System.getProperty("file.separator")
                     + newFileName;
 
-            String docRootFilePath = "/uploadedFiles/" + newFileName;
-            
-            System.out.println(newFileName);
-            currentPartnerEntity.setProfilePicString(newFileName); 
-            partnerEntitySessionBeanLocal.setProfilePicString(currentPartnerEntity, newFileName);
-            //companySessionBeanLocal.updateCompany(companyToUpdatePhoto);
+            String docRootFilePath = newFileName;
 
+            //List<String> newImages = new ArrayList<>();
+            //newImages.add(docRootFilePath);
+            System.out.println(newFileName);
+            
+            //currentPartnerEntity.getImages().add(newFileName);
+            
+            //images.add(docRootFilePath);
+            
+                  
+            //System.out.println("can add to current partner images");
+
+            partnerEntitySessionBeanLocal.setImage(currentPartnerEntity, docRootFilePath);
+            images.add(docRootFilePath);
+
+            for (String im : getImages()) {
+                System.out.println("current image string: " + im);
+            }
+            
+            //companySessionBeanLocal.updateCompany(companyToUpdatePhoto);
             File file = new File(newFilePath);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
@@ -109,8 +118,12 @@ public class PartnerProfileManagedBean implements Serializable {
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         } //catch (UpdateCompanyException | CompanyNotFoundException ex) {
-           // FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        // FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         //}
+    }
+
+    public void updateImageGallery() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Images uploaded successfully", null));
     }
 
     /**
@@ -127,4 +140,17 @@ public class PartnerProfileManagedBean implements Serializable {
         this.currentPartnerEntity = currentPartnerEntity;
     }
 
+    /**
+     * @return the images
+     */
+    public List<String> getImages() {
+        return images;
+    }
+
+    /**
+     * @param images the images to set
+     */
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 }
