@@ -6,6 +6,7 @@ import ejb.stateless.ClassEntitySessionBeanLocal;
 import ejb.stateless.CustomerEntitySessionBeanLocal;
 import ejb.stateless.PlanEntitySessionBeanLocal;
 import ejb.stateless.PurchasedPlanEntitySessionBeanLocal;
+import ejb.stateless.RefundEntitySessionBeanLocal;
 import ejb.stateless.SessionEntitySessionBeanLocal;
 import ejb.stateless.TransactionEntitySessionBeanLocal;
 import java.util.logging.Level;
@@ -18,6 +19,9 @@ import javax.naming.NamingException;
 
 public class SessionBeanLookup 
 {
+
+    RefundEntitySessionBeanLocal refundEntitySessionBean = lookupRefundEntitySessionBeanLocal();
+    
 
     BookingEntitySessionBeanLocal bookingEntitySessionBean = lookupBookingEntitySessionBeanLocal1();
 
@@ -118,6 +122,16 @@ public class SessionBeanLookup
         try {
             Context c = new InitialContext();
             return (BookingEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/BookingEntitySessionBean!ejb.stateless.BookingEntitySessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    public RefundEntitySessionBeanLocal lookupRefundEntitySessionBeanLocal() {
+        try {
+            Context c = new InitialContext();
+            return (RefundEntitySessionBeanLocal) c.lookup("java:global/HipNature/HipNature-ejb/RefundEntitySessionBean!ejb.stateless.RefundEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
