@@ -29,6 +29,8 @@
             </p:commandButton> -->
 
             <h:form id="formAllClasses">
+                <p:growl id="messages" showDetail="true"/>
+                
                 <p:dataView var="classEntity" value="#{classManagementManagedBean.classEntities}" rows="10" paginator="true"
                             rowsPerPageTemplate="10,25,50"
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

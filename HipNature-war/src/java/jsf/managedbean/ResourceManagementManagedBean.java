@@ -84,7 +84,6 @@ public class ResourceManagementManagedBean implements Serializable {
         setInstructors(instructorEntitySessionBeanLocal.retrieveAllInstructors());
         System.out.print(instructors.size());
         currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
-        currentPartnerEntity.getInstructorEntity().size();
 
         //setPartnerListOfSessions(partnerEntitySessionBeanLocal.retrievePartnerClassesSessions(currentPartnerEntity.getPartnerEntityId()));
         //setNewInstructorSessions(sessionEntitySessionBeanLocal.retrieveAllSessions());

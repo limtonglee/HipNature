@@ -28,6 +28,20 @@ import util.security.CryptographicHelper;
 @Entity
 public class PartnerEntity implements Serializable {
 
+    /**
+     * @return the images
+     */
+    public List<String> getImages() {
+        return images;
+    }
+
+    /**
+     * @param images the images to set
+     */
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +77,9 @@ public class PartnerEntity implements Serializable {
     @NotNull
     @Size(min = 8, max = 32)
     private String password;
+    
+    @Column(nullable = true)
+    private List<String> images;
 
     @Column(columnDefinition = "CHAR(32) NOT NULL")
     private String salt;

@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="content">
+
+        <h:panelGroup rendered="#{!sessionScope.isLogin}">
+            <article>
+                <h2>Please login.</h2>
+            </article>
+        </h:panelGroup>
+
+        <ez:Breadcrumb pageName ="partnerProfile"/>
+
+
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}" style="text-align:center; color: #301934">
+
+            <center><h2>#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}</h2></center>
+            <!--<center><p:graphicImage value="/uploadedFiles/#{sessionScope.currentPartnerEntity.icon}"  width="20%" rendered="#{sessionScope.currentPartnerEntity.icon != null}"/></center>-->
+                <br/>
+                <br/>
+
+                <h:form id="formProfileDetails">
+                    <p:growl id="messages" showDetail="true"/>
+
+                    <center>
+                        <p:panelGrid id="profileDetails" columns="2">
+                            <f:facet name="header">
+                                <p:graphicImage name="demo/images/misc/kobe.png" />
+                            </f:facet>
+
+                            <h:outputText value="Name: " styleClass="text-secondary" />
+                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}"/>
+
+                            <h:outputText value="Username: " />
+                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.username}"/>
+
+                            <h:outputText value="Email: " />
+                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.email}"/>
+
+                            <h:outputText value="Phone: " />
+                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.phone}" />
+
+                            <h:outputText value="Address: " />
+                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.address}" />
+                        </p:panelGrid>
+                    </center>
+                </h:form>
+
+                <br></br>
+
+                <center>
+                    <p:commandButton value="Update Details" type="button" onclick="PF('dialogUpdatePartner').show()"/> </center>
+
+                <h:form id="formPartner">
+                    <p:dialog id="dialogUpdatePartner" widgetVar="dialogUpdatePartner" header="Update Partner Details" closable="true">
+                        <p:messages id="messageUpdatePartner" redisplay="false"/>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Name: "/>
+                                </p:column>
+
+                                <p:column>
+                                    <p:inputText id="partnerEntityName" value="#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}" required="true" requiredMessage="Name cannot be empty"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Email: "/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="phone" value="#{partnerProfileManagedBean.currentPartnerEntity.email}" required="true" requiredMessage="Email cannot be empty"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Phone: "/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="email" value="#{partnerProfileManagedBean.currentPartnerEntity.phone}" required="true" requiredMessage="Phone cannot be empty"/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Address: "/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="address" value="#{partnerProfileManagedBean.currentPartnerEntity.address}" required="true" requiredMessage="Address cannot be empty"/>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column>
+                                    <p:outputLabel value="Images: "/>
+                                </p:column>
+                                <p:column>
+                                    <p:panel id="images">
+                                        <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}" multiple="true" />
+                                    </p:panel>
+                                </p:column>
+                            </p:row>
+
+                            <p:row style="text-align: center">
+                                <p:column colspan="2">
+                                    <p:commandButton value="reset" type="reset"/>
+                                    <p:commandButton value="submit" actionListener="#{partnerProfileManagedBean.updatePartner}" update="@form formProfileDetails" oncomplete="PF('dialogUpdatePartner').hide()"/> 
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </p:dialog>
+                </h:form>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

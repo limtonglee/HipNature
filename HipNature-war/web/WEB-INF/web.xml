@@ -45,10 +45,8 @@
     <welcome-file-list>
         <welcome-file>landingPage.xhtml</welcome-file>
     </welcome-file-list>
-    <ejb-local-ref>
-        <ejb-ref-name>PartnerEntitySessionBeanLocal</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>ejb.stateless.PartnerEntitySessionBeanLocal</local>
-        <ejb-link>HipNature-ejb.jar#PartnerEntitySessionBean</ejb-link>
-    </ejb-local-ref>
+    <!--<context-param>
+        <param-name>alternatedocroot_1</param-name>
+        <param-value>C:/glassfish-5.1.0-uploadedfiles/uploadedFiles</param-value>
+    </context-param>-->
 </web-app>

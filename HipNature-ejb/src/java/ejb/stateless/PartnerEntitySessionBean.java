@@ -162,6 +162,25 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
         }
         return fullListOfSessions;
     }
+    
+    @Override
+    public void updatePartner(PartnerEntity partner) throws PartnerNotFoundException, InputDataValidationException {
+        Set<ConstraintViolation<PartnerEntity>> constraintViolations = validator.validate(partner);
+
+        if (constraintViolations.isEmpty()) {
+            //System.out.println("updateInstructor in ejb: constraint is empty");
+
+            PartnerEntity partnerToUpdate = retrievePartnerByPartnerId(partner.getPartnerEntityId());
+            //System.out.println("updateInstructor in ejb: retrieved instructor " + instructorToUpdate.getInstructorName());
+
+            partnerToUpdate.setPartnerEntityName(partner.getPartnerEntityName());
+            partnerToUpdate.setEmail(partner.getEmail());
+            partnerToUpdate.setAddress(partner.getAddress());
+            partnerToUpdate.setPhone(partner.getPhone());
+        } else {
+            throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
+        }
+    }
 
     private String prepareInputDataValidationException(Set<ConstraintViolation<PartnerEntity>> constraintViolations) {
         String msg = "Input data validation error: ";
@@ -177,4 +196,5 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
         
         return query.getResultList();
     }
+    
 }

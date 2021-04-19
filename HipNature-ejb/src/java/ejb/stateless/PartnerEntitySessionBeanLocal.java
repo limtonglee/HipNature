@@ -34,6 +34,6 @@ public interface PartnerEntitySessionBeanLocal {
     
     public List<PartnerEntity> retrieveAllPartnerLessCurrent(Long partnerId);
     
-    
+    public void updatePartner(PartnerEntity partner) throws PartnerNotFoundException, InputDataValidationException;
     
 }
