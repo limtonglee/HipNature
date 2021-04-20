@@ -30,8 +30,7 @@ public class RefundEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long refundId;
-    @Column(nullable = false)
-    @NotNull
+    @Column(nullable = true)
     private String reason;
     @Column(nullable = false)
     @NotNull

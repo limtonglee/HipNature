@@ -98,9 +98,10 @@ public class BookingEntitySessionBean implements BookingEntitySessionBeanLocal {
     @Override
     public List<BookingEntity> retrieveBookingsByPartnerId(Long partnerId) {
 
-        Query query = em.createQuery("SELECT b FROM BookingEntity b WHERE b.sessionEntity.classEntity.partnerEntity.PartnerEntityId =:pid");
+        Query query = em.createQuery("SELECT b FROM BookingEntity b WHERE b.sessionEntity.classEntity.partnerEntity.PartnerEntityId =:pid and b.status!='REFUND'");
         query.setParameter("pid", partnerId);
-        return query.getResultList();
+        List<BookingEntity> bookings = query.getResultList();
+        return bookings;
 
     }
 

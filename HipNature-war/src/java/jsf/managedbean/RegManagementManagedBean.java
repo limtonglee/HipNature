@@ -5,16 +5,19 @@
  */
 package jsf.managedbean;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import ejb.stateless.BookingEntitySessionBeanLocal;
 import ejb.stateless.ClassEntitySessionBeanLocal;
 import entity.BookingEntity;
 import entity.ClassEntity;
 import entity.PartnerEntity;
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 
@@ -26,33 +29,6 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class RegManagementManagedBean implements Serializable {
 
-    /**
-     * @return the filteredBookings
-     */
-    public List<BookingEntity> getFilteredBookings() {
-        return filteredBookings;
-    }
-
-    /**
-     * @param filteredBookings the filteredBookings to set
-     */
-    public void setFilteredBookings(List<BookingEntity> filteredBookings) {
-        this.filteredBookings = filteredBookings;
-    }
-
-    /**
-     * @return the currentPartnerEntity
-     */
-    public PartnerEntity getCurrentPartnerEntity() {
-        return currentPartnerEntity;
-    }
-
-    /**
-     * @param currentPartnerEntity the currentPartnerEntity to set
-     */
-    public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
-        this.currentPartnerEntity = currentPartnerEntity;
-    }
 
     @EJB(name = "TransactionEntitySessionBeanLocal")
     private BookingEntitySessionBeanLocal bookingEntitySessionBeanLocal;
@@ -73,15 +49,24 @@ public class RegManagementManagedBean implements Serializable {
      */
     public RegManagementManagedBean() {
         classEntities = new ArrayList<>();
+        bookings = new ArrayList<>();
+        filteredBookings = new ArrayList<>();
+        currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
     }
 
     @PostConstruct
     public void postConstruct() {
+        classEntities = new ArrayList<>();
+        bookings = new ArrayList<>();
+        filteredBookings = new ArrayList<>();
+        currentPartnerEntity = (PartnerEntity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentPartnerEntity");
 
-        //setBookings(bookingEntitySessionBeanLocal.retrieveBookingsByPartnerId(currentPartnerEntity.getPartnerEntityId()));
+        setBookings(bookingEntitySessionBeanLocal.retrieveBookingsByPartnerId(currentPartnerEntity.getPartnerEntityId()));
 
     }
 
+    
+    
     /**
      * @return the classEntities
      */
@@ -110,4 +95,32 @@ public class RegManagementManagedBean implements Serializable {
         this.bookings = bookings;
     }
 
+    
+    /**
+     * @return the filteredBookings
+     */
+    public List<BookingEntity> getFilteredBookings() {
+        return filteredBookings;
+    }
+
+    /**
+     * @param filteredBookings the filteredBookings to set
+     */
+    public void setFilteredBookings(List<BookingEntity> filteredBookings) {
+        this.filteredBookings = filteredBookings;
+    }
+
+    /**
+     * @return the currentPartnerEntity
+     */
+    public PartnerEntity getCurrentPartnerEntity() {
+        return currentPartnerEntity;
+    }
+
+    /**
+     * @param currentPartnerEntity the currentPartnerEntity to set
+     */
+    public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
+        this.currentPartnerEntity = currentPartnerEntity;
+    }
 }

@@ -5,7 +5,9 @@
  */
 package entity;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -90,6 +92,7 @@ public class SessionEntity implements Serializable {
     }
 
     public SessionEntity() {
+        participants = new ArrayList<>();
     }
 
     public SessionEntity(String venue, Date startTime, Integer duration, String phone, Integer maxCapacity, String status, LocationTypeEnum locationTypeEnum, InstructorEntity instructor, ClassEntity classEntity) {
