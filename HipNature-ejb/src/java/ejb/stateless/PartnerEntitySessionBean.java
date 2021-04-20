@@ -18,12 +18,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
+import util.exception.DeletePartnerException;
 import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
 import util.exception.InvalidLoginCredentialException;
@@ -64,6 +64,17 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
 
+    }
+    
+    @Override
+    public void deletePartner(Long partnerId) throws PartnerNotFoundException, DeletePartnerException {
+        PartnerEntity partner = retrievePartnerByPartnerId(partnerId);
+        System.out.println("ejb partner: "+partner.getPartnerEntityName());
+        if (partner.getClassEntity().isEmpty() && partner.getInstructorEntity().isEmpty()) {
+            em.remove(partner);
+        } else {
+            throw new DeletePartnerException("Partner ID " + partnerId + " is associated with existing classes and instructors.  Thus, it cannot be deleted!");
+        }
     }
 
     @Override

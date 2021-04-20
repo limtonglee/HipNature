@@ -19,10 +19,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
+import util.exception.DeletePartnerException;
 import util.exception.InputDataValidationException;
 import util.exception.PartnerNotFoundException;
-import util.security.CryptographicHelper;
 
 /**
  *
@@ -36,6 +37,9 @@ public class PartnerProfileManagedBean implements Serializable {
     private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
 
     private PartnerEntity currentPartnerEntity;
+    
+    @Inject
+    private LoginManagedBean loginManagedBean;
 
     /**
      * Creates a new instance of PartnerProfileManagedBean
@@ -112,6 +116,23 @@ public class PartnerProfileManagedBean implements Serializable {
         } //catch (UpdateCompanyException | CompanyNotFoundException ex) {
            // FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         //}
+    }
+    
+    public void deletePartner(ActionEvent event) {
+        try {
+            partnerEntitySessionBeanLocal.deletePartner(currentPartnerEntity.getPartnerEntityId());
+            
+            
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Partner Account deleted successfully", null));
+            
+            loginManagedBean.logout(event);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
+        } catch (PartnerNotFoundException | DeletePartnerException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting partner account: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
     }
 
     /**

@@ -22,100 +22,109 @@
 
             <center><h2>#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}</h2></center>
             <center><p:graphicImage value="/uploadedFiles/#{sessionScope.currentPartnerEntity.profilePicString}"  width="20%" rendered="#{sessionScope.currentPartnerEntity.profilePicString != null}"/></center>
-                <br/>
-                <br/>
+            <br/>
+            <br/>
 
-                <h:form id="formProfileDetails">
-                    <p:growl id="messages" showDetail="true"/>
+            <h:form id="formProfileDetails">
+                <p:growl id="messages" showDetail="true"/>
 
-                    <center>
-                        <p:panelGrid id="profileDetails" columns="2">
-                            <f:facet name="header">
-                                <p:graphicImage name="demo/images/misc/kobe.png" />
-                            </f:facet>
+                <center>
+                    <p:panelGrid id="profileDetails" columns="2">
+                        <f:facet name="header">
+                            <p:graphicImage name="demo/images/misc/kobe.png" />
+                        </f:facet>
 
-                            <h:outputText value="Name: " styleClass="text-secondary" />
-                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}"/>
+                        <h:outputText value="Name: " styleClass="text-secondary" />
+                        <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}"/>
 
-                            <h:outputText value="Username: " />
-                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.username}"/>
+                        <h:outputText value="Username: " />
+                        <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.username}"/>
 
-                            <h:outputText value="Email: " />
-                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.email}"/>
+                        <h:outputText value="Email: " />
+                        <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.email}"/>
 
-                            <h:outputText value="Phone: " />
-                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.phone}" />
+                        <h:outputText value="Phone: " />
+                        <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.phone}" />
 
-                            <h:outputText value="Address: " />
-                            <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.address}" />
-                        </p:panelGrid>
-                    </center>
-                </h:form>
+                        <h:outputText value="Address: " />
+                        <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.address}" />
+                    </p:panelGrid>
+                </center>
 
                 <br></br>
 
                 <center>
-                    <p:commandButton value="Update Details" type="button" onclick="PF('dialogUpdatePartner').show()"/> 
+                    <p:commandButton value="Update Details" type="button" onclick="PF('dialogUpdatePartner').show()"/>
+
+                    <p:commandButton value="Delete Account" actionListener="#{partnerProfileManagedBean.deletePartner}" update="@form">
+                        <p:confirm header="Confirmation" message="Are you sure you want to delete your account?" icon="ui-icon-alert" />
+                    </p:commandButton>
                 </center>
 
-                <h:form id="formPartner">
-                    <p:dialog id="dialogUpdatePartner" widgetVar="dialogUpdatePartner" header="Update Partner Details" closable="true">
-                        <p:messages id="messageUpdatePartner" redisplay="false"/>
-                        <p:panelGrid>
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel value="Name: "/>
-                                </p:column>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
 
-                                <p:column>
-                                    <p:inputText id="partnerEntityName" value="#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}" required="true" requiredMessage="Name cannot be empty"/>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel value="Email: "/>
-                                </p:column>
-                                <p:column>
-                                    <p:inputText id="phone" value="#{partnerProfileManagedBean.currentPartnerEntity.email}" required="true" requiredMessage="Email cannot be empty"/>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel value="Phone: "/>
-                                </p:column>
-                                <p:column>
-                                    <p:inputText id="email" value="#{partnerProfileManagedBean.currentPartnerEntity.phone}" required="true" requiredMessage="Phone cannot be empty"/>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel value="Address: "/>
-                                </p:column>
-                                <p:column>
-                                    <p:inputText id="address" value="#{partnerProfileManagedBean.currentPartnerEntity.address}" required="true" requiredMessage="Address cannot be empty"/>
-                                </p:column>
-                            </p:row>
+            <h:form id="formPartner">
+                <p:dialog id="dialogUpdatePartner" widgetVar="dialogUpdatePartner" header="Update Partner Details" closable="true">
+                    <p:messages id="messageUpdatePartner" redisplay="false"/>
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Name: "/>
+                            </p:column>
 
-                            <p:row>
-                                <p:column>
-                                    <p:outputLabel value="Company Logo: "/>
-                                </p:column>
-                                <p:column>
-                                    <p:panel id="images">
-                                        <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}" oncomplete="PF('dialogUpdatePartner').hide()" />
-                                    </p:panel>
-                                </p:column>
-                            </p:row>
+                            <p:column>
+                                <p:inputText id="partnerEntityName" value="#{partnerProfileManagedBean.currentPartnerEntity.partnerEntityName}" required="true" requiredMessage="Name cannot be empty"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Email: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="phone" value="#{partnerProfileManagedBean.currentPartnerEntity.email}" required="true" requiredMessage="Email cannot be empty"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Phone: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="email" value="#{partnerProfileManagedBean.currentPartnerEntity.phone}" required="true" requiredMessage="Phone cannot be empty"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Address: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="address" value="#{partnerProfileManagedBean.currentPartnerEntity.address}" required="true" requiredMessage="Address cannot be empty"/>
+                            </p:column>
+                        </p:row>
 
-                            <p:row style="text-align: center">
-                                <p:column colspan="2">
-                                    <p:commandButton value="reset" type="reset"/>
-                                    <p:commandButton value="submit" actionListener="#{partnerProfileManagedBean.updatePartner}" update="@form formProfileDetails" oncomplete="PF('dialogUpdatePartner').hide()"/> 
-                                </p:column>
-                            </p:row>
-                        </p:panelGrid>
-                    </p:dialog>
-                </h:form>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Company Logo: "/>
+                            </p:column>
+                            <p:column>
+                                <p:panel id="images">
+                                    <p:fileUpload listener="#{partnerProfileManagedBean.handleFileUpload}" oncomplete="PF('dialogUpdatePartner').hide()" />
+                                </p:panel>
+                            </p:column>
+                        </p:row>
+
+                        <p:row style="text-align: center">
+                            <p:column colspan="2">
+                                <p:commandButton value="reset" type="reset"/>
+                                <p:commandButton value="submit" actionListener="#{partnerProfileManagedBean.updatePartner}" update="@form formProfileDetails" oncomplete="PF('dialogUpdatePartner').hide()"/> 
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </p:dialog>
+            </h:form>
         </h:panelGroup>
     </ui:define>
 
