@@ -54,7 +54,7 @@ public class PartnerManagedBean implements Serializable{
             System.out.println(newPartnerEntity.getPassword());
             System.out.println(newPartnerEntity.getPartnerEntityName());
             PartnerEntity pe = partnerEntitySessionBean.createNewPartner(newPartnerEntity);
-            partnerEntities.add(pe);
+            //partnerEntities.add(pe);
             newPartnerEntity = new PartnerEntity();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Account Created", null));
         } catch (InputDataValidationException ex) {

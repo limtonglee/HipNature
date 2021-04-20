@@ -8,6 +8,7 @@ package ejb.stateless;
 import entity.ClassEntity;
 import entity.ClassTypeEntity;
 import entity.PartnerEntity;
+import entity.ReviewEntity;
 import entity.TagEntity;
 import java.util.List;
 import java.util.Set;
@@ -158,9 +159,13 @@ public class ClassEntitySessionBean implements ClassEntitySessionBeanLocal {
     }
 
     //This delete method remove ClassEntity from database as well
-    @Override
+   @Override
     public void deleteClass(Long classEntityToDeleteId) throws DeleteClassEntityException, ClassNotFoundException {
         ClassEntity classEntityToDelete = em.find(ClassEntity.class, classEntityToDeleteId);
+        List<ReviewEntity> temp = classEntityToDelete.getReviewEntities();
+        for (ReviewEntity re: temp){
+            re.setClassEntity(null);
+        }
         int size = classEntityToDelete.getSessionEntities().size();
         if (classEntityToDelete.getSessionEntities().size() == 0) {
             em.remove(classEntityToDelete);

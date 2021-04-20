@@ -113,7 +113,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
         searchString = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionSearchString");
 
         if (searchString == null || searchString.trim().length() == 0) {
-            sessionEntities = getSessionEntitySessionBean().retrieveAllSessions();
+            sessionEntities = getSessionEntitySessionBean().retrieveSessionsByPartnerId(currentPartnerEntity.getPartnerEntityId());
             System.out.println(sessionEntities.size());
 
         } else {
@@ -138,7 +138,7 @@ public class SearchSessionsByNameManagedBean implements Serializable {
 
     public void searchSession() {
         if (searchString == null || searchString.trim().length() == 0) {
-            sessionEntities = getSessionEntitySessionBean().retrieveAllSessions();
+            sessionEntities = getSessionEntitySessionBean().retrieveSessionsByPartnerId(currentPartnerEntity.getPartnerEntityId());
             System.out.println(sessionEntities.size());
 
         } else {
