@@ -21,6 +21,7 @@
         </div>
         <div style="width: 50%; float: right;" id="indexRight">
 
+            <h:form id="formCreateNewPartner">
 
                 <h:panelGroup rendered="#{sessionScope.isLogin == false}" style="display: inline-block;float: right;margin-right: 61%; text-align: center" >
                     <br></br>
@@ -118,6 +119,8 @@
                             </p:panelGrid>
                         </p:dialog>
                     </h:form>
+                </h:panelGroup>
+            </h:form>
         </div>
     </ui:define>
 

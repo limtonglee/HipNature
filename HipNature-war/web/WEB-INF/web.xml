@@ -47,6 +47,6 @@
     </welcome-file-list>
     <context-param>
         <param-name>alternatedocroot_1</param-name>
-        <param-value>/Users/kelly/NetBeansProjects/uploadedFiles</param-value>
+        <param-value>/Users/leahj/NetBeansProjects/uploadedFiles</param-value>
     </context-param>
 </web-app>
