@@ -21,7 +21,6 @@
         </div>
         <div style="width: 50%; float: right;" id="indexRight">
 
-            <h:form id="formCreateNewPartner">
 
                 <h:panelGroup rendered="#{sessionScope.isLogin == false}" style="display: inline-block;float: right;margin-right: 61%; text-align: center" >
                     <br></br>
@@ -54,6 +53,7 @@
                     <br></br>
 
                     <p:commandButton value="Become Our Partner Today!" type="button" onclick="PF('dialogRegister').show()"/>
+                </h:panelGroup>
 
                     <h:form id="formRegister">
                         <p:dialog id="dialogRegister" widgetVar="dialogRegister" header="Register New Account" closable="true">
@@ -112,14 +112,12 @@
                                 <p:row style="text-align: center">
                                     <p:column colspan="2">
                                         <p:commandButton value="reset" type="reset"/>
-                                        <p:commandButton value="submit" actionListener="#{partnerManagedBean.createNewPartner}" update="@form formCreateNewPartner"/> 
+                                        <p:commandButton value="submit" actionListener="#{partnerManagedBean.createNewPartner}" update="@form formRegister"/> 
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>
                         </p:dialog>
                     </h:form>
-                </h:panelGroup>
-            </h:form>
         </div>
     </ui:define>
 
