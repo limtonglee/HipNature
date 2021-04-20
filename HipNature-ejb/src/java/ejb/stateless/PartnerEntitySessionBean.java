@@ -29,6 +29,7 @@ import util.exception.InstructorNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
 import util.exception.SessionNotFoundException;
+import util.exception.UpdatePartnerException;
 import util.security.CryptographicHelper;
 
 /**
@@ -65,11 +66,11 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
         }
 
     }
-    
+
     @Override
     public void deletePartner(Long partnerId) throws PartnerNotFoundException, DeletePartnerException {
         PartnerEntity partner = retrievePartnerByPartnerId(partnerId);
-        System.out.println("ejb partner: "+partner.getPartnerEntityName());
+        System.out.println("ejb partner: " + partner.getPartnerEntityName());
         if (partner.getClassEntity().isEmpty() && partner.getInstructorEntity().isEmpty()) {
             em.remove(partner);
         } else {
@@ -94,6 +95,21 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
             throw new PartnerNotFoundException("Partner ID " + partnerId + " does not exist!");
         }
 
+    }
+
+    @Override
+    public void updatePassword(PartnerEntity partner, String password) throws PartnerNotFoundException, UpdatePartnerException, InputDataValidationException {
+        if (partner != null && partner.getUsername() != null) {
+            Set<ConstraintViolation<PartnerEntity>> constraintViolations = validator.validate(partner);
+            if (constraintViolations.isEmpty()) {
+                PartnerEntity partnerToUpdate = retrievePartnerByPartnerId(partner.getPartnerEntityId());
+                partnerToUpdate.setPassword(password);
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
+            }
+        } else {
+            throw new PartnerNotFoundException("Partner Id not provided for company to be updated");
+        }
     }
 
     @Override
@@ -146,13 +162,13 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
 
     public List<SessionEntity> retrievePartnerClassesSessions(Long partnerId) throws PartnerNotFoundException, ClassNotFoundException, SessionNotFoundException {
         PartnerEntity partnerEntity = em.find(PartnerEntity.class, partnerId);
-        
+
         List<SessionEntity> fullListOfSessions = new ArrayList<>();
 
         if (partnerEntity != null) {
-            
+
             List<ClassEntity> partnerClasses = partnerEntity.getClassEntity();
-            
+
             if (partnerClasses != null) {
                 for (ClassEntity c : partnerClasses) {
                     List<SessionEntity> partnerClassesSessions = c.getSessionEntities();
@@ -161,19 +177,19 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
                             fullListOfSessions.add(s);
                         }
                     } else {
-                        throw new SessionNotFoundException ("No sessions found for partner " + partnerId);
+                        throw new SessionNotFoundException("No sessions found for partner " + partnerId);
                     }
                 }
             } else {
                 throw new ClassNotFoundException("No classes found for partner " + partnerId);
             }
-            
+
         } else {
             throw new PartnerNotFoundException("Partner ID " + partnerId + " does not exist!");
         }
         return fullListOfSessions;
     }
-    
+
     @Override
     public void updatePartner(PartnerEntity partner) throws PartnerNotFoundException, InputDataValidationException {
         Set<ConstraintViolation<PartnerEntity>> constraintViolations = validator.validate(partner);
@@ -192,26 +208,25 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationException(constraintViolations));
         }
     }
-   
-    
+
     @Override
     public void setProfilePicString(PartnerEntity pa, String s) throws PartnerNotFoundException {
         PartnerEntity partner = retrievePartnerByPartnerId(pa.getPartnerEntityId());
-        
+
         partner.setProfilePicString(s);
     }
-    
+
     @Override
     public void setImages(PartnerEntity pa, List<String> img) throws PartnerNotFoundException {
         PartnerEntity partner = retrievePartnerByPartnerId(pa.getPartnerEntityId());
-        
+
         partner.setImages(img);
     }
-    
+
     @Override
     public void setImage(PartnerEntity pa, String img) throws PartnerNotFoundException {
         PartnerEntity partner = retrievePartnerByPartnerId(pa.getPartnerEntityId());
-        
+
         if (partner.getImages().isEmpty() == true) {
             List<String> newimages = new ArrayList<>();
             newimages.add("/uploadedFiles/" + img);
@@ -219,9 +234,9 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
         } else {
             partner.getImages().add("/uploadedFiles/" + img);
         }
-        
+
     }
-    
+
     private String prepareInputDataValidationException(Set<ConstraintViolation<PartnerEntity>> constraintViolations) {
         String msg = "Input data validation error: ";
         for (ConstraintViolation constraint : constraintViolations) {
@@ -229,12 +244,13 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanLocal {
         }
         return msg;
     }
+
     @Override
-    public List<PartnerEntity> retrieveAllPartnerLessCurrent(Long partnerId){
+    public List<PartnerEntity> retrieveAllPartnerLessCurrent(Long partnerId) {
         Query query = em.createQuery("SELECT s FROM PartnerEntity s WHERE s.PartnerEntityId != :partnerId");
         query.setParameter("partnerId", partnerId);
-        
+
         return query.getResultList();
     }
-    
+
 }

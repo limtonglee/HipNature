@@ -24,6 +24,7 @@ import org.primefaces.event.FileUploadEvent;
 import util.exception.DeletePartnerException;
 import util.exception.InputDataValidationException;
 import util.exception.PartnerNotFoundException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -33,6 +34,48 @@ import util.exception.PartnerNotFoundException;
 @ViewScoped
 public class PartnerProfileManagedBean implements Serializable {
 
+    /**
+     * @return the oldPassword
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    /**
+     * @param oldPassword the oldPassword to set
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    /**
+     * @return the newPassword
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * @param newPassword the newPassword to set
+     */
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    /**
+     * @return the confirmPassword
+     */
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    /**
+     * @param confirmPassword the confirmPassword to set
+     */
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     @EJB
     private PartnerEntitySessionBean partnerEntitySessionBeanLocal;
 
@@ -40,6 +83,10 @@ public class PartnerProfileManagedBean implements Serializable {
     
     @Inject
     private LoginManagedBean loginManagedBean;
+    
+    private String oldPassword;
+    private String newPassword;
+    private String confirmPassword;
 
     /**
      * Creates a new instance of PartnerProfileManagedBean
@@ -134,6 +181,15 @@ public class PartnerProfileManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
+    
+    public void doChangePassword(ActionEvent event) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/changePassword.xhtml");
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+
+    }
 
     /**
      * @return the currentPartnerEntity
@@ -147,6 +203,46 @@ public class PartnerProfileManagedBean implements Serializable {
      */
     public void setCurrentPartnerEntity(PartnerEntity currentPartnerEntity) {
         this.currentPartnerEntity = currentPartnerEntity;
+    }
+    
+    public void changePassword(ActionEvent event) {
+
+      
+
+        if (oldPassword != null || newPassword != null || confirmPassword != null) {
+            oldPassword = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + currentPartnerEntity.getSalt()));
+        } else {
+     
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password cannot be null", null));
+        }
+
+        System.out.println(currentPartnerEntity.getPassword()); //in hash 
+        System.out.println(oldPassword);
+        if (!oldPassword.equals(currentPartnerEntity.getPassword())) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Old Password is invalid", null));
+        } else if (!newPassword.equals(confirmPassword)) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password validation Error: Passwords do not match", null));
+        } else {
+
+            try {
+                partnerEntitySessionBeanLocal.updatePassword(currentPartnerEntity, newPassword);
+
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully!", null));
+            } catch (PartnerNotFoundException ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating company: " + ex.getMessage(), null));
+            } catch (Exception ex) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+            }
+
+            //selectedCompanyToUpdate.setPassword(newPassword);
+            System.out.println(newPassword);
+            System.out.println(oldPassword);
+            System.out.println(currentPartnerEntity.getPassword());
+            System.out.println(currentPartnerEntity.getUsername());
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Password changed successfully!", null));
+        }
+
     }
 
 }

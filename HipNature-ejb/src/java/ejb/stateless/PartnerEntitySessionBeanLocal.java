@@ -13,6 +13,7 @@ import util.exception.InputDataValidationException;
 import util.exception.InstructorNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.PartnerNotFoundException;
+import util.exception.UpdatePartnerException;
 
 /**
  *
@@ -20,6 +21,8 @@ import util.exception.PartnerNotFoundException;
  */
 @Local
 public interface PartnerEntitySessionBeanLocal {
+    
+    public void updatePassword(PartnerEntity partner, String password) throws PartnerNotFoundException, UpdatePartnerException, InputDataValidationException;
 
     public void deletePartner(Long partnerId) throws PartnerNotFoundException, DeletePartnerException;
 

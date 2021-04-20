@@ -40,6 +40,7 @@
                         <h:outputText value="Username: " />
                         <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.username}"/>
 
+
                         <h:outputText value="Email: " />
                         <h:outputText value="#{partnerProfileManagedBean.currentPartnerEntity.email}"/>
 
@@ -102,6 +103,15 @@
                             </p:column>
                             <p:column>
                                 <p:inputText id="address" value="#{partnerProfileManagedBean.currentPartnerEntity.address}" required="true" requiredMessage="Address cannot be empty"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Password: "/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton ajax="false" id="password" value="Update Password" actionListener="#{partnerProfileManagedBean.doChangePassword}"/>
                             </p:column>
                         </p:row>
 
