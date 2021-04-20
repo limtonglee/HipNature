@@ -40,11 +40,19 @@ public class PartnerManagedBean implements Serializable{
      * Creates a new instance of PartnerManagedBean
      */
     public PartnerManagedBean() {
+        System.out.println("constructor");
         newPartnerEntity = new PartnerEntity();
     }
     
     public void createNewPartner(ActionEvent event){
+        System.out.println("In createNewPArtner");
         try  {
+            System.out.println("In createNewPArtner2");
+            System.out.println(newPartnerEntity.getAddress());
+            System.out.println(newPartnerEntity.getEmail());
+            System.out.println(newPartnerEntity.getPhone());
+            System.out.println(newPartnerEntity.getPassword());
+            System.out.println(newPartnerEntity.getPartnerEntityName());
             PartnerEntity pe = partnerEntitySessionBean.createNewPartner(newPartnerEntity);
             partnerEntities.add(pe);
             newPartnerEntity = new PartnerEntity();
