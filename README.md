@@ -1,4 +1,5 @@
 Module: IS3106 Enterprise Systems Interface Design and Development
+Description: Developed and created a full-stack application in a group project, including mobile and web application, using Angular and Ionic for IS3106 Enterprise Systems Interface Design and Development module.
 
 GP09
 
